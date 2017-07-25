@@ -5,7 +5,7 @@ namespace Sseko.DAL.DocumentDb
 {
     public class Repository<T> : RepositoryBase<T> where T : DocumentBase
     {
-        public Repository(DataContext context, DocumentType documentType, string firmId) : base(context, documentType, firmId)
+        public Repository(DataContext context, DocumentType documentType) : base(context, documentType)
         {
         }
     }

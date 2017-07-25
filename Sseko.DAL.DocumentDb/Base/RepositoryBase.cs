@@ -20,15 +20,12 @@ namespace Sseko.DAL.DocumentDb.Base
         private DocumentType _docType;
 
         /// <summary>Initializes a new instance of the <see cref="RepositoryBase{T}" /> class.</summary>
-        public RepositoryBase(DataContext context, DocumentType documentType, string firmId)
+        public RepositoryBase(DataContext context, DocumentType documentType)
         {
             _context = context;
             _baseUri = UriFactory.CreateDocumentCollectionUri(_context.Database, _context.CollectionName);
             _docType = documentType;
-            FirmId = firmId;
         }
-
-        public string FirmId { get; internal set; }
 
         public virtual Result<T> Add(T document, RequestOptions requestOptions = null)
         {
@@ -59,7 +56,6 @@ namespace Sseko.DAL.DocumentDb.Base
             {
                 ce.ToExceptionless()
                     .AddObject(documents)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -73,7 +69,6 @@ namespace Sseko.DAL.DocumentDb.Base
             {
                 ex.ToExceptionless()
                     .AddObject(documents)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -102,7 +97,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ce.ToExceptionless()
                     .AddObject(document)
                     .AddObject(requestOptions)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -117,7 +111,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ex.ToExceptionless()
                     .AddObject(document)
                     .AddObject(requestOptions)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -156,7 +149,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(document)
                     .AddObject(requestOptions)
                     .AddObject(forceDelete)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -172,7 +164,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(document)
                     .AddObject(requestOptions)
                     .AddObject(forceDelete)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -219,7 +210,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ce.ToExceptionless()
                     .AddObject(feedOptions)
                     .AddObject(includeDeleted)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -234,7 +224,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ex.ToExceptionless()
                     .AddObject(feedOptions)
                     .AddObject(includeDeleted)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -277,7 +266,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ce.ToExceptionless()
                     .AddObject(feedOptions)
                     .AddObject(predicate?.ToString())
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -292,7 +280,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ex.ToExceptionless()
                     .AddObject(feedOptions)
                     .AddObject(predicate?.ToString())
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -342,7 +329,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(feedOptions)
                     .AddObject(predicate?.ToString())
                     .AddObject(includeDeleted)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -358,7 +344,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(feedOptions)
                     .AddObject(predicate?.ToString())
                     .AddObject(includeDeleted)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -409,7 +394,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(predicate?.ToString())
                     .AddObject(itemCount)
                     .AddObject(continuationToken)
-                    .AddObject(FirmId)
                     .AddObject(feedOptions)
                     .AddObject(includeDeleted)
                     .AddObject(_docType.ToString())
@@ -428,7 +412,6 @@ namespace Sseko.DAL.DocumentDb.Base
                     .AddObject(predicate?.ToString())
                     .AddObject(itemCount)
                     .AddObject(continuationToken)
-                    .AddObject(FirmId)
                     .AddObject(feedOptions)
                     .AddObject(includeDeleted)
                     .AddObject(_docType.ToString())
@@ -472,7 +455,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ce.ToExceptionless()
                     .AddObject(document)
                     .AddObject(requestOptions)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
@@ -487,7 +469,6 @@ namespace Sseko.DAL.DocumentDb.Base
                 ex.ToExceptionless()
                     .AddObject(document)
                     .AddObject(requestOptions)
-                    .AddObject(FirmId)
                     .AddObject(_docType.ToString())
                     .Submit();
 
