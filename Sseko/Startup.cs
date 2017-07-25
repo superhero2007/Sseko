@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using AspNetCore.Identity.DocumentDb;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,13 +38,15 @@ namespace Sseko
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var documentClient = InitDocumentClient();
+            services.AddSingleton<IDocumentClient>(documentClient);
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
+            services.AddIdentity<DocumentDbIdentityUser, DocumentDbIdentityRole> ()
+                .AddDocumentDbStores(options =>
+                {
+                    options.Database = "skdb";
+                    options.UserStoreDocumentCollection = "skcol";
+                }).AddDefaultTokenProviders();
 
             services.AddMvc();
 
@@ -68,7 +74,7 @@ namespace Sseko
 
             app.UseStaticFiles();
 
-            //app.UseIdentity();
+            app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
@@ -78,6 +84,22 @@ namespace Sseko
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private DocumentClient InitDocumentClient()
+        {
+            var endpoint = "https://skdb.documents.azure.com:443/";
+            var authKey = "zq7o3St1apqnwAKL1zJglLOnE3Shzf85FetXuEsS9G1BezewbsxfzbXaSbcwmjSlM6U3Zo1AKnP9hCfv7zCgwQ==";
+
+            var connectionPolicy = new ConnectionPolicy
+            {
+                ConnectionMode = ConnectionMode.Gateway,
+                EnableEndpointDiscovery = true,
+                RetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 4, MaxRetryWaitTimeInSeconds = 2 },
+                RequestTimeout = TimeSpan.FromSeconds(3)
+            };
+
+            return new DocumentClient(new Uri(endpoint), authKey, connectionPolicy);
         }
     }
 }

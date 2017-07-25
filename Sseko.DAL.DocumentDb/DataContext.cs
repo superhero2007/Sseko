@@ -15,8 +15,6 @@ namespace Sseko.DAL.DocumentDb
 
         public DataContext()
         {
-
-
             _authKey = "";
             _endpointUri = "";
             Database = "";
