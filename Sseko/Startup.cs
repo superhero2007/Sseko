@@ -1,7 +1,9 @@
 ﻿using System;
+using Akka.Actor;
 using AspNetCore.Identity.DocumentDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -31,6 +33,8 @@ namespace Sseko
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            StartAkkaSystems();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -100,6 +104,14 @@ namespace Sseko
             };
 
             return new DocumentClient(new Uri(endpoint), authKey, connectionPolicy);
+        }
+
+        private void StartAkkaSystems()
+        {
+            var dsSystem = ActorSystem.Create("SsekoDs");
+            var rgSystem = ActorSystem.Create("SsekoRg");
+            Akka.DataService.Startup.StartActorSystem(dsSystem);
+            Akka.ReportGeneration.Startup.StartActorSystem(rgSystem);
         }
     }
 }

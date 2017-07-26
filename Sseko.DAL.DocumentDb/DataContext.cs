@@ -15,10 +15,10 @@ namespace Sseko.DAL.DocumentDb
 
         public DataContext()
         {
-            _authKey = "";
-            _endpointUri = "";
-            Database = "";
-            CollectionName = "";
+            _authKey = "zq7o3St1apqnwAKL1zJglLOnE3Shzf85FetXuEsS9G1BezewbsxfzbXaSbcwmjSlM6U3Zo1AKnP9hCfv7zCgwQ==";
+            _endpointUri = "https://skdb.documents.azure.com:443/";
+            Database = "skdb";
+            CollectionName = "skcol";
 
             Init();
         }

@@ -10,6 +10,8 @@ namespace Sseko.DAL.DocumentDb.Enums
     public enum DocumentType
     {
         User,
-        Role
+        Role,
+        Report,
+        ReportType
     }
 }

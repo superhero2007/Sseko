@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Identity.DocumentDb\AspNetCore.Identity.DocumentDb.csproj" />
   </ItemGroup>
 

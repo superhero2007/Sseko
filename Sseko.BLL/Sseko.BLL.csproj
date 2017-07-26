@@ -1,12 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
+    <PackageReference Include="Autofac" Version="4.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sseko.Akka.DataService\Sseko.Akka.DataService.csproj" />
+    <ProjectReference Include="..\Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj" />
+    <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />
   </ItemGroup>
 
 </Project>

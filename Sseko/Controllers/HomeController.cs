@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Akka.Actor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sseko.BLL;
 
 namespace Sseko.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ServiceFactory factory = new ServiceFactory();
+
+            await factory.ReportService().GenerateReport(null);
             return View();
         }
 

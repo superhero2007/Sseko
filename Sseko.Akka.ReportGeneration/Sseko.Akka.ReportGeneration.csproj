@@ -1,7 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akka" Version="1.3.0-beta-6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />
+    <ProjectReference Include="..\Sseko.Data\Sseko.Data.csproj" />
+  </ItemGroup>
 
 </Project>
