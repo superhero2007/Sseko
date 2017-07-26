@@ -25,6 +25,6 @@ namespace Sseko.DAL.DocumentDb.Entities
         public List<Column> Columns { get; set; } = new List<Column>();
 
         [JsonProperty(PropertyName = "rows")]
-        public List<object> Rows { get; set; } = new List<object>();
+        public List<string> Rows { get; set; } = new List<string>();
     }
 }

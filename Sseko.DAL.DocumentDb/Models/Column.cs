@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using Sseko.DAL.DocumentDb.Enums;
 
 namespace Sseko.DAL.DocumentDb.Models
 {
@@ -10,13 +11,10 @@ namespace Sseko.DAL.DocumentDb.Models
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "type")]
-        public Type Type { get; set; }
+        [JsonProperty(PropertyName = "columnType")]
+        public ColumnType ColumnType { get; set; }
 
-        [JsonProperty(PropertyName = "sqlName")]
-        public string SqlName { get; set; }
-
-        [JsonProperty(PropertyName = "columnKey")]
-        public bool ColumnKey { get; set; }
+        [JsonProperty(PropertyName = "columnKeyType")]
+        public ColumnKeyType ColumnKeyType { get; set; }
     }
 }

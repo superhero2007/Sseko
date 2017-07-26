@@ -22,7 +22,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
                 //{
                 //    throw new InvalidOperationException("Column layout not valid!");
                 //}
-                var columnKey = columns[0].Name;
+                var columnKey = columns[0].ColumnKeyType;
                 var columnKeyFetcher = ColumnLookupTable.ColumnKeyFetcher(columnKey);
 
                 var columnKeyResults = columnKeyFetcher();
@@ -34,7 +34,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
                     .ToList();
                 foreach (var column in columns.Skip(1))
                 {
-                    var columnFetcher = ColumnLookupTable.ColumnFetcher(column.Name);
+                    var columnFetcher = ColumnLookupTable.ColumnFetcher(column.ColumnType);
                     foreach (var row in rows)
                     {
                         var rowKey = row[0];

@@ -14,11 +14,11 @@ namespace SsekoConsole
 
         static void Main(string[] args)
         {
-            context = new SsekoContext();
+            //context = new SsekoContext();
 
-            Task.Run(() => Run()).Wait();
+            //Task.Run(() => Run()).Wait();
 
-            Debugger.Break();
+            //Debugger.Break();
         }
 
         private static async Task<bool> Run()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Akka.Actor;
 using Sseko.Akka.ReportGeneration.Actors;
+using Sseko.Data;
 using Sseko.DAL.DocumentDb;
 
 namespace Sseko.Akka.ReportGeneration
@@ -16,6 +17,8 @@ namespace Sseko.Akka.ReportGeneration
             ActorSystemRefs.ReportCoordinatorActor = system.ActorOf(
                 Props.Create(() => new ReportCoordinatorActor("reportWorkers", 1, 20)),
                 ActorSystemRefs.ReportCoordinatorActorName);
+
+            ActorSystemRefs.Context = new SsekoContext();
         }
     }
 }

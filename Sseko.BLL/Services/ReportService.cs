@@ -7,6 +7,7 @@ using Sseko.Akka.ReportGeneration;
 using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.BLL.Interfaces;
 using Sseko.DAL.DocumentDb.Entities;
+using Sseko.DAL.DocumentDb.Enums;
 using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.BLL.Services
@@ -19,11 +20,13 @@ namespace Sseko.BLL.Services
 
             var keyColumn = new Column
             {
-                ColumnKey = true,
+                ColumnKeyType = ColumnKeyType.Fellow,
                 Name = "fellows"
             };
+
             var otherColumn = new Column
             {
+                ColumnType = ColumnType.PlaceHolder,
                 Name = "sales"
             };
 
@@ -32,7 +35,7 @@ namespace Sseko.BLL.Services
             report.Columns.Add(keyColumn);
             report.Columns.Add(otherColumn);
 
-            return (await  reportService.CreateAsync(report)).Output;
+            return (await reportService.CreateAsync(report)).Output;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sseko.Data;
 using Sseko.Data.Models;
+using Sseko.DAL.DocumentDb.Enums;
 using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.Akka.ReportGeneration
@@ -14,49 +16,35 @@ namespace Sseko.Akka.ReportGeneration
         private static List<AffiliateplusTransaction> _transactions;
         private static List<AffiliateplusAccount> _fellows;
 
-        private static async void Init()
+        public static void Init()
         {
-            try
-            {
-                if (_dataContext == null) _dataContext = new SsekoContext();
-                if (_transactions == null) _transactions = (await _dataContext.AffiliateplusTransaction.ToListAsync()).ToList();
-                if (_fellows == null) _fellows = (await _dataContext.AffiliateplusAccount.ToListAsync()).ToList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            if (_dataContext == null) _dataContext = ActorSystemRefs.Context;
+            if (_transactions == null) _transactions = _dataContext.AffiliateplusTransaction.ToList();
+            if (_fellows == null) _fellows =  _dataContext.AffiliateplusAccount.ToList();
+
         }
 
-        public static Func<List<string>> ColumnKeyFetcher(string columnKey)
+        public static Func<List<string>> ColumnKeyFetcher(ColumnKeyType columnKey)
         {
             Init();
 
             switch (columnKey)
             {
-                case "fellows":
+                case ColumnKeyType.Fellow:
                     return () => _fellows.Select(f => f.ReferredBy).ToList();
                 default:
                     throw new ArgumentException("Invalid column key!");
             }
         }
-        public static Func<string, string> ColumnFetcher(string column)
+        public static Func<string, string> ColumnFetcher(ColumnType column)
         {
             Init();
 
             switch (column)
             {
-                case "sales":
-                    return (ck) => _transactions.Where(t => t.Account.Name == ck).Sum(t => t.TotalAmount).ToString();
                 default:
                     throw new ArgumentException("Invalid column");
             }
-        }
-
-        public static bool ValidateColumns(List<Column> columns)
-        {
-            throw new NotImplementedException();
         }
     }
 }
