@@ -10,11 +10,5 @@ namespace Sseko.DAL.DocumentDb.Models
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-
-        [JsonProperty(PropertyName = "columnType")]
-        public ColumnType ColumnType { get; set; }
-
-        [JsonProperty(PropertyName = "columnKeyType")]
-        public ColumnKeyType ColumnKeyType { get; set; }
     }
 }

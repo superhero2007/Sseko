@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.BLL;
+using Sseko.DAL.DocumentDb.Entities;
+using Sseko.DAL.DocumentDb.Enums;
+using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.Controllers
 {
@@ -16,7 +20,9 @@ namespace Sseko.Controllers
         {
             ServiceFactory factory = new ServiceFactory();
 
-            await factory.ReportService().GenerateReport(null);
+            var reportType = ReportGenerationOperations.ReportType.DownlineSummary;
+
+            await factory.ReportService().GenerateReport(reportType);
             return View();
         }
 

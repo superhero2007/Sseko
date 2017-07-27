@@ -7,6 +7,11 @@ namespace Sseko.Akka.ReportGeneration.Messages
 {
     public abstract class ReportGenerationOperations
     {
+        public enum ReportType
+        {
+            PvTransactionSummary,
+            DownlineSummary
+        }
         public interface IOperation
         {
             
@@ -14,24 +19,25 @@ namespace Sseko.Akka.ReportGeneration.Messages
 
         public class Operation : IOperation
         {
-            public Operation(ReportType reportType)
+            public Operation(ReportType reportType, int fellowId = 0)
             {
                 ReportType = reportType;
+                FellowId = fellowId;
             }
 
-            public ReportType ReportType { get; set; }
+            public ReportType ReportType { get; internal set; }
+
+            public int FellowId { get; internal set; }
         }
 
         public class Result
         {
-            public Result(List<List<string>> output, Exception exception = null)
+            public Result(Report output)
             {
                 Output = output;
-                Exception = exception;
             }
-
-            public List<List<string>> Output { get; set; }
-            public Exception Exception { get; set; }
+            public Report Output { get; internal set; }
+            public Exception Exception { get; internal set; }
             public bool IsError => Exception != null;
         }
     }
