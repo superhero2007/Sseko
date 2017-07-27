@@ -301,3 +301,4 @@ cv/cv.tss
 
 *.jfm
 cv/CV.Database/CV.Database.jfm
+Sseko.Akka.ReportGeneration/GlobalSuppressions.cs

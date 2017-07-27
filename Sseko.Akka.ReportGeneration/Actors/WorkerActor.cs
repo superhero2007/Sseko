@@ -46,10 +46,9 @@ namespace Sseko.Akka.ReportGeneration.Actors
             public string GrandParent { get; set; }
         }
 
-        private Report GetDownlineReport(ReportGenerationOperations.Operation message)
+        private static Report GetDownlineReport(ReportGenerationOperations.Operation message)
         {
             var report = new Report();
-            var rows = new List<List<string>>();
             var fellowId = message.FellowId;
 
             report.Columns = new List<Column>
@@ -64,17 +63,11 @@ namespace Sseko.Akka.ReportGeneration.Actors
 
             var childFellows = DataStore.GetAllChildren(fellowId);
 
-            foreach (var fellow in childFellows)
-            {
-                var hostesses = DataStore.GetHostessIds(fellow.Id);
-
-                var transactions = DataStore.TransactionsWhere(t => t.AccountId == fellow.Id || hostesses.Contains(t.AccountId));
-                transactions.Add(new AffiliateplusTransaction());
-                var personalPurchases = transactions.Where(t => t.Commission == 0).Sum(t => t.TotalAmount);
-
-                var pv = transactions.Sum(t => t.TotalAmount);
-
-                var row = new List<string>
+            var rows = (from fellow in childFellows
+                        let transactions = DataStore.Transactions(fellowId)
+                        let personalPurchases = transactions.Where(t => t.Commission == 0).Sum(t => t.TotalAmount)
+                        let pv = transactions.Sum(t => t.TotalAmount)
+                        select new List<string>
                 {
                     fellow.Name,
                     fellow.Parent,
@@ -82,19 +75,16 @@ namespace Sseko.Akka.ReportGeneration.Actors
                     fellow.Level.ToString(),
                     (pv - personalPurchases).ToString(),
                     pv.ToString()
-                };
-                rows.Add(row);
-            }
+                }).AsParallel().ToList();
             report.Rows = rows;
 
             return report;
         }
 
-        private Report GetPvTransactionSummaryReport(ReportGenerationOperations.Operation message)
+        private static Report GetPvTransactionSummaryReport(ReportGenerationOperations.Operation message)
         {
             var report = new Report();
-            var rows = new List<List<string>>();
-            var fellow = message.FellowId;
+            var fellowId = message.FellowId;
 
             report.Columns = new List<Column>
             {
@@ -107,27 +97,12 @@ namespace Sseko.Akka.ReportGeneration.Actors
                 new Column { Name = "Sale" }
             };
 
-            var hostesses = DataStore.GetHostessIds(fellow);
+            var transactions = DataStore.Transactions(fellowId);
 
-            var transactions = DataStore.TransactionsWhere(t => t.AccountId == fellow || hostesses.Contains(t.AccountId));
-
-            foreach (var transaction in transactions)
-            {
-                string hostess = string.Empty;
-                if (transaction.AccountName.Contains("Hostess"))
-                {
-                    hostess = transaction.AccountName.Skip(8).ToString();
-                }
-                string type = string.Empty;
-                var transactionProgram = transaction.ProgramName ?? string.Empty;
-                if (transactionProgram.Contains("Hostess"))
-                    type = "Hostess Program";
-                else if (transactionProgram.Contains("Fellows"))
-                    type = "Fellows Program";
-                else if (transaction.Commission == 0)
-                    type = "Personal Purchase";
-
-                var row = new List<string>
+            var rows = (from transaction in transactions
+                let hostess = transaction.AccountName.Replace("Hostess ", "")
+                let type = GetTransactionType(transaction)
+                select new List<string>
                 {
                     transaction.CreatedTime.ToString(),
                     transaction.OrderId.ToString(),
@@ -136,12 +111,26 @@ namespace Sseko.Akka.ReportGeneration.Actors
                     type,
                     transaction.Commission.ToString(),
                     transaction.TotalAmount.ToString()
-                };
-                rows.Add(row);
-            }
+                }).AsParallel().ToList();
             report.Rows = rows;
 
             return report;
+        }
+
+        private static string GetTransactionType(AffiliateplusTransaction transaction)
+        {
+            var transactionProgram = transaction.ProgramName ?? string.Empty;
+
+            if (transactionProgram.Contains("Hostess"))
+                return "Hostess Program";
+
+            if (transactionProgram.Contains("Fellows"))
+                return "Fellows Program";
+
+            if (transaction.Commission == 0)
+                return "Personal Purchase";
+
+            return string.Empty;
         }
     }
 }

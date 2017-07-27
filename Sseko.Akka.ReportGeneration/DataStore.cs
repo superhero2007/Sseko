@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Sseko.Akka.ReportGeneration.Actors;
@@ -11,42 +12,49 @@ namespace Sseko.Akka.ReportGeneration
     public static class DataStore
     {
         private static SsekoContext _dataContext;
-        private static List<AffiliateplusTransaction> _aPlusTransactions;
-        private static List<AffiliateplusAccount> _accounts;
-        private static List<AffiliatepluslevelTier> _underlings;
+        private static ImmutableList<AffiliateplusTransaction> _aPlusTransactions;
+        private static ImmutableList<AffiliateplusAccount> _accounts;
+        private static ImmutableList<AffiliatepluslevelTier> _underlings;
 
         public static void Init()
         {
             if (_dataContext == null) _dataContext = ActorSystemRefs.Context;
-            if (_aPlusTransactions == null) _aPlusTransactions = _dataContext.AffiliateplusTransaction.ToList();
-            if (_accounts == null) _accounts = _dataContext.AffiliateplusAccount.ToList();
-            if (_underlings == null) _underlings = _dataContext.AffiliatepluslevelTier.ToList();
+            if (_aPlusTransactions == null) _aPlusTransactions = _dataContext.AffiliateplusTransaction.ToImmutableList();
+            if (_accounts == null) _accounts = _dataContext.AffiliateplusAccount.ToImmutableList();
+            if (_underlings == null) _underlings = _dataContext.AffiliatepluslevelTier.ToImmutableList();
         }
 
-        public static void Terminate()
+        internal static void Terminate()
         {
             _aPlusTransactions = null;
             _accounts = null;
             _underlings = null;
         }
 
-        public static List<AffiliateplusTransaction> TransactionsWhere(Func<AffiliateplusTransaction, bool> predicate)
+        internal static ImmutableList<AffiliateplusTransaction> Transactions(int fellowId)
+        {
+            var hostesses = GetHostessIds(fellowId);
+
+            return TransactionsWhere(t => t.AccountId == fellowId || hostesses.Contains(t.AccountId));
+        }
+
+        internal static ImmutableList<AffiliateplusTransaction> TransactionsWhere(Func<AffiliateplusTransaction, bool> predicate)
         {
             Init();
 
-            return _aPlusTransactions.Where(predicate).ToList();
+            return _aPlusTransactions.Where(predicate).ToImmutableList();
         }
 
-        public static List<int> GetHostessIds(int overlordAccountId)
+        internal static ImmutableList<int> GetHostessIds(int overlordAccountId)
         {
             Init();
 
             var allUnderlingIds = _underlings.Where(u => u.ToptierId == overlordAccountId).Select(u => u.TierId).ToList();
 
-            return _accounts.Where(a => allUnderlingIds.Contains(a.AccountId) && a.Name.Contains("Hostess")).Select(a => a.AccountId).ToList();
+            return _accounts.Where(a => allUnderlingIds.Contains(a.AccountId) && a.Name.Contains("Hostess")).Select(a => a.AccountId).ToImmutableList();
         }
 
-        public static List<AffiliateplusAccount> GetUnderlings(int overlordAccountId, bool includeHostesses = false)
+        internal static ImmutableList<AffiliateplusAccount> GetUnderlings(int overlordAccountId, bool includeHostesses = false)
         {
             Init();
 
@@ -54,10 +62,10 @@ namespace Sseko.Akka.ReportGeneration
 
             var underlings =  _accounts.Where(a => allUnderlingIds.Contains(a.AccountId)).ToList();
 
-            return includeHostesses ? underlings : underlings.Where(u => !u.Name.Contains("Hostess")).ToList();
+            return includeHostesses ? underlings.ToImmutableList() : underlings.Where(u => !u.Name.Contains("Hostess")).ToImmutableList();
         }
 
-        public static List<WorkerActor.FellowLite> GetAllChildren(int fellowId)
+        internal static ImmutableList<WorkerActor.FellowLite> GetAllChildren(int fellowId)
         {
             var fellows = new List<WorkerActor.FellowLite>();
             var children = GetUnderlings(fellowId);
@@ -98,6 +106,7 @@ namespace Sseko.Akka.ReportGeneration
                     }
                 }
             }
+            return fellows.ToImmutableList();
         }
     }
 }
