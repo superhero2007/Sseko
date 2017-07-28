@@ -26,6 +26,7 @@ namespace AspNetCore.Identity.DocumentDb
             this.Logins = new List<UserLoginInfo>();
             this.Claims = new List<Claim>();
             this.PKey = "User";
+            this.DocumentType = "DocumentDbIdentityUser";
         }
 
         [JsonProperty(PropertyName = "pKey")]

@@ -18,9 +18,9 @@ namespace Sseko.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var factory = new ServiceFactory();
+            //var factory = new ServiceFactory();
 
-            await factory.ReportService().GenerateReport(ReportGenerationOperations.ReportType.PvTransactionSummary);
+            //await factory.ReportService().GenerateReport(ReportGenerationOperations.ReportType.PvTransactionSummary);
             return View();
         }
 

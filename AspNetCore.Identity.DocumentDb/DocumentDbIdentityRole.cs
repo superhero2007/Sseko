@@ -13,6 +13,7 @@ namespace AspNetCore.Identity.DocumentDb
         {
             this.Claims = new List<Claim>();
             this.PKey = "Role";
+            this.DocumentType = "DocumentDbIdentityRole";
         }
 
         [JsonProperty(PropertyName = "pKey")]
