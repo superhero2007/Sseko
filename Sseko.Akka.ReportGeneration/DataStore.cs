@@ -54,6 +54,20 @@ namespace Sseko.Akka.ReportGeneration
             return _accounts.Where(a => allUnderlingIds.Contains(a.AccountId) && a.Name.Contains("Hostess")).Select(a => a.AccountId).ToImmutableList();
         }
 
+        internal static ImmutableList<AffiliateplusAccount> GetFellows(DateTime? lastUpdated = null)
+        {
+            Init();
+
+            var fellows = _accounts.Where(a => !a.Name.Contains("Hostess") &&
+                                                a.Balance + a.TotalCommissionReceived != 0 &&
+                                                a.Status
+                                                ).OrderBy(a => a.Name).ToImmutableList();
+
+            return lastUpdated == null
+                    ? fellows 
+                    : fellows.Where(f => f.CreatedTime > lastUpdated).ToImmutableList();
+        }
+
         internal static ImmutableList<AffiliateplusAccount> GetUnderlings(int overlordAccountId, bool includeHostesses = false)
         {
             Init();

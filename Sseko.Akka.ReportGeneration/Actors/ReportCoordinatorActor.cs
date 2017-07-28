@@ -35,7 +35,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
         {
             ReceiveAny(message =>
             {
-                if (message is ReportGenerationOperations.Operation)
+                if (message is ReportOperations.IOperation)
                 {
                     _workers.Forward(message);
                 }

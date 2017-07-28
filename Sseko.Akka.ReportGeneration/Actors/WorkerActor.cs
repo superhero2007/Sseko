@@ -19,21 +19,26 @@ namespace Sseko.Akka.ReportGeneration.Actors
     {
         public WorkerActor()
         {
-            Receive<ReportGenerationOperations.Operation>(message =>
+            Receive<ReportOperations.ReportOperation>(message =>
             {
                 switch (message.ReportType)
                 {
-                    case ReportGenerationOperations.ReportType.DownlineSummary:
+                    case ReportOperations.ReportType.DownlineSummary:
                         var dlReport = GetDownlineReport(message);
-                        Sender.Tell(new ReportGenerationOperations.Result(dlReport));
+                        Sender.Tell(new ReportOperations.Result<Report>(dlReport));
                         break;
-                    case ReportGenerationOperations.ReportType.PvTransactionSummary:
+                    case ReportOperations.ReportType.PvTransactionSummary:
                         var pvReport = GetPvTransactionSummaryReport(message);
-                        Sender.Tell(new ReportGenerationOperations.Result(pvReport));
+                        Sender.Tell(new ReportOperations.Result<Report>(pvReport));
                         break;
                     default:
                         break;
                 }
+            });
+            Receive<ReportOperations.GetNewFellows>(message =>
+            {
+                var newFellows = GetNewFellows(message.LastUpdated);
+                Sender.Tell(new ReportOperations.ResultList<User>(newFellows));
             });
         }
 
@@ -46,7 +51,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
             public string GrandParent { get; set; }
         }
 
-        private static Report GetDownlineReport(ReportGenerationOperations.Operation message)
+        private static Report GetDownlineReport(ReportOperations.ReportOperation message)
         {
             var report = new Report();
             var fellowId = message.FellowId;
@@ -81,7 +86,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
             return report;
         }
 
-        private static Report GetPvTransactionSummaryReport(ReportGenerationOperations.Operation message)
+        private static Report GetPvTransactionSummaryReport(ReportOperations.ReportOperation message)
         {
             var report = new Report();
             var fellowId = message.FellowId;
@@ -131,6 +136,19 @@ namespace Sseko.Akka.ReportGeneration.Actors
                 return "Personal Purchase";
 
             return string.Empty;
+        }
+
+        private static List<User> GetNewFellows(DateTime? lastUpdateDate)
+        {
+            var activeAccounts =  DataStore.GetFellows(lastUpdateDate);
+
+            return activeAccounts.Select(account => new User
+                {
+                    Email = account.Email,
+                    UserName = account.Name,
+                    CustomUrlId = account.IdentifyCode,
+                    MagentoAccountId = account.AccountId
+                }).AsParallel().ToList();
         }
     }
 }

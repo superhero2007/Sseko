@@ -17,7 +17,7 @@ namespace Sseko.BLL.Services
 {
     public class ReportService : IReportService
     {
-        public async Task<ReportGenerationOperations.Result> GenerateReport(ReportGenerationOperations.ReportType reportType)
+        public async Task<ReportOperations.Result<Report>> GenerateReport(ReportOperations.ReportType reportType)
         {
             var reportGenerationService = new ReportGenerationService();
 

@@ -25,5 +25,11 @@ namespace Sseko.DAL.DocumentDb.Entities
 
         [JsonProperty(PropertyName = "deleted")]
         public bool Deleted { get; set; }
+
+        [JsonProperty(PropertyName = "customerUrlId")]
+        public string CustomUrlId { get; set; }
+
+        [JsonProperty(PropertyName = "magentoAccountId")]
+        public int MagentoAccountId { get; set; }
     }
 }

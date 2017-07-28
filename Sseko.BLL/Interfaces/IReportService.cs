@@ -9,6 +9,6 @@ namespace Sseko.BLL.Interfaces
 {
     public interface IReportService
     {
-        Task<ReportGenerationOperations.Result> GenerateReport(ReportGenerationOperations.ReportType reportType);
+        Task<ReportOperations.Result<Report>> GenerateReport(ReportOperations.ReportType reportType);
     }
 }

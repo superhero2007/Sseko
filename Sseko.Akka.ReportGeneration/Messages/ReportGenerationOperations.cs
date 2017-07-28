@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Sseko.DAL.DocumentDb.Entities;
+using Sseko.Data.QueryModels;
 
 namespace Sseko.Akka.ReportGeneration.Messages
 {
-    public abstract class ReportGenerationOperations
+    public abstract class ReportOperations
     {
         public enum ReportType
         {
@@ -17,9 +17,9 @@ namespace Sseko.Akka.ReportGeneration.Messages
             
         }
 
-        public class Operation : IOperation
+        public class ReportOperation : IOperation
         {
-            public Operation(ReportType reportType, int fellowId = 0)
+            public ReportOperation(ReportType reportType, int fellowId = 0)
             {
                 ReportType = reportType;
                 FellowId = fellowId;
@@ -30,15 +30,43 @@ namespace Sseko.Akka.ReportGeneration.Messages
             public int FellowId { get; internal set; }
         }
 
-        public class Result
+        public class Result<T> : Data.QueryModels.Result<T>
         {
-            public Result(Report output)
+            public Result(T output, Exception exception = null)
             {
                 Output = output;
+                Exception = exception;
             }
-            public Report Output { get; internal set; }
-            public Exception Exception { get; internal set; }
-            public bool IsError => Exception != null;
+
+            public Result(Data.QueryModels.Result<T> input)
+            {
+                Output = input.Output;
+                Exception = input.Exception;
+            }
+        }
+
+        public class ResultList<T> : Data.QueryModels.ResultList<T>
+        {
+            public ResultList(List<T> output, Exception exception = null)
+            {
+                Output = output;
+                Exception = exception;
+            }
+
+            public ResultList(Data.QueryModels.ResultList<T> input)
+            {
+                Output = input.Output;
+                Exception = input.Exception;
+            }
+        }
+
+        public class GetNewFellows : IOperation
+        {
+            public GetNewFellows(DateTime? lastUpdated = null)
+            {
+                LastUpdated = lastUpdated;
+            }
+            public DateTime? LastUpdated { get; }
         }
     }
 }

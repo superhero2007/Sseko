@@ -13,9 +13,9 @@ namespace Sseko.Akka.ReportGeneration.Services
             _coordinator = ActorSystemRefs.ReportCoordinatorActor;
         }
 
-        public async Task<Report> CreateAsync(ReportGenerationOperations.ReportType reportType, int i)
+        public async Task<Report> CreateAsync(ReportOperations.ReportType reportType, int i)
         {
-            return (Report) await _coordinator.Ask(new ReportGenerationOperations.Operation(reportType, i));
+            return (Report) await _coordinator.Ask(new ReportOperations.GetNewFellows());
         }
     }
 }
