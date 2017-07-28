@@ -19,7 +19,7 @@ namespace Sseko.Akka.DataService.Messages
             QueryPaged
         }
 
-        public interface IOperation<T>
+        public interface IOperation<out T>
         {
             bool CanCache { get; }
             string Id { get; }
@@ -71,7 +71,6 @@ namespace Sseko.Akka.DataService.Messages
             public IRepository<T> Repository { get; }
             public RequestOptions RequestOptions { get; }
             public Type Type { get; }
-            public bool UsePaging { get; private set; }
             public bool ClearCache { get; }
         }
 

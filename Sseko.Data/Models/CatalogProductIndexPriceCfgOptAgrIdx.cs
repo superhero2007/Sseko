@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Sseko.Data.Models
+﻿namespace Sseko.Data.Models
 {
     public partial class CatalogProductIndexPriceCfgOptAgrIdx
     {

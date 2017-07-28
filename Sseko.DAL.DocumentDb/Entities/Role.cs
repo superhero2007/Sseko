@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using AspNetCore.Identity.DocumentDb;
 using Newtonsoft.Json;
-using Sseko.DAL.DocumentDb.Base;
 
 namespace Sseko.DAL.DocumentDb.Entities
 {

@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Akka.Actor;
-using Akka.Routing;
-using Microsoft.EntityFrameworkCore;
 using Sseko.Akka.ReportGeneration.Messages;
-using Sseko.Data;
 using Sseko.Data.Models;
 using Sseko.DAL.DocumentDb.Entities;
-using Sseko.DAL.DocumentDb.Enums;
 using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.Akka.ReportGeneration.Actors
@@ -32,7 +26,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
                         Sender.Tell(new ReportOperations.Result<Report>(pvReport));
                         break;
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException();
                 }
             });
             Receive<ReportOperations.GetNewFellows>(message =>

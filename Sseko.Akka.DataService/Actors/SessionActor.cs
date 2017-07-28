@@ -11,7 +11,6 @@ namespace Sseko.Akka.DataService.Actors
         private T _cache;
         private string _id;
         private DateTime _lastRead;
-        private TimeSpan _receiveTimeout;
         private int _sessionTimeout;
 
         public SessionActor(string id, TimeSpan receiveTimeout, int sessionTimeout)
@@ -19,10 +18,9 @@ namespace Sseko.Akka.DataService.Actors
             _cache = default(T);
             _id = id;
             _lastRead = DateTime.UtcNow;
-            _receiveTimeout = receiveTimeout;
             _sessionTimeout = sessionTimeout;
 
-            SetReceiveTimeout(_receiveTimeout); // Shutdown this Actor if it hasn't been used
+            SetReceiveTimeout(receiveTimeout); // Shutdown this Actor if it hasn't been used
             Become(Ready);
         }
 

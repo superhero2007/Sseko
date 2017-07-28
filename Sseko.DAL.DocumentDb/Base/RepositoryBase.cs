@@ -246,9 +246,7 @@ namespace Sseko.DAL.DocumentDb.Base
 
                 double totalCost = 0;
 
-                IQueryable<T> queryBuilder;
-
-                queryBuilder = predicate == null ? _context.Client.CreateDocumentQuery<T>(_baseUri, SetPKey(feedOptions)) : _context.Client.CreateDocumentQuery<T>(_baseUri, SetPKey(feedOptions)).Where(predicate);
+                var queryBuilder = predicate == null ? _context.Client.CreateDocumentQuery<T>(_baseUri, SetPKey(feedOptions)) : _context.Client.CreateDocumentQuery<T>(_baseUri, SetPKey(feedOptions)).Where(predicate);
 
                 var query = queryBuilder.AsDocumentQuery();
 

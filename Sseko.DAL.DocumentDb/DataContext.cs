@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;

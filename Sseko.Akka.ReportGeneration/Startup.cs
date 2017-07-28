@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Sseko.Akka.ReportGeneration.Actors;
 using Sseko.Data;
-using Sseko.DAL.DocumentDb;
 
 namespace Sseko.Akka.ReportGeneration
 {

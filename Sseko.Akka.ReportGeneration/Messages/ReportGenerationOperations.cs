@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Sseko.Data.QueryModels;
 
 namespace Sseko.Akka.ReportGeneration.Messages
 {

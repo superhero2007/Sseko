@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sseko.Data;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -10,22 +8,22 @@ namespace SsekoConsole
 {
     class Program
     {
-        static SsekoContext context;
+        static SsekoContext _context;
 
         static void Main(string[] args)
         {
-            //context = new SsekoContext();
+            _context = new SsekoContext();
 
-            //Task.Run(() => Run()).Wait();
+            Task.Run(Run).Wait();
 
-            //Debugger.Break();
+            Debugger.Break();
         }
 
         private static async Task<bool> Run()
         {
             try
             {
-                var data = await context.AffiliateplusAccount.ToListAsync().ConfigureAwait(false);
+                var data = await _context.AffiliateplusAccount.ToListAsync().ConfigureAwait(false);
 
                 Debugger.Break();
 

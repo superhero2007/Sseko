@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Sseko.Data.Models;
 
 namespace Sseko.Data.Models
 {

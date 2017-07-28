@@ -52,7 +52,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
         where TUser : DocumentDbIdentityUser<TRole>
         where TRole : DocumentDbIdentityRole
     {
-        private IRoleStore<TRole> roleStore;
+        private IRoleStore<TRole> _roleStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentDbUserStore{TUser, TRole}"/>
@@ -63,7 +63,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
         public DocumentDbUserStore(IDocumentClient documentClient, IOptions<DocumentDbOptions> options, IRoleStore<TRole> roleStore)
             : base(documentClient, options, options.Value.UserStoreDocumentCollection)
         {
-            this.roleStore = roleStore;
+            this._roleStore = roleStore;
         }
 
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 user.Id = Guid.NewGuid().ToString();
             }
 
-            ResourceResponse<Document> result = await documentClient.CreateDocumentAsync(collectionUri, user, Utilities.GetRequestOptions("User"));
+            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, user, Utilities.GetRequestOptions("User"));
 
             return result.StatusCode == HttpStatusCode.Created
                 ? IdentityResult.Success
@@ -101,7 +101,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                await documentClient.DeleteDocumentAsync(GenerateDocumentUri(user.Id), Utilities.GetRequestOptions("User"));
+                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(user.Id), Utilities.GetRequestOptions("User"));
             }
             catch (DocumentClientException dce)
             {
@@ -126,7 +126,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            TUser foundUser = await documentClient.ReadDocumentAsync<TUser>(GenerateDocumentUri(userId), Utilities.GetRequestOptions("User"));
+            TUser foundUser = await DocumentClient.ReadDocumentAsync<TUser>(GenerateDocumentUri(userId), Utilities.GetRequestOptions("User"));
 
             return foundUser;
         }
@@ -141,7 +141,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            TUser foundUser = documentClient.CreateDocumentQuery<TUser>(collectionUri, Utilities.GetFeedOptions("User"))
+            TUser foundUser = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
                 .Where(u => u.NormalizedUserName == normalizedUserName && u.DocumentType == typeof(TUser).Name)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -240,7 +240,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                await documentClient.ReplaceDocumentAsync(GenerateDocumentUri(user.Id), user, Utilities.GetRequestOptions("User"));
+                await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(user.Id), user, Utilities.GetRequestOptions("User"));
             }
             catch (DocumentClientException dce)
             {
@@ -355,7 +355,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(claim));
             }
 
-            var result = documentClient.CreateDocumentQuery<TUser>(collectionUri, Utilities.GetFeedOptions("User"))
+            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
                 .SelectMany(u => u.Claims
                     .Where(c => c.Type == claim.Type && c.Value == claim.Value)
                     .Select(c => u)
@@ -442,7 +442,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(loginProvider));
             }
 
-            TUser user = documentClient.CreateDocumentQuery<TUser>(collectionUri, Utilities.GetFeedOptions("User"))
+            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
                 .SelectMany(u => u.Logins
                     .Where(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey)
                     .Select(l => u)
@@ -467,7 +467,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
             }
 
             // Check if the given role name exists
-            TRole foundRole = await roleStore.FindByNameAsync(normalizedRoleName, cancellationToken);
+            TRole foundRole = await _roleStore.FindByNameAsync(normalizedRoleName, cancellationToken);
 
             if (foundRole == null)
             {
@@ -547,7 +547,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var result = documentClient.CreateDocumentQuery<TUser>(collectionUri, Utilities.GetFeedOptions("User"))
+            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
                 .SelectMany(u => u.Roles
                     .Where(r => r.NormalizedName == normalizedRoleName)
                     .Select(r => u)
@@ -780,7 +780,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            TUser user = documentClient.CreateDocumentQuery<TUser>(collectionUri, Utilities.GetFeedOptions("User"))
+            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
                 .Where(u => u.NormalizedEmail == normalizedEmail && u.DocumentType == typeof(TUser).Name)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -920,7 +920,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
         public void Dispose()
         {
             // TODO: Workaround, gets disposed too early currently
-            disposed = false;
+            Disposed = false;
         }
 
         #endregion

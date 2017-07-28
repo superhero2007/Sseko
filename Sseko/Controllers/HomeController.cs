@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.BLL;
-using Sseko.DAL.DocumentDb.Entities;
-using Sseko.DAL.DocumentDb.Enums;
-using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.Controllers
 {

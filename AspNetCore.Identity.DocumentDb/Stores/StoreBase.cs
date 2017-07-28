@@ -2,33 +2,30 @@
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AspNetCore.Identity.DocumentDb.Stores
 {
     public abstract class StoreBase
     {
-        protected bool disposed = false;
+        protected bool Disposed = false;
 
-        protected IDocumentClient documentClient;
-        protected DocumentDbOptions options;
-        protected Uri collectionUri;
-        protected string collectionName;
+        protected IDocumentClient DocumentClient;
+        protected DocumentDbOptions Options;
+        protected Uri CollectionUri;
+        protected string CollectionName;
 
         protected StoreBase(IDocumentClient documentClient, IOptions<DocumentDbOptions> options, string collectionName)
         {
-            this.documentClient = documentClient;
-            this.options = options.Value;
-            this.collectionName = collectionName;
+            this.DocumentClient = documentClient;
+            this.Options = options.Value;
+            this.CollectionName = collectionName;
 
-            this.collectionUri = UriFactory.CreateDocumentCollectionUri(this.options.Database, collectionName);
+            this.CollectionUri = UriFactory.CreateDocumentCollectionUri(this.Options.Database, collectionName);
         }
 
         protected virtual void ThrowIfDisposed()
         {
-            if (disposed)
+            if (Disposed)
             {
                 throw new ObjectDisposedException(GetType().Name);
             }
@@ -36,7 +33,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
         protected Uri GenerateDocumentUri(string documentId)
         {
-            return UriFactory.CreateDocumentUri(options.Database, collectionName, documentId);
+            return UriFactory.CreateDocumentUri(Options.Database, CollectionName, documentId);
         }
     }
 }

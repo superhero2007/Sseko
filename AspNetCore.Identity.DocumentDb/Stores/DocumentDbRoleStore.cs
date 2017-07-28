@@ -28,9 +28,9 @@ namespace AspNetCore.Identity.DocumentDb.Stores
         public DocumentDbRoleStore(IDocumentClient documentClient, IOptions<DocumentDbOptions> options)
             : base(documentClient, options, options.Value.RoleStoreDocumentCollection ?? options.Value.UserStoreDocumentCollection)
         {
-            collectionUri = UriFactory.CreateDocumentCollectionUri(
-                this.options.Database,
-                this.options.RoleStoreDocumentCollection ?? this.options.UserStoreDocumentCollection);
+            CollectionUri = UriFactory.CreateDocumentCollectionUri(
+                this.Options.Database,
+                this.Options.RoleStoreDocumentCollection ?? this.Options.UserStoreDocumentCollection);
         }
 
         public Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = default(CancellationToken))
@@ -102,7 +102,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 role.Id = Guid.NewGuid().ToString();
             }
 
-            ResourceResponse<Document> result = await documentClient.CreateDocumentAsync(collectionUri, role, Utilities.GetRequestOptions("Role"));
+            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, role, Utilities.GetRequestOptions("Role"));
 
             return result.StatusCode == HttpStatusCode.Created
                 ? IdentityResult.Success
@@ -121,7 +121,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                ResourceResponse<Document> result = await documentClient.ReplaceDocumentAsync(GenerateDocumentUri(role.Id), role, Utilities.GetRequestOptions("Role"));
+                ResourceResponse<Document> result = await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(role.Id), role, Utilities.GetRequestOptions("Role"));
             }
             catch (DocumentClientException dce)
             {
@@ -141,8 +141,6 @@ namespace AspNetCore.Identity.DocumentDb.Stores
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            ResourceResponse<Document> result;
-
             if (role == null)
             {
                 throw new ArgumentNullException(nameof(role));
@@ -150,7 +148,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                result = await documentClient.DeleteDocumentAsync(GenerateDocumentUri(role.Id), Utilities.GetRequestOptions("Role"));
+                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(role.Id), Utilities.GetRequestOptions("Role"));
             }
             catch (DocumentClientException dce)
             {
@@ -254,7 +252,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(roleId));
             }
 
-            TRole role = await documentClient.ReadDocumentAsync<TRole>(GenerateDocumentUri(roleId), Utilities.GetRequestOptions("Role"));
+            TRole role = await DocumentClient.ReadDocumentAsync<TRole>(GenerateDocumentUri(roleId), Utilities.GetRequestOptions("Role"));
 
             return role;
         }
@@ -269,7 +267,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            TRole role = documentClient.CreateDocumentQuery<TRole>(collectionUri, Utilities.GetFeedOptions("Role"))
+            TRole role = DocumentClient.CreateDocumentQuery<TRole>(CollectionUri, Utilities.GetFeedOptions("Role"))
                 .Where(r => r.NormalizedName == normalizedRoleName && r.DocumentType == typeof(TRole).Name)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -282,7 +280,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
         public void Dispose()
         {
             // TODO: Workaround, gets disposed too early currently
-            disposed = false;
+            Disposed = false;
         }
 
         #endregion

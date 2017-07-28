@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.Identity.DocumentDb;
 using Microsoft.AspNetCore.Authorization;
@@ -8,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Sseko.DAL.DocumentDb.Entities;
-using Sseko.Models;
 using Sseko.Models.ManageViewModels;
 using Sseko.Services;
 

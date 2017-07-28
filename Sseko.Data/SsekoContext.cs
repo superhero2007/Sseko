@@ -8,7 +8,7 @@ namespace Sseko.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseMySql(@"Server=rds-slave-2-sseko.czts6uwbwov0.us-west-2.rds.amazonaws.com; Port=3306; Database=magento; Uid=magento; Pwd=qBNkM486X6nyhGwREv; SslMode=Preferred;");
+            optionsBuilder.UseMySql("Server=rds-slave-2-sseko.czts6uwbwov0.us-west-2.rds.amazonaws.com; Port=3306; Database=magento; Uid=magento; Pwd=qBNkM486X6nyhGwREv; SslMode=Preferred;");
             //optionsBuilder.UseMySql(@"Server=localhost; Port=3306; Database=sseko; Uid=root; Pwd=Kazam2359; SslMode=Preferred;");
         }
 

@@ -3,15 +3,11 @@ using Akka.Actor;
 using AspNetCore.Identity.DocumentDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sseko.Models;
 using Sseko.Services;
 
 namespace Sseko

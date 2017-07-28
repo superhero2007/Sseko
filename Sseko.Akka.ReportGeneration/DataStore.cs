@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
 using Sseko.Akka.ReportGeneration.Actors;
 using Sseko.Data;
 using Sseko.Data.Models;
@@ -86,7 +85,7 @@ namespace Sseko.Akka.ReportGeneration
 
             foreach (var child in children)
             {
-                var grandChildren = DataStore.GetUnderlings(child.AccountId);
+                var grandChildren = GetUnderlings(child.AccountId);
 
                 fellows.Add(new WorkerActor.FellowLite
                 {
@@ -97,7 +96,7 @@ namespace Sseko.Akka.ReportGeneration
                 });
                 foreach (var grandChild in grandChildren)
                 {
-                    var greatGrandChildren = DataStore.GetUnderlings(grandChild.AccountId);
+                    var greatGrandChildren = GetUnderlings(grandChild.AccountId);
 
                     fellows.Add(new WorkerActor.FellowLite
                     {

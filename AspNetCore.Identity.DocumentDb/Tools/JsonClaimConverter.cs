@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
@@ -18,12 +15,14 @@ namespace AspNetCore.Identity.DocumentDb.Tools
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var claim = (Claim)value;
-            JObject jo = new JObject();
-            jo.Add("Type", claim.Type);
-            jo.Add("Value", claim.Value);
-            jo.Add("ValueType", claim.ValueType);
-            jo.Add("Issuer", claim.Issuer);
-            jo.Add("OriginalIssuer", claim.OriginalIssuer);
+            var jo = new JObject
+            {
+                {"Type", claim.Type},
+                {"Value", claim.Value},
+                {"ValueType", claim.ValueType},
+                {"Issuer", claim.Issuer},
+                {"OriginalIssuer", claim.OriginalIssuer}
+            };
             jo.WriteTo(writer);
         }
 
