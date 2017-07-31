@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Azure.Documents;
 using System.Net;
 using AspNetCore.Identity.DocumentDb.Tools;
+using Sseko.Core.Enums;
 
 namespace AspNetCore.Identity.DocumentDb.Stores
 {
@@ -142,7 +143,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
             }
 
             TUser foundUser = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
-                .Where(u => u.NormalizedUserName == normalizedUserName && u.DocumentType == typeof(TUser).Name)
+                .Where(u => u.NormalizedUserName == normalizedUserName && u.DocumentType == DocumentType.DocumentDbIdentityUser)
                 .AsEnumerable()
                 .FirstOrDefault();
 
@@ -781,7 +782,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
             }
 
             TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
-                .Where(u => u.NormalizedEmail == normalizedEmail && u.DocumentType == typeof(TUser).Name)
+                .Where(u => u.NormalizedEmail == normalizedEmail && u.DocumentType == DocumentType.DocumentDbIdentityUser)
                 .AsEnumerable()
                 .FirstOrDefault();
 

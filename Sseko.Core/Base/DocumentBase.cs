@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.Azure.Documents;
 using Newtonsoft.Json;
-using Sseko.DAL.DocumentDb.Enums;
+using Sseko.Core.Enums;
+using Sseko.Core.Interfaces;
 
-namespace Sseko.DAL.DocumentDb.Base
+namespace Sseko.Core.Base
 {
-    public abstract class DocumentBase : Resource
+    public abstract class DocumentBase : Resource, IDocument
     {
         protected DocumentBase(DocumentType documentType)
         {
@@ -16,8 +17,6 @@ namespace Sseko.DAL.DocumentDb.Base
             PKey = documentType.ToString();
 
         }
-        [JsonProperty(PropertyName = "id")]
-        public override string Id { get; set; }
 
         [JsonProperty(PropertyName = "created")]
         public DateTime Created { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using AspNetCore.Identity.DocumentDb;
 using Newtonsoft.Json;
+using Sseko.DAL.DocumentDb.Interfaces;
 
 namespace Sseko.DAL.DocumentDb.Entities
 {
@@ -12,15 +13,6 @@ namespace Sseko.DAL.DocumentDb.Entities
             Created = DateTime.UtcNow;
             Modified = DateTime.UtcNow;
         }
-
-        [JsonProperty(PropertyName = "created")]
-        public DateTime Created { get; set; }
-
-        [JsonProperty(PropertyName = "modified")]
-        public DateTime Modified { get; set; }
-
-        [JsonProperty(PropertyName = "deleted")]
-        public bool Deleted { get; set; }
 
         [JsonProperty(PropertyName = "customerUrlId")]
         public string CustomUrlId { get; set; }

@@ -1,5 +1,6 @@
-﻿using Sseko.DAL.DocumentDb.Base;
-using Sseko.DAL.DocumentDb.Enums;
+﻿using Sseko.Core.Base;
+using Sseko.Core.Enums;
+using Sseko.DAL.DocumentDb.Base;
 
 namespace Sseko.DAL.DocumentDb
 {

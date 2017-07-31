@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Sseko.Core.Base;
+using Sseko.Core.Enums;
 
 namespace AspNetCore.Identity.DocumentDb
 {
@@ -18,21 +20,15 @@ namespace AspNetCore.Identity.DocumentDb
     /// </summary>
     public class DocumentDbIdentityUser<TRole> : DocumentBase
     {
-        public DocumentDbIdentityUser()
+        public DocumentDbIdentityUser() : base(DocumentType.DocumentDbIdentityUser)
         {
+            this.Id = Guid.NewGuid().ToString();
             this.Roles = new List<TRole>();
             this.Logins = new List<UserLoginInfo>();
             this.Claims = new List<Claim>();
-            this.PKey = "User";
-            this.DocumentType = "DocumentDbIdentityUser";
+            this.PKey = "DocumentDbIdentityUser";
+            this.DocumentType = DocumentType.DocumentDbIdentityUser;
         }
-
-        [JsonProperty(PropertyName = "pKey")]
-        public string PKey { get; set; }
-
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
         [JsonProperty(PropertyName = "userName")]
         public string UserName { get; set; }
 

@@ -7,7 +7,8 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Exceptionless;
-using Sseko.DAL.DocumentDb.Enums;
+using Sseko.Core.Base;
+using Sseko.Core.Enums;
 using Sseko.DAL.DocumentDb.Interfaces;
 using Sseko.DAL.DocumentDb.QueryModels;
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using AspNetCore.Identity.DocumentDb;
 using Microsoft.Azure.Documents.Client;
+using Sseko.Core.Interfaces;
 using Sseko.DAL.DocumentDb.Interfaces;
 
 namespace Sseko.Akka.DataService.Messages
@@ -54,7 +56,7 @@ namespace Sseko.Akka.DataService.Messages
                     throw new ArgumentException("Id must be supplied to use CanCache");
 
                     // Do a validation check if this document inherits from IDocument
-                    if (document != null && document is IDocument)
+                    if (document != null && !(document is IDocument))
                         throw new InvalidOperationException("Document does not inherit from IDocument!");
 
             }

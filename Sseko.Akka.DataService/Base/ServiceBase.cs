@@ -2,7 +2,9 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Akka.Actor;
+using AspNetCore.Identity.DocumentDb;
 using Sseko.Akka.DataService.Messages;
+using Sseko.Core.Interfaces;
 using Sseko.DAL.DocumentDb.Interfaces;
 
 namespace Sseko.Akka.DataService.Base
@@ -11,7 +13,6 @@ namespace Sseko.Akka.DataService.Base
     {
         internal IActorRef Coordinator { get; set; }
         internal IRepository<T> Repository { get; set; }
-
 
         public virtual async Task<DataOperations.Result<T>> CreateAsync(T document)
         {

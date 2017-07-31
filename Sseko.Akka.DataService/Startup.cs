@@ -17,7 +17,7 @@ namespace Sseko.Akka.DataService
                 ActorSystemRefs.UserCoordinatorName);
 
             ActorSystemRefs.RoleCoordinatorActor = system.ActorOf(
-                Props.Create(() => new CoordinatorActor<User>("roleWorkers", 1, 20, TimeSpan.FromMinutes(60), 30)),
+                Props.Create(() => new CoordinatorActor<Role>("roleWorkers", 1, 20, TimeSpan.FromMinutes(60), 30)),
                 ActorSystemRefs.RoleCoordinatorName);
 
             ActorSystemRefs.DataContext = new DataContext();

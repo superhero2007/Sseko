@@ -20,9 +20,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Identity.Documen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.BLL", "Sseko.BLL\Sseko.BLL.csproj", "{BEF970F3-8E88-4850-9161-06E5573650E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sseko.Akka.DataService", "Sseko.Akka.DataService\Sseko.Akka.DataService.csproj", "{CE1D9A5D-D0E9-4FF7-9D68-6EC4197D8CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.DataService", "Sseko.Akka.DataService\Sseko.Akka.DataService.csproj", "{CE1D9A5D-D0E9-4FF7-9D68-6EC4197D8CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sseko.Akka.ReportGeneration", "Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj", "{CA45EABC-C284-493A-B411-86CF0DCFEBA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.ReportGeneration", "Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj", "{CA45EABC-C284-493A-B411-86CF0DCFEBA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sseko.Core", "Sseko.Core\Sseko.Core.csproj", "{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{CA45EABC-C284-493A-B411-86CF0DCFEBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA45EABC-C284-493A-B411-86CF0DCFEBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA45EABC-C284-493A-B411-86CF0DCFEBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

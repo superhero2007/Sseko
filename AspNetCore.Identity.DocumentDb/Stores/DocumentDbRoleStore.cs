@@ -10,6 +10,7 @@ using Microsoft.Azure.Documents;
 using System.Security.Claims;
 using System.Net;
 using AspNetCore.Identity.DocumentDb.Tools;
+using Sseko.Core.Enums;
 
 namespace AspNetCore.Identity.DocumentDb.Stores
 {
@@ -268,7 +269,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
             }
 
             TRole role = DocumentClient.CreateDocumentQuery<TRole>(CollectionUri, Utilities.GetFeedOptions("Role"))
-                .Where(r => r.NormalizedName == normalizedRoleName && r.DocumentType == typeof(TRole).Name)
+                .Where(r => r.NormalizedName == normalizedRoleName && r.DocumentType == DocumentType.DocumentDbIdentityRole)
                 .AsEnumerable()
                 .FirstOrDefault();
 

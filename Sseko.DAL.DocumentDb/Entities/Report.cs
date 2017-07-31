@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using Sseko.DAL.DocumentDb.Base;
-using Sseko.DAL.DocumentDb.Enums;
+using Sseko.Core.Base;
+using Sseko.Core.Enums;
 using Sseko.DAL.DocumentDb.Models;
+using DocumentType = Sseko.Core.Enums.DocumentType;
 
 namespace Sseko.DAL.DocumentDb.Entities
 {

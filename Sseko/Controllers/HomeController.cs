@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.BLL;
+using Sseko.DAL.DocumentDb.Entities;
 
 namespace Sseko.Controllers
 {
@@ -11,9 +12,6 @@ namespace Sseko.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var factory = new ServiceFactory();
-
-            await factory.ReportService().GenerateReport(ReportOperations.ReportType.PvTransactionSummary);
             return View();
         }
 
