@@ -103,7 +103,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 role.Id = Guid.NewGuid().ToString();
             }
 
-            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, role, Utilities.GetRequestOptions("Role"));
+            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, role, Utilities.GetRequestOptions("DocumentDbIdentityRole"));
 
             return result.StatusCode == HttpStatusCode.Created
                 ? IdentityResult.Success
@@ -122,7 +122,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                ResourceResponse<Document> result = await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(role.Id), role, Utilities.GetRequestOptions("Role"));
+                ResourceResponse<Document> result = await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(role.Id), role, Utilities.GetRequestOptions("DocumentDbIdentityRole"));
             }
             catch (DocumentClientException dce)
             {
@@ -149,7 +149,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(role.Id), Utilities.GetRequestOptions("Role"));
+                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(role.Id), Utilities.GetRequestOptions("DocumentDbIdentityRole"));
             }
             catch (DocumentClientException dce)
             {
@@ -253,7 +253,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(roleId));
             }
 
-            TRole role = await DocumentClient.ReadDocumentAsync<TRole>(GenerateDocumentUri(roleId), Utilities.GetRequestOptions("Role"));
+            TRole role = await DocumentClient.ReadDocumentAsync<TRole>(GenerateDocumentUri(roleId), Utilities.GetRequestOptions("DocumentDbIdentityRole"));
 
             return role;
         }
@@ -268,7 +268,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            TRole role = DocumentClient.CreateDocumentQuery<TRole>(CollectionUri, Utilities.GetFeedOptions("Role"))
+            TRole role = DocumentClient.CreateDocumentQuery<TRole>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityRole"))
                 .Where(r => r.NormalizedName == normalizedRoleName && r.DocumentType == DocumentType.DocumentDbIdentityRole)
                 .AsEnumerable()
                 .FirstOrDefault();

@@ -83,7 +83,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 user.Id = Guid.NewGuid().ToString();
             }
 
-            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, user, Utilities.GetRequestOptions("User"));
+            ResourceResponse<Document> result = await DocumentClient.CreateDocumentAsync(CollectionUri, user, Utilities.GetRequestOptions("DocumentDbIdentityUser"));
 
             return result.StatusCode == HttpStatusCode.Created
                 ? IdentityResult.Success
@@ -102,7 +102,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(user.Id), Utilities.GetRequestOptions("User"));
+                await DocumentClient.DeleteDocumentAsync(GenerateDocumentUri(user.Id), Utilities.GetRequestOptions("DocumentDbIdentityUser"));
             }
             catch (DocumentClientException dce)
             {
@@ -127,7 +127,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            TUser foundUser = await DocumentClient.ReadDocumentAsync<TUser>(GenerateDocumentUri(userId), Utilities.GetRequestOptions("User"));
+            TUser foundUser = await DocumentClient.ReadDocumentAsync<TUser>(GenerateDocumentUri(userId), Utilities.GetRequestOptions("DocumentDbIdentityUser"));
 
             return foundUser;
         }
@@ -142,7 +142,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            TUser foundUser = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
+            TUser foundUser = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityUser"))
                 .Where(u => u.NormalizedUserName == normalizedUserName && u.DocumentType == DocumentType.DocumentDbIdentityUser)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -241,7 +241,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
 
             try
             {
-                await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(user.Id), user, Utilities.GetRequestOptions("User"));
+                await DocumentClient.ReplaceDocumentAsync(GenerateDocumentUri(user.Id), user, Utilities.GetRequestOptions("DocumentDbIdentityUser"));
             }
             catch (DocumentClientException dce)
             {
@@ -356,7 +356,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(claim));
             }
 
-            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
+            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityUser"))
                 .SelectMany(u => u.Claims
                     .Where(c => c.Type == claim.Type && c.Value == claim.Value)
                     .Select(c => u)
@@ -443,7 +443,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(loginProvider));
             }
 
-            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
+            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityUser"))
                 .SelectMany(u => u.Logins
                     .Where(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey)
                     .Select(l => u)
@@ -548,7 +548,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
+            var result = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityUser"))
                 .SelectMany(u => u.Roles
                     .Where(r => r.NormalizedName == normalizedRoleName)
                     .Select(r => u)
@@ -781,7 +781,7 @@ namespace AspNetCore.Identity.DocumentDb.Stores
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("User"))
+            TUser user = DocumentClient.CreateDocumentQuery<TUser>(CollectionUri, Utilities.GetFeedOptions("DocumentDbIdentityUser"))
                 .Where(u => u.NormalizedEmail == normalizedEmail && u.DocumentType == DocumentType.DocumentDbIdentityUser)
                 .AsEnumerable()
                 .FirstOrDefault();
