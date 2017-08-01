@@ -13,7 +13,7 @@ namespace Sseko.DAL.DocumentDb.Interfaces
 
         Task<Result<T>> AddAsync(T document, RequestOptions requestOptions = null);
 
-        Task<Result<T>> DeleteAsync(T document, RequestOptions requestOptions = null, bool forceDelete = true);
+        Task<Result<T>> DeleteAsync(T document, RequestOptions requestOptions = null, bool forceDelete = false);
 
         Task<ResultList<T>> GetAllAsync(FeedOptions feedOptions = null, bool includeDeleted = false);
 

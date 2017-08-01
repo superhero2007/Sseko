@@ -14,6 +14,7 @@ namespace Sseko.BLL.Services
     public class UserService : IUserService
     {
         private ServiceFactory _serviceFactory;
+
         public UserService()
         {
             _serviceFactory = new ServiceFactory();
@@ -39,20 +40,6 @@ namespace Sseko.BLL.Services
             }
         }
 
-        public async Task DeleteAllUsers()
-        {
-            var userDs = new UserDataService();
-
-            var request = await userDs.GetAllAsync(true);
-
-            var users = request.Output;
-
-            foreach (var user in users)
-            {
-                await userDs.DeleteAsync(user);
-            }
-        }
-
         private async Task<List<User>> GetNewFellows()
         {
             var lastUpdated = await GetLastUpdated();
@@ -66,7 +53,7 @@ namespace Sseko.BLL.Services
             return request.Output;
         }
 
-        private async Task<DateTime> GetLastUpdated()
+        private static async Task<DateTime> GetLastUpdated()
         {
             var userDs = new UserDataService();
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sseko.Akka.ReportGeneration.Messages;
@@ -12,9 +13,6 @@ namespace Sseko.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var serviceFactoy = new ServiceFactory();
-
-            await serviceFactoy.UserService().DeleteAllUsers();
             return View();
         }
 
