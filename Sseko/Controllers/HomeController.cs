@@ -12,6 +12,9 @@ namespace Sseko.Controllers
     {
         public async Task<IActionResult> Index()
         {
+            var serviceFactoy = new ServiceFactory();
+
+            await serviceFactoy.UserService().DeleteAllUsers();
             return View();
         }
 

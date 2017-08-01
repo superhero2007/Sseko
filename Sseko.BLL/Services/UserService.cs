@@ -18,6 +18,7 @@ namespace Sseko.BLL.Services
         {
             _serviceFactory = new ServiceFactory();
         }
+
         public async Task UpdateFellows()
         {
             var userDs = new UserDataService();
@@ -26,11 +27,29 @@ namespace Sseko.BLL.Services
             var fellowRole = (await roleDs.GetAsync(r => r.NormalizedName == "Fellow")).Output.FirstOrDefault();
             var fellowsToAdd = await GetNewFellows();
 
-            //Add new fellows to db
             foreach (var fellow in fellowsToAdd)
             {
                 fellow.Roles.Add(fellowRole);
-                await userDs.UpsertAsync(fellow);
+                fellow.PasswordHash = "AQAAAAEAACcQAAAAEIxQFu+YBiNsMZNhl49mc1YK0NulPS3yjTG3gVPsASO2ae7MulF5V7bEzUJSlndgeA==";
+                fellow.SecurityStamp = "d2b5686f-8291-484a-8534-8fd21b705526";
+                var request = await userDs.UpsertAsync(fellow);
+
+                //if(!request.IsError)
+                //TODO: Send confirmation email
+            }
+        }
+
+        public async Task DeleteAllUsers()
+        {
+            var userDs = new UserDataService();
+
+            var request = await userDs.GetAllAsync(true);
+
+            var users = request.Output;
+
+            foreach (var user in users)
+            {
+                await userDs.DeleteAsync(user);
             }
         }
 

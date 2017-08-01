@@ -128,13 +128,13 @@ namespace Sseko.DAL.DocumentDb.Base
             return _context.Client.CreateDocumentQuery<T>(_baseUri, SetPKey(feedOptions));
         }
 
-        public virtual async Task<Result<T>> DeleteAsync(T document, RequestOptions requestOptions = null, bool forceDelete = false)
+        public virtual async Task<Result<T>> DeleteAsync(T document, RequestOptions requestOptions = null, bool forceDelete = true)
         {
             try
             {
                 if (forceDelete)
                 {
-                    var delete = await _context.Client.DeleteDocumentAsync(document.SelfLink, requestOptions);
+                    var delete = await _context.Client.DeleteDocumentAsync(document.SelfLink, SetPKey(requestOptions));
 
                     return new Result<T>
                     {

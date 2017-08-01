@@ -5,5 +5,7 @@ namespace Sseko.BLL.Interfaces
     public interface IUserService
     {
         Task UpdateFellows();
+
+        Task DeleteAllUsers();
     }
 }

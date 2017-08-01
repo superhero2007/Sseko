@@ -29,7 +29,7 @@ namespace Sseko.BLL.Services
             return report;
         }
 
-        public async Task<ReportOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated = null)
+        public async Task<ReportOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated)
         {
             var reportGenerationService = new ReportGenerationService();
 
