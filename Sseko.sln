@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.ReportGeneration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Core", "Sseko.Core\Sseko.Core.csproj", "{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Web", "Sseko.Web\Sseko.Web.csproj", "{C66DFE21-24A4-43C3-9EDB-379873EB843F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C66DFE21-24A4-43C3-9EDB-379873EB843F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C66DFE21-24A4-43C3-9EDB-379873EB843F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C66DFE21-24A4-43C3-9EDB-379873EB843F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C66DFE21-24A4-43C3-9EDB-379873EB843F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
