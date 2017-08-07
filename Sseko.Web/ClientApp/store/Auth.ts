@@ -45,7 +45,6 @@ export const actionCreators = {
             .then(response => {
                 const cookies = new Cookies();
                 cookies.set('token', response.data.token, { path: '/' });
-
                 var decodedToken = Decoder(response.data.token);
 
                 dispatch({ type: 'AUTH_USER', role: decodedToken.role });

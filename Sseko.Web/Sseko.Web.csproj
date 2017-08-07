@@ -5,7 +5,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Akka" Version="1.3.0-beta-6" />
+    <PackageReference Include="Exceptionless" Version="4.0.1955" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
@@ -18,6 +21,13 @@
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sseko.Akka.DataService\Sseko.Akka.DataService.csproj" />
+    <ProjectReference Include="..\Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj" />
+    <ProjectReference Include="..\Sseko.BLL\Sseko.BLL.csproj" />
+    <ProjectReference Include="..\Sseko.Core\Sseko.Core.csproj" />
+    <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

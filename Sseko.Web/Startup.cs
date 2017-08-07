@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using SsekoWeb.Utilities;
+using Akka.Actor;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApplicationBasic
 {
@@ -21,6 +26,8 @@ namespace WebApplicationBasic
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            StartAkkaSystems();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -28,7 +35,6 @@ namespace WebApplicationBasic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc();
         }
 
@@ -50,7 +56,17 @@ namespace WebApplicationBasic
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = TokenManager.GetSecurityKey()
+            };
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                TokenValidationParameters = tokenValidationParameters
+            });
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -63,6 +79,15 @@ namespace WebApplicationBasic
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+
+        public void StartAkkaSystems()
+        {
+            var dsSystem = ActorSystem.Create("dSk");
+            Sseko.Akka.DataService.Startup.StartActorSystem(dsSystem);
+
+            var rSystem = ActorSystem.Create("rSk");
+            Sseko.Akka.ReportGeneration.Startup.StartActorSystem(rSystem);
         }
     }
 }

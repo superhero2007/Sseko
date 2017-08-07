@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sseko.Akka.ReportGeneration.Reports;
 
 namespace Sseko.Akka.ReportGeneration.Messages
 {
     public abstract class ReportOperations
     {
-        public enum ReportType
-        {
-            PvTransactionSummary,
-            DownlineSummary
-        }
+
         public interface IOperation
         {
             

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Sseko.Akka.ReportGeneration.Messages;
+using Sseko.Akka.ReportGeneration.Reports;
 using Sseko.DAL.DocumentDb.Entities;
 
 namespace Sseko.BLL.Interfaces

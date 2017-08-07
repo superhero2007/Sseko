@@ -5,7 +5,7 @@ using Akka.Actor;
 using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.Data.Models;
 using Sseko.DAL.DocumentDb.Entities;
-using Sseko.DAL.DocumentDb.Models;
+using Sseko.Akka.ReportGeneration.Reports;
 
 namespace Sseko.Akka.ReportGeneration.Actors
 {
@@ -17,11 +17,11 @@ namespace Sseko.Akka.ReportGeneration.Actors
             {
                 switch (message.ReportType)
                 {
-                    case ReportOperations.ReportType.DownlineSummary:
+                    case ReportType.DownlineSummary:
                         var dlReport = GetDownlineReport(message);
                         Sender.Tell(new ReportOperations.Result<Report>(dlReport));
                         break;
-                    case ReportOperations.ReportType.PvTransactionSummary:
+                    case ReportType.PvTransactionSummary:
                         var pvReport = GetPvTransactionSummaryReport(message);
                         Sender.Tell(new ReportOperations.Result<Report>(pvReport));
                         break;
@@ -50,31 +50,22 @@ namespace Sseko.Akka.ReportGeneration.Actors
             var report = new Report();
             var fellowId = message.FellowId;
 
-            report.Columns = new List<Column>
-            {
-                new Column { Name = "Fellow"},
-                new Column { Name = "Parent"},
-                new Column { Name = "GrandParent"},
-                new Column { Name = "Level"},
-                new Column { Name = "Commissionable Sales"},
-                new Column { Name = "PV"}
-            };
-
             var childFellows = DataStore.GetAllChildren(fellowId);
 
             var rows = (from fellow in childFellows
                         let transactions = DataStore.Transactions(fellowId)
                         let personalPurchases = transactions.Where(t => t.Commission == 0).Sum(t => t.TotalAmount)
                         let pv = transactions.Sum(t => t.TotalAmount)
-                        select new List<string>
+                        select new Dictionary<string, string>
                 {
-                    fellow.Name,
-                    fellow.Parent,
-                    fellow.GrandParent,
-                    fellow.Level.ToString(),
-                    (pv - personalPurchases).ToString(),
-                    pv.ToString()
+                    {"fellow", fellow.Name},
+                    {"parent", fellow.Parent},
+                    {"grandparent", fellow.GrandParent},
+                    {"level", fellow.Level.ToString()},
+                    {"commissionableSales", (pv - personalPurchases).ToString()},
+                    {"pv", pv.ToString()}
                 }).AsParallel().ToList();
+
             report.Rows = rows;
 
             return report;
@@ -84,33 +75,22 @@ namespace Sseko.Akka.ReportGeneration.Actors
         {
             var report = new Report();
             var fellowId = message.FellowId;
-
-            report.Columns = new List<Column>
-            {
-                new Column { Name = "Date" },
-                new Column { Name = "Order Number" },
-                new Column { Name = "Customer" },
-                new Column { Name = "Hostess" },
-                new Column { Name = "Type" },
-                new Column { Name = "Commission" },
-                new Column { Name = "Sale" }
-            };
-
             var transactions = DataStore.Transactions(fellowId);
 
             var rows = (from transaction in transactions
-                let hostess = transaction.AccountName.Replace("Hostess ", "")
-                let type = GetTransactionType(transaction)
-                select new List<string>
+                        let hostess = transaction.AccountName.Replace("Hostess ", "")
+                        let type = GetTransactionType(transaction)
+                        select new Dictionary<string, string>
                 {
-                    transaction.CreatedTime.ToString(),
-                    transaction.OrderId.ToString(),
-                    transaction.CustomerEmail,
-                    hostess,
-                    type,
-                    transaction.Commission.ToString(),
-                    transaction.TotalAmount.ToString()
+                    { "date", transaction.CreatedTime.ToString() },
+                    { "orderNumber", transaction.OrderId.ToString()},
+                    { "customer",  transaction.CustomerEmail},
+                    { "hostess", hostess},
+                    { "type", type},
+                    { "commission", transaction.Commission.ToString()},
+                    { "sale", transaction.TotalAmount.ToString()}
                 }).AsParallel().ToList();
+
             report.Rows = rows;
 
             return report;
@@ -134,17 +114,17 @@ namespace Sseko.Akka.ReportGeneration.Actors
 
         private static List<User> GetNewFellows(DateTime? lastUpdateDate)
         {
-            var activeAccounts =  DataStore.GetFellows(lastUpdateDate);
+            var activeAccounts = DataStore.GetFellows(lastUpdateDate);
 
             return activeAccounts.Select(account => new User
-                {
-                    Email = account.Email,
-                    NormalizedEmail = account.Email,
-                    UserName = account.Email,
-                    NormalizedUserName = account.Email,
-                    CustomUrlId = account.IdentifyCode,
-                    MagentoAccountId = account.AccountId
-                }).AsParallel().ToList();
+            {
+                Email = account.Email,
+                NormalizedEmail = account.Email,
+                UserName = account.Email,
+                NormalizedUserName = account.Email,
+                CustomUrlId = account.IdentifyCode,
+                MagentoAccountId = account.AccountId
+            }).AsParallel().ToList();
         }
     }
 }

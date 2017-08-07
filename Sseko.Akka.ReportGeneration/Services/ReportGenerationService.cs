@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Design.Internal;
 using Sseko.Akka.ReportGeneration.Messages;
 using Sseko.Data.QueryModels;
 using Sseko.DAL.DocumentDb.Entities;
+using Sseko.Akka.ReportGeneration.Reports;
 
 namespace Sseko.Akka.ReportGeneration.Services
 {
@@ -17,7 +18,7 @@ namespace Sseko.Akka.ReportGeneration.Services
             _coordinator = ActorSystemRefs.ReportCoordinatorActor;
         }
 
-        public async Task<ReportOperations.Result<Report>> CreateAsync(ReportOperations.ReportType reportType, int fellowId)
+        public async Task<ReportOperations.Result<Report>> CreateAsync(ReportType reportType, int fellowId)
         {
             var report = (ReportOperations.Result<Report>)await _coordinator.Ask(new ReportOperations.ReportOperation(reportType, fellowId));
 

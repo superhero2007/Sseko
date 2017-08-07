@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Akka.Dispatch;
 using Sseko.Akka.ReportGeneration.Messages;
+using Sseko.Akka.ReportGeneration.Reports;
 using Sseko.Akka.ReportGeneration.Services;
 using Sseko.BLL.Interfaces;
 using Sseko.DAL.DocumentDb.Entities;
@@ -14,7 +15,7 @@ namespace Sseko.BLL.Services
         {
             var reportGenerationService = new ReportGenerationService();
 
-            var report = await reportGenerationService.CreateAsync(ReportOperations.ReportType.DownlineSummary, fellowId);
+            var report = await reportGenerationService.CreateAsync(ReportType.DownlineSummary, fellowId);
 
             return report;
         }
@@ -24,7 +25,7 @@ namespace Sseko.BLL.Services
             var reportGenerationService = new ReportGenerationService();
 
             var report = await reportGenerationService.CreateAsync(
-                ReportOperations.ReportType.PvTransactionSummary, fellowId);
+                ReportType.PvTransactionSummary, fellowId);
 
             return report;
         }
