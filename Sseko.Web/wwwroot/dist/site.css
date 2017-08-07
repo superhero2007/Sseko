@@ -1,0 +1,411 @@
+.main-nav li .glyphicon {
+    margin-right: 10px;
+}
+
+/* Highlighting rules for nav menu items */
+.main-nav li a.active,
+.main-nav li a.active:hover,
+.main-nav li a.active:focus {
+    background-color: #4189C7;
+    color: white;
+}
+
+/* Keep the nav menu independent of scrolling and on top of other items */
+.main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+@media (max-width: 767px) {
+    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+    body {
+        padding-top: 50px;
+    }
+}
+
+@media (min-width: 768px) {
+    /* On small screens, convert the nav menu to a vertical sidebar */
+    .main-nav {
+        height: 100%;
+        width: calc(25% - 20px);
+    }
+    .main-nav .navbar {
+        border-radius: 0px;
+        border-width: 0px;
+        height: 100%;
+    }
+    .main-nav .navbar-header {
+        float: none;
+    }
+    .main-nav .navbar-collapse {
+        border-top: 1px solid #444;
+        padding: 0px;
+    }
+    .main-nav .navbar ul {
+        float: none;
+    }
+    .main-nav .navbar li {
+        float: none;
+        font-size: 15px;
+        margin: 6px;
+    }
+    .main-nav .navbar li a {
+        padding: 10px 16px;
+        border-radius: 4px;
+    }
+    .main-nav .navbar a {
+        /* If a menu item's text is too long, truncate it */
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.bg-primary {
+    background-color: #497568;
+}
+
+.bg-primary-dark {
+    background-color: #40655a;
+}
+
+.bg-primary-light {
+    background-color: #f9f9f9;
+}
+
+.field-validation-error {
+    padding: 4px 8px;
+    margin-top: 5px;
+    margin-bottom: 8px;
+    background-color: #F4D1D1;
+    border: 1px solid #e4b9b9;
+    line-height: 1.4;
+    display: block;
+    border-radius: 4px;
+}
+
+.validation-summary-errors ul {
+    padding-left: 0;
+}
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+}
+
+.validation-summary-errors ul li {
+    list-style-type: none;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    background-color: #F4D1D1;
+    border: 1px solid #e4b9b9;
+    line-height: 1.4;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+}
+
+    .validation-summary-errors ul li:last-child {
+        margin-bottom: 0;
+    }
+
+    .validation-summary-errors ul li a {
+        color: #a84341;
+        font-weight: 800;
+    }
+
+/* Intro Styles */
+.intro-wrapper {
+    position: relative;
+    height: 10vh;
+    width: 100%;
+    display: table;
+    background: transparent;
+    overflow: hidden;
+    padding-top: 36px !important;
+}
+
+    .intro-wrapper .intro-content {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0 5%;
+        -webkit-font-smooting: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+.intro-content .img {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto;
+}
+
+    .intro-content .img img {
+        width: 100%;
+    }
+
+.intro-content h1 {
+    font-size: 2rem;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.intro-content p {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 1em 0;
+    color: rgba(3, 3, 3, 0.8);
+}
+
+@media only screen and (min-width: 768px) {
+    .intro-content h1 {
+        font-size: 3.2rem;
+        font-weight: 300;
+    }
+
+    .intro-content p {
+        font-size: 1.2rem;
+        margin: 1.5em 0 1.9em;
+    }
+}
+
+.login-form {
+    opacity: 0;
+    -webkit-animation-duration: 0.8s;
+    -moz-animation-duration: 0.8s;
+    -animation-duration: 0.8s;
+    -webkit-animation-delay: 0.3s;
+    -moz-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+.login-form {
+    opacity: 1;
+}
+
+.scale.login-form * {
+    opacity: 1;
+}
+
+.scale.login-form {
+    background-color: transparent;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-animation: scale-in 0.6s 0.3s both;
+    -moz-animation: scale-in 0.6s 0.3s both;
+    animation: scale-in 0.6s 0.3s both;
+}
+
+/* Login Styles */
+.login-form {
+    width: 100%;
+    padding: 0 12px 20px;
+    margin: 0 auto 0;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+    .login-form .form {
+        margin-bottom: 12px;
+    }
+
+        .login-form .form .auth-form-header {
+            background-color: transparent;
+            border: 0 none;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: none;
+            padding: 10px 20px;
+            color: #333;
+        }
+
+            .login-form .form .auth-form-header h1 {
+                font-size: 24px;
+                font-weight: 300;
+                letter-spacing: -0.5px;
+                margin: 0;
+            }
+
+        .login-form .form .auth-form-body {
+            background-color: #fff;
+            padding: 20px;
+            font-size: 14px;
+            border: 1px solid #d8dee2;
+        }
+
+            .login-form .form .auth-form-body .intuit-sso-btn {
+                position: relative;
+                background: #365EBE url("/Assets/images/intuit_default.png") no-repeat !important;
+                background-size: 154px !important;
+                background-position-x: 50% !important;
+                background-position-y: 2px !important;
+                height: 40px !important;
+                width: 100% !important;
+                overflow: hidden;
+            }
+
+                .login-form .form .auth-form-body .intuit-sso-btn:hover {
+                    background: #2E55A2 url("/Assets/images/intuit_hover.png") no-repeat !important;
+                    background-size: 154px !important;
+                    background-position-x: 50% !important;
+                    background-position-y: 2px !important;
+                }
+
+                .login-form .form .auth-form-body .intuit-sso-btn .intuitPlatformLoginButtonHorizontal,
+                .login-form .form .auth-form-body .intuit-sso-btn .intuitPlatformLoginButtonHorizontal:hover {
+                    background: none !important;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+
+            .login-form .form .auth-form-body .single-sign-in-btn {
+                background-color: #2c9f1c !important;
+                line-height: 2.4;
+                margin-bottom: 12px;
+                width: 100%;
+                position: relative;
+            }
+
+                .login-form .form .auth-form-body .single-sign-in-btn:hover {
+                    background-color: #288417 !important;
+                }
+
+                .login-form .form .auth-form-body .single-sign-in-btn i.qb-icon {
+                    background: rgba(0, 0, 0, 0) url("/Assets/images/qb-logo.png") no-repeat !important;
+                    background-size: 32px !important;
+                    width: 32px;
+                    height: 32px;
+                    margin-right: -16px;
+                }
+
+                .login-form .form .auth-form-body .single-sign-in-btn .intuitPlatformConnectButton,
+                .login-form .form .auth-form-body .single-sign-in-btn .intuitPlatformConnectButton:hover {
+                    background: none !important;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+
+            .login-form .form .auth-form-body .auth-form-separator {
+                padding: 0 !important;
+                position: relative;
+                margin-top: 30px !important;
+                margin-bottom: 18px !important;
+                padding: 0 !important;
+                height: .8px;
+                background-color: #ddd;
+                border: 0 none;
+                border-radius: 0;
+            }
+
+                .login-form .form .auth-form-body .auth-form-separator span {
+                    position: absolute;
+                    background-color: #fff;
+                    margin-top: -15px;
+                    margin-left: -12px;
+                    padding: 6px;
+                    top: 50%;
+                    left: 50%;
+                    height: 30px;
+                    width: 30px;
+                }
+
+            .login-form .form .auth-form-body #signin-form_id {
+                margin-bottom: 12px;
+            }
+
+    .login-form p {
+        padding: 15px 20px;
+        text-align: center;
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.6);
+        border-radius: 4px;
+        border: 1px solid #d8dee2;
+    }
+
+        .login-form p a {
+            color: #497568;
+        }
+
+    .login-form .form-group {
+        margin-bottom: 10px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+        .login-form .form-group .input-group {
+            border-radius: 4px;
+        }
+
+.form-control:focus {
+    border-color: #ccc;
+    box-shadow: none;
+}
+
+.login-form .input-group .form-control {
+    font-size: 16px;
+    height: 37px;
+    line-height: 1.84615;
+}
+
+.login-form .form-group label {
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0;
+    padding: 4px 0;
+    font-weight: normal;
+}
+
+    .login-form .form-group label input {
+        margin-right: 10px;
+    }
+
+.login-form .btn-submit {
+    margin-top: 20px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background-color: #497568 !important;
+    border: 1px solid #40655a;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+    .login-form .btn-submit:hover,
+    .login-form .btn-submit:focus {
+        background-color: #40655a !important;
+        color: rgba(255, 255, 255, 1);
+    }
+
+    .login-form .btn-submit:active,
+    .login-form .btn-submit:active:focus,
+    .login-form .btn-submit:active:hover {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.3) inset;
+    }
+
+@media only screen and (min-width: 768px) {
+    .login-form {
+        width: 340px;
+    }
+}
+/*# sourceMappingURL=site.css.map*/
