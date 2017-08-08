@@ -41,7 +41,7 @@ namespace Sseko.Akka.ReportGeneration
         {
             Init();
 
-            return _aPlusTransactions.Where(predicate).ToImmutableList();
+            return _aPlusTransactions.Where(predicate).Where(t => t.CreatedTime.HasValue).ToImmutableList();
         }
 
         internal static ImmutableList<int> GetHostessIds(int overlordAccountId)
@@ -92,7 +92,8 @@ namespace Sseko.Akka.ReportGeneration
                     Name = child.Name,
                     Id = child.AccountId,
                     Level = 1,
-                    Parent = "Me"
+                    Parent = "Me",
+                    GrandParent = string.Empty
                 });
                 foreach (var grandChild in grandChildren)
                 {

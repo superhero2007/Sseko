@@ -53,7 +53,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
             var childFellows = DataStore.GetAllChildren(fellowId);
 
             var rows = (from fellow in childFellows
-                        let transactions = DataStore.Transactions(fellowId)
+                        let transactions = DataStore.Transactions(fellow.Id)
                         let personalPurchases = transactions.Where(t => t.Commission == 0).Sum(t => t.TotalAmount)
                         let pv = transactions.Sum(t => t.TotalAmount)
                         select new Dictionary<string, string>
@@ -62,8 +62,8 @@ namespace Sseko.Akka.ReportGeneration.Actors
                     {"parent", fellow.Parent},
                     {"grandparent", fellow.GrandParent},
                     {"level", fellow.Level.ToString()},
-                    {"commissionableSales", (pv - personalPurchases).ToString()},
-                    {"pv", pv.ToString()}
+                    {"commissionableSales", (pv - personalPurchases).ToCurrency()},
+                    {"pv", pv.ToCurrency()}
                 }).AsParallel().ToList();
 
             report.Rows = rows;
@@ -81,14 +81,14 @@ namespace Sseko.Akka.ReportGeneration.Actors
                         let hostess = transaction.AccountName.Replace("Hostess ", "")
                         let type = GetTransactionType(transaction)
                         select new Dictionary<string, string>
-                {
-                    { "date", transaction.CreatedTime.ToString() },
+                {   
+                    { "date", transaction.CreatedTime.Value.Date.ToString("MM/dd/yy") },
                     { "orderNumber", transaction.OrderId.ToString()},
                     { "customer",  transaction.CustomerEmail},
                     { "hostess", hostess},
                     { "type", type},
-                    { "commission", transaction.Commission.ToString()},
-                    { "sale", transaction.TotalAmount.ToString()}
+                    { "commission", transaction.Commission.ToCurrency()},
+                    { "sale", transaction.TotalAmount.ToCurrency()}
                 }).AsParallel().ToList();
 
             report.Rows = rows;
@@ -125,6 +125,18 @@ namespace Sseko.Akka.ReportGeneration.Actors
                 CustomUrlId = account.IdentifyCode,
                 MagentoAccountId = account.AccountId
             }).AsParallel().ToList();
+        }
+
+
+    }
+
+    internal static class Extensions
+    {
+        internal static string ToCurrency(this decimal number)
+        {
+            var rounded = Math.Round(number, 2);
+
+            return $"${rounded}";
         }
     }
 }

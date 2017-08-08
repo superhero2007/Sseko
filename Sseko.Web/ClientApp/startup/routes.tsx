@@ -4,8 +4,8 @@ import { Authorization } from './Authorization'
 
 import { Layout } from '../app/shared/Layout'
 import { Home } from '../app/Home';
-import { PvReport } from '../app/PvReport';
-import { DlReport } from '../app/DlReport';
+import PvReport from '../app/PvReport';
+import DlReport from '../app/DlReport';
 import Login from '../app/Login';
 
 const Fellow = Authorization(['fellow', 'admin']);

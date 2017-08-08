@@ -1,11 +1,11 @@
 ﻿import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as AuthState from '../store/Auth';
+import * as Auth from '../store/Auth';
 import { ApplicationState } from '../store'
 import { Textbox } from '../components/Textbox'
 
-type LoginProps = AuthState.AuthState & typeof AuthState.actionCreators
+type LoginProps = Auth.AuthState & typeof Auth.actionCreators
 
 interface LoginState {
     user: User,
@@ -96,5 +96,5 @@ class Login extends React.Component<LoginProps, LoginState> {
 }
 export default connect(
     (state: ApplicationState) => state.auth,
-    AuthState.actionCreators
+    Auth.actionCreators
 )(Login) as typeof Login;
