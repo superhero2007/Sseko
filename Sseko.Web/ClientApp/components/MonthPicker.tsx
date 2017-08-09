@@ -17,17 +17,19 @@ interface MonthPickerState {
 export class MonthPicker extends React.Component<MonthPickerProps, MonthPickerState> {
     constructor(props) {
         super(props)
-
+        var start = this.props.start;
+        start.month += 1;
+        var end = this.props.end;
+        end.month += 1;
         this.state = {
             mrange: {
-                from: this.props.start,
-                to: this.props.end
+                from: start,
+                to: end
             },
             value: 'N/A'
         }
 
         this._handleClickRangeBox = this._handleClickRangeBox.bind(this)
-        this.handleRangeChange = this.handleRangeChange.bind(this)
         this.handleRangeDissmis = this.handleRangeDissmis.bind(this)
     }
 
@@ -61,7 +63,6 @@ export class MonthPicker extends React.Component<MonthPickerProps, MonthPickerSt
                         range={mrange}
                         lang={pickerLang}
                         theme="light"
-                        onChange={this.props.onChange}
                         onDismiss={this.handleRangeDissmis}
                     >
                         <MonthBox value={makeText(mrange.from) + ' ~ ' + makeText(mrange.to)} onClick={this._handleClickRangeBox} />
@@ -74,10 +75,8 @@ export class MonthPicker extends React.Component<MonthPickerProps, MonthPickerSt
     _handleClickRangeBox(e) {
         this.refs.pickRange.show()
     }
-    handleRangeChange(value, text, listIndex) {
-        //
-    }
     handleRangeDissmis(value) {
         this.setState({ mrange: value })
+        this.props.onChange(value);
     }
 }

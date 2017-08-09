@@ -1,9 +1,8 @@
 ﻿import * as React from 'react';
-import { NavBarLink } from './NavBarLink';
+import { NavBarLink } from '../../components/NavBarLink';
 
 
-export class FellowLinkGroup extends React.Component<{}, {}> {
-    render() {
+export const FellowLinkGroup = () => {
         return (
             <div className='navbar-collapse collapse'>
                 <ul className='nav navbar-nav'>
@@ -28,5 +27,4 @@ export class FellowLinkGroup extends React.Component<{}, {}> {
                 </ul>
             </div>
         );
-    }
 }

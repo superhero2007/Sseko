@@ -1,6 +1,6 @@
-import * as Auth from './Auth';
-import * as PvReport from './PvReport';
-import * as DlReport from './DlReport';
+import * as Auth from '../app/Login/LoginStore';
+import * as PvReport from '../app/PvReport/PvReportStore';
+import * as DlReport from '../app/DlReport/DlReportStore';
 
 // The top-level state object
 export interface ApplicationState {

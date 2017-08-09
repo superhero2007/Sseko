@@ -1,8 +1,8 @@
-﻿import axios from 'axios';
-import { Action, Reducer, ActionCreator } from 'redux';
-import * as Cookies from 'universal-cookie';
+﻿import * as Cookies from 'universal-cookie';
 import * as Decoder from 'jwt-decode';
-import { AppThunkAction } from './';
+import { Action, Reducer, ActionCreator } from 'redux';
+import { AppThunkAction } from '../../store';
+import axios from 'axios';
 
 export interface DlReportState {
     rows: DlRow[],

@@ -26,6 +26,16 @@ export function hostessFilterer(rows, hostesses)
     return rows.filter((row) => _.includes(hostesses, row.hostess));
 }
 
+export function dateFilterer(rows, startDate, endDate) {
+    var filteredRows = [];
+    for (var x in rows) {
+        var date = new Date(rows[x].date);
+        if (startDate <= date && date <= endDate)
+            filteredRows.push(rows[x]);
+    }
+    return filteredRows;
+}
+
 export function sortGrid(rows, sortColumn, sortDirection) {
     const comparer = (a, b) => {
         var item1;

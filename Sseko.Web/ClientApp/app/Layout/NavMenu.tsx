@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { FellowLinkGroup } from '../../components/FellowLinkGroup'
+import { FellowLinkGroup } from './FellowLinkGroup'
 
 export class NavMenu extends React.Component<{}, {}> {
     public render() {

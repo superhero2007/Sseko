@@ -1,8 +1,8 @@
-﻿import axios from 'axios';
-import { Action, Reducer, ActionCreator } from 'redux';
-import * as Cookies from 'universal-cookie';
-import { AppThunkAction } from './';
+﻿import * as Cookies from 'universal-cookie';
 import * as Decoder from 'jwt-decode';
+import { Action, Reducer, ActionCreator } from 'redux';
+import { AppThunkAction } from '../../store';
+import axios from 'axios';
 
 export interface AuthState {
     error: string;

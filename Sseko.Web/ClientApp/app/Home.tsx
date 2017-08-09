@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Layout } from './shared/Layout'
+import { Layout } from './Layout/Layout'
 
 export class Home extends React.Component<RouteComponentProps<{}>, {}> {
     public render() {
