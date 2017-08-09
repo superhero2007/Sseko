@@ -8,13 +8,13 @@ export interface DlReportState {
     rows: DlRow[],
     sortColumn: string,
     sortDirection: string,
-    levels: string[],
+    levelFilter: string[],
     errors: string
 }
 
 interface GetDlRows { type: 'GET_DL_ROWS', payload: DlRow[] }
 interface UpdateLevelFilter { type: 'UPDATE_LEVEL_FILTER', payload: string[] }
-interface UpdateSort { type: 'UPDATE_SORT', column: string, direction: string }
+interface UpdateSort { type: 'UPDATE_DL_SORT', column: string, direction: string }
 
 type KnownAction = GetDlRows | UpdateLevelFilter | UpdateSort;
 
@@ -30,19 +30,19 @@ export const actionCreators = {
             });
     },
 
-    updateLevelFilter: (levels: string[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UPDATE_LEVEL_FILTER', payload: levels });
+    updateLevelFilter: (levelFilter: string[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        dispatch({ type: 'UPDATE_LEVEL_FILTER', payload: levelFilter });
     },
 
     updateSort: (column: string, direction: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UPDATE_SORT', column, direction })
+        dispatch({ type: 'UPDATE_DL_SORT', column, direction })
     }
 }
 
 const unloadedState: DlReportState = {
     rows: [],
     errors: '',
-    levels: ["1", "2", "3"],
+    levelFilter: ["1", "2", "3"],
     sortColumn: 'fellow',
     sortDirection: 'ASC'
 }
@@ -52,8 +52,8 @@ export const reducer: Reducer<DlReportState> = (state: DlReportState, action: Kn
         case 'GET_DL_ROWS':
             return { ...state, errors: '', rows: action.payload };
         case 'UPDATE_LEVEL_FILTER':
-            return { ...state, levels: action.payload };
-        case 'UPDATE_SORT':
+            return { ...state, levelFilter: action.payload };
+        case 'UPDATE_DL_SORT':
             return { ...state, sortColumn: action.column, sortDirection: action.direction };
         default:
             const exhaustiveCheck: never = action;

@@ -9,12 +9,13 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../store'
 import { SelectList } from '../components/SelectList';
 import * as _ from 'lodash';
-import { levelFilter, sortGrid } from '../utils/DatatableFilters';
+import { levelFilterer, sortGrid } from '../utils/DatatableFilters';
 
 type DlReportProps = MappedProps & typeof Report.actionCreators;
 
 interface MappedProps {
-    rows: string[]
+    rows: string[],
+    levelFilter: string
 }
 
 const columns = [
@@ -72,6 +73,7 @@ class DlReport extends React.Component<DlReportProps, {}> {
                     onChange={this.onLevelChange}
                     options={levelOptions}
                     multi
+                    initialValue={this.props.levelFilter}
                 />
                 <ReactDataGrid
                     onGridSort={this.onGridSort}
@@ -86,11 +88,15 @@ class DlReport extends React.Component<DlReportProps, {}> {
 }
 
 function mapStateToProps(state) {
-    const { rows, levels, sortColumn, sortDirection } = state.dlReport;
-    var filteredItems = levelFilter(rows, levels);
+    const { rows, levelFilter, sortColumn, sortDirection } = state.dlReport;
+    var filteredItems = levelFilterer(rows, levelFilter);
     filteredItems = sortGrid(filteredItems, sortColumn, sortDirection);
 
-    return { rows: filteredItems };
+    var levelFilterMapping = '';
+    for (var x in levelFilter)
+        levelFilterMapping = levelFilterMapping.concat(levelFilter[x]).concat(',');
+
+    return { rows: filteredItems, levelFilter: levelFilterMapping };
 }
 
 export default connect(
