@@ -1,7 +1,7 @@
-﻿import '../css/month-picker.css'
-import * as React from 'react';
-import Picker from 'react-month-picker';
+﻿import * as React from 'react';
+import './month-picker.css'
 import { MonthBox } from './MonthBox';
+import Picker from 'react-month-picker';
 
 interface MonthPickerProps {
     onChange: (event: any) => any;

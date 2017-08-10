@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.DAL.DocumentDb", "Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj", "{9A0A1C48-716B-4F9B-831E-C6AB2B0BA21A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Identity.DocumentDb", "AspNetCore.Identity.DocumentDb\AspNetCore.Identity.DocumentDb.csproj", "{C35B69D9-0D5C-4470-92CD-4145F32BC4F6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.BLL", "Sseko.BLL\Sseko.BLL.csproj", "{BEF970F3-8E88-4850-9161-06E5573650E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.DataService", "Sseko.Akka.DataService\Sseko.Akka.DataService.csproj", "{CE1D9A5D-D0E9-4FF7-9D68-6EC4197D8CA2}"
@@ -38,10 +36,6 @@ Global
 		{9A0A1C48-716B-4F9B-831E-C6AB2B0BA21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A0A1C48-716B-4F9B-831E-C6AB2B0BA21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A0A1C48-716B-4F9B-831E-C6AB2B0BA21A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C35B69D9-0D5C-4470-92CD-4145F32BC4F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C35B69D9-0D5C-4470-92CD-4145F32BC4F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C35B69D9-0D5C-4470-92CD-4145F32BC4F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C35B69D9-0D5C-4470-92CD-4145F32BC4F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BEF970F3-8E88-4850-9161-06E5573650E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BEF970F3-8E88-4850-9161-06E5573650E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEF970F3-8E88-4850-9161-06E5573650E7}.Release|Any CPU.ActiveCfg = Release|Any CPU

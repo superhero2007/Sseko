@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCore.Identity.DocumentDb\AspNetCore.Identity.DocumentDb.csproj" />
+    <Folder Include="Enums\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Enums\" />
+    <ProjectReference Include="..\Sseko.Core\Sseko.Core.csproj" />
   </ItemGroup>
 
 </Project>

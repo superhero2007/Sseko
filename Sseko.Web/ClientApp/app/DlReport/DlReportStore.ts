@@ -9,7 +9,8 @@ export interface DlReportState {
     sortColumn: string,
     sortDirection: string,
     levelFilter: string[],
-    errors: string
+    errors: string,
+    loading: boolean
 }
 
 interface GetDlRows { type: 'GET_DL_ROWS', payload: DlRow[] }
@@ -44,13 +45,14 @@ const unloadedState: DlReportState = {
     errors: '',
     levelFilter: ["1", "2", "3"],
     sortColumn: 'fellow',
-    sortDirection: 'ASC'
+    sortDirection: 'ASC',
+    loading: true
 }
 
 export const reducer: Reducer<DlReportState> = (state: DlReportState, action: KnownAction) => {
     switch (action.type) {
         case 'GET_DL_ROWS':
-            return { ...state, errors: '', rows: action.payload };
+            return { ...state, errors: '', rows: action.payload, loading: false };
         case 'UPDATE_LEVEL_FILTER':
             return { ...state, levelFilter: action.payload };
         case 'UPDATE_DL_SORT':

@@ -9,15 +9,13 @@ export interface AuthState {
     message: string;
     content: string;
     authenticated: boolean;
-    role: string;
 }
 
-interface AuthUserAction { type: 'AUTH_USER', role: '' }
+interface AuthUserAction { type: 'AUTH_USER' }
 interface UnAuthUserAction { type: 'UNAUTH_USER' }
 interface AuthErrorAction { type: 'AUTH_ERROR', payload: '' }
-interface ProtectedTestAction { type: 'PROTECTED_TEST', payload: '' }
 
-type KnownAction = AuthUserAction | UnAuthUserAction | AuthErrorAction | ProtectedTestAction;
+type KnownAction = AuthUserAction | UnAuthUserAction | AuthErrorAction;
 
 export const actionCreators = {
 
@@ -29,69 +27,42 @@ export const actionCreators = {
         if (error.status === 401) {
             dispatch({
                 type: type,
-                payload: 'You are not authorized to do this. Please login and try again.'
+                payload: 'Invalid username or password'
             });
-            this.logoutUser();
         } else {
             dispatch({
                 type: type,
-                payload: errorMessage
+                payload: 'Server error. Please try again'
             });
         }
     },
 
     loginUser: (email, password): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        axios.post(`/auth/login`, { email, password })
+        axios.post(`/api/users/login`, { Username: email, Password: password })
             .then(response => {
                 const cookies = new Cookies();
                 cookies.set('token', response.data.token, { path: '/' });
                 var decodedToken = Decoder(response.data.token);
 
-                dispatch({ type: 'AUTH_USER', role: decodedToken.role });
+                dispatch({ type: 'AUTH_USER'});
                 window.location.href = '/';
             })
             .catch((error) => {
-                this.actionCreators.errorHandler(dispatch, error.message, 'AUTH_ERROR')
+                this.actionCreators.errorHandler(dispatch, error.response, 'AUTH_ERROR')
             });
-    },
-
-    logoutUser: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UNAUTH_USER' });
-        const cookies = new Cookies();
-        cookies.remove('token', { path: '/' });
-
-        window.location.href = '/login';
-    },
-
-    protectedTest: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        const cookies = new Cookies();
-        axios.get(`auth/protected`, {
-            headers: { 'Authorization': cookies.load('token') }
-        })
-            .then(response => {
-                dispatch({
-                    type: 'PROTECTED_TEST',
-                    payload: response.data.content
-                });
-            })
-            .catch((error) => {
-                this.errorHandler(dispatch, error.response, 'AUTH_ERROR')
-            });
-    },
+    }
 }
 
-const unloadedState: AuthState = { error: '', message: '', content: '', authenticated: false, role: '' };
+const unloadedState: AuthState = { error: '', message: '', content: '', authenticated: false };
 
 export const reducer: Reducer<AuthState> = (state: AuthState, action: KnownAction) => {
     switch (action.type) {
         case 'AUTH_USER':
-            return { ...state, error: '', message: '', authenticated: true, role: action.role };
+            return { ...state, error: '', message: '', authenticated: true };
         case 'UNAUTH_USER':
             return { ...state, authenticated: false };
         case 'AUTH_ERROR':
             return { ...state, error: action.payload };
-        case 'PROTECTED_TEST':
-            return { ...state, content: action.payload };
         default:
             const exhaustiveCheck: never = action;
     }

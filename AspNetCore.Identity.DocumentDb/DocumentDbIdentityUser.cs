@@ -23,7 +23,6 @@ namespace AspNetCore.Identity.DocumentDb
         public DocumentDbIdentityUser() : base(DocumentType.DocumentDbIdentityUser)
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Roles = new List<TRole>();
             this.Logins = new List<UserLoginInfo>();
             this.Claims = new List<Claim>();
             this.PKey = "DocumentDbIdentityUser";
@@ -62,8 +61,7 @@ namespace AspNetCore.Identity.DocumentDb
         [JsonProperty(PropertyName = "logins")]
         public IList<UserLoginInfo> Logins { get; set; }
 
-        [JsonProperty(PropertyName = "roles")]
-        public IList<TRole> Roles { get; set; }
+        public string Role { get; set; }
 
         [JsonProperty(PropertyName = "claims")]
         public IList<Claim> Claims { get; set; }

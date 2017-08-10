@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { NavBarLink } from '../../components/NavBarLink';
+import { NavBarLink } from './NavBarLink';
 
 
 export const FellowLinkGroup = () => {

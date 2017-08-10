@@ -12,7 +12,8 @@ export interface PvReportState {
     sortDirection: string,
     startDate: Date,
     endDate: Date,
-    errors: string
+    errors: string,
+    loading: boolean
 }
 
 interface GetPvRows { type: 'GET_PV_ROWS', payload: PvRow[] }
@@ -61,13 +62,14 @@ const unloadedState: PvReportState = {
     startDate: new Date(today.getFullYear(), today.getMonth(), 1),
     endDate: new Date(today.getFullYear(), today.getMonth() + 1, 0),
     sortColumn: 'date',
-    sortDirection: 'ASC'
+    sortDirection: 'ASC',
+    loading: true
 }
 
 export const reducer: Reducer<PvReportState> = (state: PvReportState, action: KnownAction) => {
     switch (action.type) {
         case 'GET_PV_ROWS':
-            return { ...state, errors: '', rows: action.payload };
+            return { ...state, errors: '', rows: action.payload, loading: false };
         case 'UPDATE_PV_SORT':
             return { ...state, sortColumn: action.column, sortDirection: action.direction };
         case 'UPDATE_SALE_FILTER':

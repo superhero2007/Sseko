@@ -26,16 +26,16 @@ export class Textbox extends React.Component<TextboxProps, {}> {
                     label={this.props.label}
                     required={this.props.required}
                 />
-                    <input
-                        id={this.props.htmlId}
-                        type={this.props.type}
-                        name={this.props.name}
-                        placeholder={this.props.placeholder}
-                        value={this.props.value}
-                        onChange={this.props.onChange}
-                        className={"form-control" + (this.props.error ? " form-control-danger" : "")}
-                    />
-                    {this.props.error && <div className="form-control-feedback">{this.props.error}</div>}
+                <input
+                    id={this.props.htmlId}
+                    type={this.props.type}
+                    name={this.props.name}
+                    placeholder={this.props.placeholder}
+                    value={this.props.value}
+                    onChange={this.props.onChange}
+                    className={"form-control" + (this.props.error ? " form-control-danger" : "")}
+                />
+                {this.props.error && <div className="form-control-feedback">{this.props.error}</div>}
             </div>
         );
     }

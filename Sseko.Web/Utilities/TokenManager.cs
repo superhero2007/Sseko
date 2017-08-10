@@ -1,17 +1,14 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using Sseko.DAL.DocumentDb.Entities;
 
-namespace SsekoWeb.Utilities
+namespace Sseko.Web.Utilities
 {
     public static class TokenManager
     {
-        public static string GenerateTokenAsync()
+        public static string GenerateTokenAsync(User user)
         {
             var expirationTime = TimeSpan.FromHours(16);
 
@@ -23,9 +20,10 @@ namespace SsekoWeb.Utilities
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, "sseko@mailinator.com"),
-                    new Claim("userId", Guid.Empty.ToString()),
-                    new Claim("role", "fellow")
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("userId", user.Id),
+                    new Claim("magentoId", user.MagentoAccountId.ToString()),
+                    new Claim("role", user.Role), 
                 }),
                 Expires = now.AddMinutes(180),
 

@@ -67,6 +67,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             rowGetter={this.rowGetter}
             rows={this.props.rows}
             typeFilter={this.props.typeFilter}
+            loading={this.props.loading}
         />
     }
 }
@@ -79,11 +80,12 @@ interface MappedProps {
     dateFilter: {
         start: { month: number, year: number },
         end: { month: number, year: number }
-    }
+    },
+    loading: boolean
 }
 
 function mapStateToProps(state) {
-    const { rows, saleTypeFilter, hostessFilter, sortColumn, sortDirection, startDate, endDate } = state.pvReport;
+    const { rows, saleTypeFilter, hostessFilter, sortColumn, sortDirection, startDate, endDate, loading } = state.pvReport;
 
     var filteredRows = typeFilterer(rows, saleTypeFilter);
     filteredRows = sortGrid(filteredRows, sortColumn, sortDirection);
@@ -111,7 +113,14 @@ function mapStateToProps(state) {
         end: { month: endDate.getMonth(), year: endDate.getFullYear() }
     }
 
-    return { rows: filteredRows, hostesses, hostessFilter: currentHostessFilter, typeFilter: currentTypeFilter, dateFilter: currentDateFilter };
+    return {
+        rows: filteredRows,
+        hostesses,
+        hostessFilter: currentHostessFilter,
+        typeFilter: currentTypeFilter,
+        dateFilter: currentDateFilter,
+        loading
+    };
 }
 
 export default connect(

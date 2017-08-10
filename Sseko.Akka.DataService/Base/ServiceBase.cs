@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Akka.Actor;
-using AspNetCore.Identity.DocumentDb;
 using Sseko.Akka.DataService.Messages;
 using Sseko.Core.Interfaces;
 using Sseko.DAL.DocumentDb.Interfaces;

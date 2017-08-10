@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Sseko.BLL;
 
-namespace WebApplicationBasic.Controllers
+namespace Sseko.Web.Controllers
 {
     public class HomeController : Controller
     {

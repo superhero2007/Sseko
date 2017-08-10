@@ -15,7 +15,7 @@ namespace Sseko.Core.Base
             Modified = DateTime.UtcNow;
             DocumentType = documentType;
             PKey = documentType.ToString();
-
+            Id = Guid.NewGuid().ToString();
         }
 
         [JsonProperty(PropertyName = "created")]

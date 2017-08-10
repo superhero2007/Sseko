@@ -21,14 +21,6 @@ namespace Sseko.BLL
             }
         }
 
-        public IRoleService RoleService()
-        {
-            using (var scope = _container.BeginLifetimeScope())
-            {
-                return scope.Resolve<IRoleService>();
-            }
-        }
-
         public IUserService UserService()
         {
             using (var scope = _container.BeginLifetimeScope())
@@ -47,7 +39,6 @@ namespace Sseko.BLL
             var containerBuilder = new ContainerBuilder();
 
             containerBuilder.RegisterType<ReportService>().As<IReportService>();
-            containerBuilder.RegisterType<RoleService>().As<IRoleService>();
             containerBuilder.RegisterType<UserService>().As<IUserService>();
 
             _container = containerBuilder.Build();

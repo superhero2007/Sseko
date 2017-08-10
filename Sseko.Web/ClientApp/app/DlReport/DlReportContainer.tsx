@@ -43,17 +43,19 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
             onLevelChange={this.onLevelChange}
             onGridSort={this.onGridSort}
             levelFilter={this.props.levelFilter}
+            loading={this.props.loading}
         />
     }
 }
 
 interface MappedProps {
     rows: string[],
-    levelFilter: string
+    levelFilter: string,
+    loading: boolean
 }
 
 function mapStateToProps(state) {
-    const { rows, levelFilter, sortColumn, sortDirection } = state.dlReport;
+    const { rows, levelFilter, sortColumn, sortDirection, loading } = state.dlReport;
     var filteredItems = levelFilterer(rows, levelFilter);
     filteredItems = sortGrid(filteredItems, sortColumn, sortDirection);
 
@@ -61,7 +63,7 @@ function mapStateToProps(state) {
     for (var x in levelFilter)
         levelFilterMapping = levelFilterMapping.concat(levelFilter[x]).concat(',');
 
-    return { rows: filteredItems, levelFilter: levelFilterMapping };
+    return { rows: filteredItems, levelFilter: levelFilterMapping, loading };
 }
 
 export default connect(

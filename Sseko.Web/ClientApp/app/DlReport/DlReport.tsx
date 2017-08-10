@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { DataTable } from '../../components/DataTable/DataTable';
-import { Layout } from '../Layout/Layout'
+import { Layout } from '../../components/Layout/Layout'
 import { SelectList } from '../../components/SelectList';
 
 export const DlReport = (props: DlReportProps) => {
@@ -20,6 +20,7 @@ export const DlReport = (props: DlReportProps) => {
                 rows={props.rows}
                 onGridSort={props.onGridSort}
                 columns={columns}
+                isLoading={props.loading}
             />  
         </Layout>
     )
@@ -30,7 +31,8 @@ interface DlReportProps {
     onGridSort: (column: string, dir: string) => any;
     onLevelChange: (event: any) => any;
     rowGetter: (i: number) => any;
-    rows: string[]
+    rows: string[],
+    loading: boolean
 }
 
 const columns = [

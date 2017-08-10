@@ -1,20 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Akka.Actor;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using SsekoWeb.Utilities;
-using Akka.Actor;
-using Newtonsoft.Json.Serialization;
+using Sseko.DAL.DocumentDb.Entities;
+using Sseko.Web.Models;
+using Sseko.Web.Utilities;
 
-namespace WebApplicationBasic
+namespace Sseko.Web
 {
     public class Startup
     {
@@ -28,6 +25,7 @@ namespace WebApplicationBasic
             Configuration = builder.Build();
 
             StartAkkaSystems();
+            ConfigureMappings();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -88,6 +86,15 @@ namespace WebApplicationBasic
 
             var rSystem = ActorSystem.Create("rSk");
             Sseko.Akka.ReportGeneration.Startup.StartActorSystem(rSystem);
+        }
+
+        public void ConfigureMappings()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<User, UserDto>();
+
+            });
         }
     }
 }

@@ -9,14 +9,14 @@ namespace Sseko.Web.Controllers
 {
     public class BaseController : Controller
     {
-        public string GetId()
+        protected string GetId()
         {
             var token = HttpContext.Request.Cookies["Token"];
 
             return "";
         }
 
-        public int GetMagentoId()
+        protected int GetMagentoId()
         {
             var token = HttpContext.Request.Cookies["Token"];
 

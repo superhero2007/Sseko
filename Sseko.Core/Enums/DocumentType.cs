@@ -6,9 +6,6 @@ namespace Sseko.Core.Enums
     [JsonConverter(typeof(StringEnumConverter))]
     public enum DocumentType
     {
-        DocumentDbIdentityUser,
-        DocumentDbIdentityRole,
-        Report,
-        ReportType
+        User
     }
 }

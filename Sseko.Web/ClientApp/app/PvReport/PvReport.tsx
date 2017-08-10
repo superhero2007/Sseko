@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { DataTable } from '../../components/DataTable/DataTable';
-import { Layout } from '../Layout/Layout'
-import { MonthPicker } from '../../components/MonthPicker';
+import { Layout } from '../../components/Layout/Layout'
+import { MonthPicker } from '../../components/MonthPicker/MonthPicker';
 import { SelectList } from '../../components/SelectList';
 
 export const PvReport = (props: PvReportProps) => {
@@ -36,8 +36,9 @@ export const PvReport = (props: PvReportProps) => {
                 rows={props.rows}
                 columns={columns}
                 onGridSort={props.onGridSort}
+                isLoading={props.loading}
             />
-        </Layout>);
+        </Layout >);
 }
 
 interface PvReportProps {
@@ -51,6 +52,7 @@ interface PvReportProps {
     rowGetter: (i: number) => any;
     rows: string[]
     typeFilter: string;
+    loading: boolean;
 }
 
 const columns = [

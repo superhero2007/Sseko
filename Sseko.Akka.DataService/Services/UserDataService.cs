@@ -13,7 +13,7 @@ namespace Sseko.Akka.DataService.Services
         public UserDataService()
         {
             Coordinator = ActorSystemRefs.UserCoordinatorActor;
-            Repository = new Repository<User>(ActorSystemRefs.DataContext, DocumentType.DocumentDbIdentityUser);
+            Repository = new Repository<User>(ActorSystemRefs.DataContext, DocumentType.User);
         }
     }
 }

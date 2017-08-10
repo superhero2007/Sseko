@@ -1,5 +1,4 @@
-﻿import * as React from 'react'
-import * as AuthState from '../store/Auth';
+﻿import * as React from 'react';
 import * as Cookies from 'universal-cookie';
 import * as Decoder from 'jwt-decode';
 
@@ -18,7 +17,7 @@ export const Authorization = (allowedRoles) =>
                 if (allowedRoles.includes(role)) {
                     return <WrappedComponent {...this.props} />
                 } else {
-                    window.location.href = '/Login';
+                    window.location.href = '/404';
                 };
             }
         }

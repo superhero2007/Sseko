@@ -8,7 +8,7 @@ export const Login = (props: LoginProps) => {
             <div className="form">
                 <div className="auth-form-header">
                     <h1>Sign in to Sseko</h1>
-                    {props.error && <div className="alert alert-danger">{this.props.error}</div>}
+                    {props.error && <div className="alert alert-danger">{props.error}</div>}
                 </div>
                 <div className="auth-form-body">
                     <div className="form-group">

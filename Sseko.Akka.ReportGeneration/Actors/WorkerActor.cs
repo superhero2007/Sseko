@@ -118,10 +118,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
 
             return activeAccounts.Select(account => new User
             {
-                Email = account.Email,
-                NormalizedEmail = account.Email,
                 UserName = account.Email,
-                NormalizedUserName = account.Email,
                 CustomUrlId = account.IdentifyCode,
                 MagentoAccountId = account.AccountId
             }).AsParallel().ToList();
