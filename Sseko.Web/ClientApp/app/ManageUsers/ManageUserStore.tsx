@@ -27,12 +27,12 @@ export const actionCreators = {
         if (error.status === 401) {
             dispatch({
                 type: type,
-                payload: 'Unauthorized!'
+                error: 'Unauthorized!'
             });
         } else {
             dispatch({
                 type: type,
-                payload: 'Server error. Please try again'
+                error: 'Server error. Please try again'
             });
         }
     },

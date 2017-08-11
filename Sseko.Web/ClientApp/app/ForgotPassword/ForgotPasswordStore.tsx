@@ -15,7 +15,7 @@ type KnownAction = SubmitPasswordRequest;
 export const actionCreators = {
     submitRequest: (email: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         var cookies = new Cookies();
-        axios.post('/api/users/resetPassword', { email })
+        axios.post('/api/users/sendResetPasswordLink', { email })
             .then(response => {
                 dispatch({ type: 'SUBMIT_RESET_REQUEST' });
             })
@@ -32,7 +32,7 @@ const unloadedState: ForgotPasswordState = {
 export const reducer: Reducer<ForgotPasswordState> = (state: ForgotPasswordState, action: KnownAction) => {
     switch (action.type) {
         case 'SUBMIT_RESET_REQUEST':
-            return { ...state, errors: '', submitted: true };
+            return { ...state, submitted: true };
         //Uncomment this code if another action is ever added.
         //default:
         //    const exhaustiveCheck: never = action;

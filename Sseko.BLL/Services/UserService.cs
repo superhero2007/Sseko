@@ -74,7 +74,7 @@ namespace Sseko.BLL.Services
             return await _ds.GetAsync(predicate);
         }
 
-        public async Task<DataOperations.Result<User>> UpdatePassword(string username, string password)
+        public async Task<DataOperations.Result<User>> ResetPassword(string username, string password)
         {
             var user = await GetByUserNameAsync(username);
 
@@ -83,6 +83,19 @@ namespace Sseko.BLL.Services
             user.PasswordHash = CreateHash(password);
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.PasswordResetDetails = null;
+            
+            return await UpsertAsync(user);
+        }
+
+        public async Task<DataOperations.Result<User>> UpdatePassword(string userId, string password)
+        {
+            var request = await _ds.GetAsync(userId);
+
+            if (request.IsError) return request;
+
+            var user = request.Output;
+
+            user.PasswordHash = CreateHash(password);
 
             return await UpsertAsync(user);
         }
@@ -112,6 +125,17 @@ namespace Sseko.BLL.Services
                 if (hashBytes[i + 16] != hash[i])
                     return null;
             return user;
+        }
+
+        public async Task<bool> VerifyResetLink(string resetCode)
+        {
+            var request = await GetWhereAsync(u => u.PasswordResetDetails != null && u.PasswordResetDetails.Code == resetCode);
+
+            if (request.IsError) throw request.Exception;
+
+            var user = request.Output.FirstOrDefault();
+
+            return user != null && user.PasswordResetDetails.Expiration < DateTime.UtcNow;
         }
 
         private static string CreateHash(string password)

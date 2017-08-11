@@ -8,7 +8,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
                 !props.submitted
                     ? <div>
                         <Textbox
-                            htmlId={"password-reset-input"}
+                            htmlId={"email-reset-input"}
                             label={"Email"}
                             name={"email"}
                             error={""}

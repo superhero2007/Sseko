@@ -38,7 +38,7 @@ export const actionCreators = {
     },
 
     loginUser: (email, password): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        axios.post(`/api/users/login`, { Username: email, Password: password })
+        axios.post(`/api/users/login`, { username: email, password })
             .then(response => {
                 const cookies = new Cookies();
                 cookies.set('token', response.data.token, { path: '/' });

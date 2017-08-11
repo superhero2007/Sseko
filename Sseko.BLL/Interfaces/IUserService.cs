@@ -14,12 +14,16 @@ namespace Sseko.BLL.Interfaces
 
         Task<User> GetByUserNameAsync(string username);
 
-        Task<DataOperations.Result<User>> UpdatePassword(string username, string password);
+        Task<DataOperations.Result<User>> ResetPassword(string username, string password);
+
+        Task<DataOperations.Result<User>> UpdatePassword(string userId, string password);
 
         Task<DataOperations.Result<User>> UpsertAsync(User user);
 
         Task<DataOperations.ResultList<User>> GetAllAsync();
 
         Task<User> ValidateUser(string username, string password);
+
+        Task<bool> VerifyResetLink(string resetCode);
     }
 }

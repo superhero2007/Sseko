@@ -7,12 +7,15 @@ using Newtonsoft.Json;
 
 namespace Sseko.Web.Models
 {
-    public class UserForAuthDto
+    public class UserForPasswodResetDto
     {
-        [JsonProperty("username")]
-        public string Username { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
-        [JsonProperty( "password")]
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("password")]
         public string Password { get; set; }
     }
 }

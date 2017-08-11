@@ -28,7 +28,7 @@ class ForgotPasswordContainer extends React.Component<ForgotPasswordProps, Forgo
         this.setState({ email: event.target.value });
     }
 
-    public render() {
+    render() {
         return <ForgotPassword
             onSubmit={this.onSubmit}
             submitted={this.props.submitted}

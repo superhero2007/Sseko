@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Akka.Util.Internal;
 using AutoMapper;
 using Exceptionless;
 using Microsoft.AspNetCore.Authorization;
@@ -18,15 +15,20 @@ namespace Sseko.Web.Controllers
     [Route("/api/users/")]
     public class UsersController : BaseController
     {
+        private ServiceFactory _serviceFactory;
+
+        public UsersController()
+        {
+            _serviceFactory = new ServiceFactory();
+        }
+
         [HttpGet]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetUsers()
         {
             try
             {
-                var serviceFactory = new ServiceFactory();
-
-                var request = await serviceFactory.UserService().GetAllAsync();
+                var request = await _serviceFactory.UserService().GetAllAsync();
 
                 if (request.IsError) throw request.Exception;
 
@@ -47,7 +49,7 @@ namespace Sseko.Web.Controllers
         {
             try
             {
-                var userService = new ServiceFactory().UserService();
+                var userService = _serviceFactory.UserService();
 
                 var user = await userService.ValidateUser(model.Username, model.Password);
 
@@ -63,18 +65,19 @@ namespace Sseko.Web.Controllers
             }
         }
 
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> SendPasswordResetLink(string email)
+        [HttpPost("SendResetPasswordLink")]
+        public async Task<IActionResult> SendPasswordResetLink([FromBody] UserForPasswodResetDto model)
         {
             try
             {
-                var userService = new ServiceFactory().UserService();
+                var userService = _serviceFactory.UserService();
 
-                var user = await userService.GetByUserNameAsync(email);
+                var user = await userService.GetByUserNameAsync(model.Email);
                 if (user == null) return StatusCode(204); //Don't reveal that this user does not exst
 
                 //Invalidate the current password
-                user.PasswordHash = string.Concat(user.PasswordHash, Guid.NewGuid().ToString());
+                var rand = new Random();
+                user.PasswordHash = string.Concat(user.PasswordHash, rand.Next(int.MaxValue).ToString());
 
                 //Change the security stamp. This will force already authenticated users to logout
                 //TODO: actually implement this feature
@@ -96,15 +99,53 @@ namespace Sseko.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> UpdatePassword([FromBody] UserForAuthDto model)
+        [HttpPost("VerifyResetLink")]
+        public async Task<IActionResult> VerifyResetLink([FromBody] UserForPasswodResetDto model)
         {
             try
             {
-                var userService = new ServiceFactory().UserService();
+                var valid = await _serviceFactory.UserService().VerifyResetLink(model.Id);
 
-                if (!await userService.Exists(model.Username)) return StatusCode(404);
+                return valid ? StatusCode(204) : StatusCode(404);
+            }
+            catch (Exception e)
+            {
+                e.ToExceptionless().Submit();
+                return StatusCode(500);
+            }
+        }
 
-                var request = await userService.UpdatePassword(model.Username, model.Password);
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetForgottenPassword([FromBody] UserForPasswodResetDto model)
+        {
+            try
+            {
+                var userService = _serviceFactory.UserService();
+
+                var request = await userService.UpdatePassword(model.Email, model.Password);
+
+                if (request.IsError) throw request.Exception;
+
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                e.ToExceptionless().Submit();
+                return StatusCode(500);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswodResetDto model)
+        {
+            try
+            {
+                var userService = _serviceFactory.UserService();
+
+                var userId = GetId();
+
+                var request = await userService.UpdatePassword(model.Id, model.Password);
 
                 if (request.IsError) throw request.Exception;
 

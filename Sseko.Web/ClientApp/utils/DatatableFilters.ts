@@ -10,7 +10,7 @@ export function typeFilterer(rows, types) {
     if (types.length == 0)
         return rows;
     var filteredRows = rows.filter((row) => _.includes(types, row.type));
-    
+
     if (_.includes(types, "Other"))
         for (var x in rows)
             if (rows[x].type == "")
@@ -19,8 +19,7 @@ export function typeFilterer(rows, types) {
     return filteredRows;
 }
 
-export function hostessFilterer(rows, hostesses)
-{
+export function hostessFilterer(rows, hostesses) {
     if (hostesses.length == 0)
         return rows;
     return rows.filter((row) => _.includes(hostesses, row.hostess));
@@ -46,10 +45,10 @@ export function sortGrid(rows, sortColumn, sortDirection) {
         } else if (sortColumn == 'commissionableSales' || sortColumn == 'pv' || sortColumn == 'commission' || sortColumn == 'sale') {
             item1 = new Number(a[sortColumn].substr(1));
             item2 = new Number(b[sortColumn].substr(1));
-        } else if(sortColumn == 'date') {
+        } else if (sortColumn == 'date') {
             item1 = new Date(a[sortColumn]);
             item2 = new Date(b[sortColumn]);
-        }else {
+        } else {
             item1 = a[sortColumn];
             item2 = b[sortColumn];
         }
