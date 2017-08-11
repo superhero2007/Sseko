@@ -8,3 +8,9 @@ export const GetRole = () => {
 
     return decodedToken.role;
 }
+
+export const Logout = () => {
+    var cookies = new Cookies();
+    cookies.remove('token');
+    window.location.href = '/Login';
+}

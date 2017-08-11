@@ -11,7 +11,7 @@ using Sseko.Web.Models;
 using Sseko.Web.Utilities;
 
 namespace Sseko.Web.Controllers
-{   
+{
     [Route("/api/users/")]
     public class UsersController : BaseController
     {
@@ -104,9 +104,11 @@ namespace Sseko.Web.Controllers
         {
             try
             {
-                var valid = await _serviceFactory.UserService().VerifyResetLink(model.Id);
+                var email = await _serviceFactory.UserService().VerifyResetLink(model.Code);
 
-                return valid ? StatusCode(204) : StatusCode(404);
+                if (string.IsNullOrWhiteSpace(email))
+                    return StatusCode(404);
+                return Json(new { email });
             }
             catch (Exception e)
             {
@@ -122,7 +124,7 @@ namespace Sseko.Web.Controllers
             {
                 var userService = _serviceFactory.UserService();
 
-                var request = await userService.UpdatePassword(model.Email, model.Password);
+                var request = await userService.ResetPassword(model.Email, model.Password);
 
                 if (request.IsError) throw request.Exception;
 
@@ -145,7 +147,7 @@ namespace Sseko.Web.Controllers
 
                 var userId = GetId();
 
-                var request = await userService.UpdatePassword(model.Id, model.Password);
+                var request = await userService.UpdatePassword(userId, model.Password);
 
                 if (request.IsError) throw request.Exception;
 

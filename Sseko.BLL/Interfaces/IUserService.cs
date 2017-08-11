@@ -24,6 +24,6 @@ namespace Sseko.BLL.Interfaces
 
         Task<User> ValidateUser(string username, string password);
 
-        Task<bool> VerifyResetLink(string resetCode);
+        Task<string> VerifyResetLink(string resetCode);
     }
 }

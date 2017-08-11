@@ -17,5 +17,8 @@ namespace Sseko.Web.Models
 
         [JsonProperty("password")]
         public string Password { get; set; }
+
+        [JsonProperty("code")]
+        public string Code { get; set; }
     }
 }

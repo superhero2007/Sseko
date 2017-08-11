@@ -6,13 +6,15 @@ import { AppThunkAction } from '../../store';
 
 export interface ResetPasswordState {
     submitted: boolean,
+    email: string,
     error: string
 }
 
 interface ResetPasswordError { type: 'RESET_PASSWORD_ERROR', error: any }
 interface ResetPassword { type: 'RESET_PASSWORD' };
+interface VerifiedCode { type: 'CODE_IS_VERIFIED', email: string }
 
-type KnownAction = ResetPassword | ResetPasswordError;
+type KnownAction = ResetPassword | ResetPasswordError | VerifiedCode;
 
 export const actionCreators = {
     errorHandler: (dispatch, error) => {
@@ -23,31 +25,33 @@ export const actionCreators = {
         });
     },
 
-    submitRequest: (password: string, code: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-        var cookies = new Cookies();
-        var valid = await axios.post('/api/users/verifycode', { code })
+    getEmail: (code: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        var valid = axios.post('/api/users/verifyresetlink', { code })
             .then(response => {
-                return true;
+                dispatch({ type: 'CODE_IS_VERIFIED', email: response.data.email })
             })
             .catch(error => {
                 this.actionCreators.errorHandler(dispatch, error.response)
-                return false;
             });
+    },
 
-        axios.post('/api/users/resetPassword', { password })
+    submitRequest: (email: string, password: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        var cookies = new Cookies();
+
+        axios.post('/api/users/resetPassword', { email, password })
             .then(response => {
-                if (valid)
-                    dispatch({ type: 'RESET_PASSWORD' });
+                dispatch({ type: 'RESET_PASSWORD' });
             })
             .catch((error) => {
                 this.actionCreators.errorHandler(dispatch, error.response)
-    });
+            });
     }
 }
 
 const unloadedState: ResetPasswordState = {
     submitted: false,
-    error: ''
+    error: '',
+    email: ''
 }
 
 export const reducer: Reducer<ResetPasswordState> = (state: ResetPasswordState, action: KnownAction) => {
@@ -56,6 +60,8 @@ export const reducer: Reducer<ResetPasswordState> = (state: ResetPasswordState, 
             return { ...state, error: '', submitted: true };
         case 'RESET_PASSWORD_ERROR':
             return { ...state, error: action.error, submitted: false }
+        case 'CODE_IS_VERIFIED':
+            return { ...state, error: '', email: action.email, submitted: false }
         default:
             const exhaustiveCheck: never = action;
     }

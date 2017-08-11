@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Sseko.Web.Utilities;
 
 namespace Sseko.Web.Controllers
 {
@@ -11,16 +12,20 @@ namespace Sseko.Web.Controllers
     {
         protected string GetId()
         {
-            var token = HttpContext.Request.Cookies["Token"];
+            var encodedToken = HttpContext.Request.Cookies["token"];
 
-            return "";
+            var token = encodedToken.Decode();
+
+            return token.Id;
         }
 
         protected int GetMagentoId()
         {
-            var token = HttpContext.Request.Cookies["Token"];
+            var encodedToken = HttpContext.Request.Cookies.FirstOrDefault(c => c.Key == "token").Value;
 
-            return 1104;
+            var token = encodedToken.Decode();
+
+            return token.MagentoId;
         }
     }
 }

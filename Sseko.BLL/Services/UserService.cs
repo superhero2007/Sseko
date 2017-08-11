@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Exceptionless;
@@ -32,6 +33,7 @@ namespace Sseko.BLL.Services
             {
                 fellow.Role = "fellow";
                 fellow.PasswordHash = CreateHash("p@s5w0rD");
+                fellow.SecurityStamp = Guid.NewGuid().ToString();
                 var request = await _ds.UpsertAsync(fellow);
 
                 //if(!request.IsError)
@@ -83,7 +85,7 @@ namespace Sseko.BLL.Services
             user.PasswordHash = CreateHash(password);
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.PasswordResetDetails = null;
-            
+
             return await UpsertAsync(user);
         }
 
@@ -127,15 +129,15 @@ namespace Sseko.BLL.Services
             return user;
         }
 
-        public async Task<bool> VerifyResetLink(string resetCode)
+        public async Task<string> VerifyResetLink(string resetCode)
         {
-            var request = await GetWhereAsync(u => u.PasswordResetDetails != null && u.PasswordResetDetails.Code == resetCode);
+            var request = await GetWhereAsync(u => u.PasswordResetDetails != null);
 
             if (request.IsError) throw request.Exception;
 
-            var user = request.Output.FirstOrDefault();
+            var user = request.Output.FirstOrDefault(u => u.PasswordResetDetails.Code == resetCode);
 
-            return user != null && user.PasswordResetDetails.Expiration < DateTime.UtcNow;
+            return user != null && user.PasswordResetDetails.Expiration < DateTime.UtcNow ? user.UserName : string.Empty;
         }
 
         private static string CreateHash(string password)

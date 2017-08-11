@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 import { Textbox } from '../../components/Textbox';
 
 export const ResetPassword = (props: ResetPasswordProps) => {
-    const { submitError, errors, auth, onChange, onSubmit, submitted } = props;
+    const { submitError, errors, auth, onChange, onSubmit, submitted, email } = props;
     return (
         <div>
             {
                 !submitted
                     ? <div>
                         <div>
-                            <h1>Reset Password</h1>
+                            <h1>Reset Password for {email}</h1>
                             {submitError && <div className="alert alert-danger">{submitError}</div>}
                         </div>
                         <Textbox
@@ -34,7 +34,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                         <button type="submit" onClick={onSubmit} className="btn btn-default">Reset Password</button>
                     </div>
                     : <div>
-                        <h2>Password Reset!</h2>
+                        <h2>Password Reset</h2>
                         <Link to={"/Login"}>Click here to login</Link>
                     </div>
             }
@@ -48,5 +48,6 @@ interface ResetPasswordProps {
     auth: { password: string, passwordConfirmation: string };
     errors: any,
     submitError: string,
-    submitted: boolean
+    submitted: boolean,
+    email: string
 }

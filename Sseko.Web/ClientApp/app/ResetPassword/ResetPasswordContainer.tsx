@@ -35,7 +35,11 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
 
     onSubmit() {
         if (!this.validate()) return;
-        this.props.submitRequest(this.state.auth.password, this.props.match.params.code);
+        this.props.submitRequest(this.props.email, this.state.auth.password);
+    }
+
+    componentWillMount() {
+        this.props.getEmail(this.props.match.params.code);
     }
 
     validate() {
@@ -53,7 +57,7 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
     onChange(event) {
         var auth = this.state.auth;
         auth[event.target.name] = event.target.value;
-        this.setState({auth});
+        this.setState({ auth });
     }
 
     render() {
@@ -64,6 +68,7 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
             onSubmit={this.onSubmit}
             submitError={this.props.error}
             submitted={this.props.submitted}
+            email={this.props.email}
         />
     }
 }

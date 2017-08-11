@@ -6,8 +6,12 @@ namespace Sseko.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var serviceFactory = new ServiceFactory();
+
+            await serviceFactory.UserService().UpdateFellows();
+
             return View();
         }
 
