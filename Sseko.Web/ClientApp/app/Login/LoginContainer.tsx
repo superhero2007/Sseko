@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ApplicationState } from '../../store'
 import { connect } from 'react-redux';
 import { Login } from './Login';
+import { LogoutWithoutRedirect } from '../../utils/AuthService';
 
 type LoginProps = Auth.AuthState & typeof Auth.actionCreators
 
@@ -26,6 +27,10 @@ class LoginContainer extends React.Component<LoginProps, LoginState> {
         }
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentWillMount() {
+        LogoutWithoutRedirect();
     }
 
     onSubmit = () => {

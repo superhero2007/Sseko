@@ -23,7 +23,7 @@ namespace Sseko.Web.Utilities
                     new Claim("uId", user.Id),
                     new Claim("mId", user.MagentoAccountId.ToString()),
                     new Claim("role", user.Role),
-                    new Claim("sec", user.SecurityStamp), 
+                    new Claim("sec", user.SecurityStamp),
                 }),
                 Expires = now.AddHours(24),
 
@@ -47,14 +47,13 @@ namespace Sseko.Web.Utilities
         {
             var decoded = new JwtSecurityToken(token);
 
-
             return new Token
             {
                 Username = decoded.Claims.FirstOrDefault(c => c.Type == "unique_name").Value,
                 Id = decoded.Claims.FirstOrDefault(c => c.Type == "uId").Value,
                 MagentoId = int.Parse(decoded.Claims.FirstOrDefault(c => c.Type == "mId").Value),
                 Role = decoded.Claims.FirstOrDefault(c => c.Type == "role").Value
-        };
+            };
         }
     }
 

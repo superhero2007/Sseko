@@ -1,15 +1,17 @@
 ﻿import * as React from 'react';
-import { NavMenu } from '../NavMenu/NavMenu';
+import { SideNav } from '../SideNav/SideNav';
+import { TopNav } from '../TopNav/TopNav';
 import { Footer } from './Footer';
-import { GetRole } from '../../utils/AuthService';
+import { GetRole, GetUsername } from '../../utils/AuthService';
 
 
 export class Layout extends React.Component<{}, {}> {
     public render() {
         return <div className='container-fluid'>
+            <TopNav username={GetUsername()} />
             <div className='row'>
                 <div className='col-sm-3'>
-                    <NavMenu role={GetRole()}/>
+                    <SideNav role={GetRole()} />
                 </div>
                 <div className='col-sm-9'>
                     {this.props.children}

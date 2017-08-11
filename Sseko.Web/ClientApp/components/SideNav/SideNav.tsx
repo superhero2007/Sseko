@@ -3,11 +3,11 @@ import { NavLink, Link } from 'react-router-dom';
 import { FellowLinkGroup } from './FellowLinkGroup';
 import { AdminLinkGroup } from './AdminLinkGroup';
 
-interface NavMenuProps {
+interface SideNavProps {
     role: string
 }
 
-export const NavMenu = (props: NavMenuProps) => {
+export const SideNav = (props: SideNavProps) => {
     return (
         <div className='main-nav'>
             <div className='navbar navbar-inverse'>
