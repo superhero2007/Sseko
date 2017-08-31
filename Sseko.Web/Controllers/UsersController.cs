@@ -6,7 +6,6 @@ using Exceptionless;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sseko.BLL;
-using Sseko.DAL.DocumentDb.Models;
 using Sseko.Web.Models;
 using Sseko.Web.Utilities;
 
@@ -44,6 +43,7 @@ namespace Sseko.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]UserForAuthDto model)
         {
@@ -65,6 +65,7 @@ namespace Sseko.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("SendResetPasswordLink")]
         public async Task<IActionResult> SendPasswordResetLink([FromBody] UserForPasswodResetDto model)
         {
@@ -72,22 +73,8 @@ namespace Sseko.Web.Controllers
             {
                 var userService = _serviceFactory.UserService();
 
-                var user = await userService.GetByUserNameAsync(model.Email);
+                var user = await userService.SetPasswordReset(model.Email);
                 if (user == null) return StatusCode(204); //Don't reveal that this user does not exst
-
-                //Invalidate the current password
-                var rand = new Random();
-                user.PasswordHash = string.Concat(user.PasswordHash, rand.Next(int.MaxValue).ToString());
-
-                //Change the security stamp. This will force already authenticated users to logout
-                //TODO: actually implement this feature
-                user.SecurityStamp = Guid.NewGuid().ToString();
-
-                user.PasswordResetDetails = new PasswordResetDetails();
-
-                var request = await userService.UpsertAsync(user);
-
-                if (request.IsError) throw request.Exception;
 
                 //TODO: Send email
                 return StatusCode(204);
@@ -99,6 +86,7 @@ namespace Sseko.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("VerifyResetLink")]
         public async Task<IActionResult> VerifyResetLink([FromBody] UserForPasswodResetDto model)
         {
@@ -117,6 +105,7 @@ namespace Sseko.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetForgottenPassword([FromBody] UserForPasswodResetDto model)
         {
@@ -137,7 +126,6 @@ namespace Sseko.Web.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswodResetDto model)
         {

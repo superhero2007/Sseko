@@ -3211,7 +3211,6 @@ var DlReportContainer = (function (_super) {
         if (_this.props.rows.length == 0)
             _this.props.getDlReport();
         _this.onGridSort = _this.onGridSort.bind(_this);
-        _this.rowGetter = _this.rowGetter.bind(_this);
         _this.onLevelChange = _this.onLevelChange.bind(_this);
         return _this;
     }
@@ -3226,11 +3225,8 @@ var DlReportContainer = (function (_super) {
         }
         this.props.updateLevelFilter(levels);
     };
-    DlReportContainer.prototype.rowGetter = function (i) {
-        return this.props.rows[i];
-    };
     DlReportContainer.prototype.render = function () {
-        return React.createElement(DlReport_1.DlReport, { rows: this.props.rows, rowGetter: this.rowGetter, onLevelChange: this.onLevelChange, onGridSort: this.onGridSort, levelFilter: this.props.levelFilter, loading: this.props.loading });
+        return React.createElement(DlReport_1.DlReport, { rows: this.props.rows, onLevelChange: this.onLevelChange, onGridSort: this.onGridSort, levelFilter: this.props.levelFilter, loading: this.props.loading });
     };
     return DlReportContainer;
 }(React.Component));

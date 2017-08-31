@@ -16,6 +16,8 @@ namespace Sseko.BLL.Interfaces
 
         Task<DataOperations.Result<User>> ResetPassword(string username, string password);
 
+        Task<DataOperations.Result<User>> SetPasswordReset(string username);
+
         Task<DataOperations.Result<User>> UpdatePassword(string userId, string password);
 
         Task<DataOperations.Result<User>> UpsertAsync(User user);

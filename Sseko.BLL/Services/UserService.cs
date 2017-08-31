@@ -12,6 +12,7 @@ using Sseko.Akka.DataService.Services;
 using Sseko.Akka.ReportGeneration.Services;
 using Sseko.BLL.Interfaces;
 using Sseko.DAL.DocumentDb.Entities;
+using Sseko.DAL.DocumentDb.Models;
 
 namespace Sseko.BLL.Services
 {
@@ -19,6 +20,7 @@ namespace Sseko.BLL.Services
     {
         private ServiceFactory _serviceFactory;
         private UserDataService _ds;
+
         public UserService()
         {
             _serviceFactory = new ServiceFactory();
@@ -89,6 +91,24 @@ namespace Sseko.BLL.Services
             return await UpsertAsync(user);
         }
 
+        public async Task<DataOperations.Result<User>> SetPasswordReset(string username)
+        {
+            var user = await GetByUserNameAsync(username);
+
+            if (user == null) return null;
+
+            //Invalidate the current password
+            var rand = new Random();
+            user.PasswordHash = string.Concat(rand.Next(int.MaxValue).ToString(), user.PasswordHash);
+
+            //Change the security stamp. This will force already authenticated users to logout
+            user.SecurityStamp = Guid.NewGuid().ToString();
+
+            user.PasswordResetDetails = new PasswordResetDetails();
+
+            return await UpsertAsync(user);
+        }
+
         public async Task<DataOperations.Result<User>> UpdatePassword(string userId, string password)
         {
             var request = await _ds.GetAsync(userId);
@@ -111,22 +131,9 @@ namespace Sseko.BLL.Services
         {
             var user = await GetByUserNameAsync(username);
 
-            if (user == null)
-                return null;
-            var passwordHash = user.PasswordHash;
+            if (user == null) return null;
 
-            var hashBytes = Convert.FromBase64String(passwordHash);
-
-            var salt = new byte[16];
-            Array.Copy(hashBytes, 0, salt, 0, 16);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
-            var hash = pbkdf2.GetBytes(20);
-
-            for (int i = 0; i < 20; i++)
-                if (hashBytes[i + 16] != hash[i])
-                    return null;
-            return user;
+            return VerifyHashedPassword(user.PasswordHash, password) ? user : null;
         }
 
         public async Task<string> VerifyResetLink(string resetCode)
@@ -136,32 +143,73 @@ namespace Sseko.BLL.Services
             if (request.IsError) throw request.Exception;
 
             var user = request.Output.FirstOrDefault(u => u.PasswordResetDetails.Code == resetCode);
-
-            return user != null && user.PasswordResetDetails.Expiration < DateTime.UtcNow ? user.UserName : string.Empty;
+            
+            return user != null && DateTime.UtcNow  < user.PasswordResetDetails.Expiration ? user.UserName : string.Empty;
         }
 
         private static string CreateHash(string password)
         {
-            var rand = RandomNumberGenerator.Create();
+            byte[] salt;
+            byte[] buffer2;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+            {
+                salt = bytes.Salt;
+                buffer2 = bytes.GetBytes(0x20);
+            }
+            byte[] dst = new byte[0x31];
+            Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
+            Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+            return Convert.ToBase64String(dst);
+        }
 
-            var salt = new byte[16];
-            rand.GetBytes(salt);
+        private static bool VerifyHashedPassword(string hashedPassword, string password)
+        {
+            byte[] buffer4;
+            if (hashedPassword == null)
+            {
+                return false;
+            }
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            byte[] src = Convert.FromBase64String(hashedPassword);
+            if ((src.Length != 0x31) || (src[0] != 0))
+            {
+                return false;
+            }
+            byte[] dst = new byte[0x10];
+            Buffer.BlockCopy(src, 1, dst, 0, 0x10);
+            byte[] buffer3 = new byte[0x20];
+            Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, dst, 0x3e8))
+            {
+                buffer4 = bytes.GetBytes(0x20);
+            }
+            return ByteArrayCompare(buffer3, buffer4);
+        }
 
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
-            var hash = pbkdf2.GetBytes(20);
+        private static bool ByteArrayCompare(byte[] a1, byte[] a2)
+        {
+            if (a1.Length != a2.Length)
+                return false;
 
-            var hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
+            for (int i = 0; i < a1.Length; i++)
+                if (a1[i] != a2[i])
+                    return false;
 
-            return Convert.ToBase64String(hashBytes);
+            return true;
         }
 
         private async Task<List<User>> GetNewFellows()
         {
             var lastUpdated = await GetLastUpdated();
 
-            var request = await _serviceFactory.ReportService().GetNewFellows(lastUpdated);
+            var request = await _serviceFactory.MagentoService().GetNewFellows(lastUpdated);
 
             if (request.IsError)
             {
