@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import * as Report from './PvReportStore'
+import * as Report from './PvReportStore';
 import { ApplicationState } from '../../store';
 import { connect } from 'react-redux';
 import { PvReport } from './PvReport';
@@ -19,6 +19,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         this.onSaleTypeChange = this.onSaleTypeChange.bind(this);
         this.onHostessChange = this.onHostessChange.bind(this);
         this.onMonthChange = this.onMonthChange.bind(this);
+        this.calculateTotalSales = this.calculateTotalSales.bind(this);
     }
 
     onGridSort(sortColumn, sortDirection) {
@@ -45,10 +46,22 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
 
     onMonthChange(value) {
         var start = value.from;
-        var end = value.to
+        var end = value.to;
         var startDate = new Date(start.year, start.month - 1);
         var endDate = new Date(end.year, end.month, 0);
         this.props.updateDateFilter(startDate, endDate);
+    }
+
+    calculateTotalSales() {
+        let total = 0;
+        let rows = this.props.rows;
+        for (let r in rows) {
+            if (rows.hasOwnProperty(r)) {
+                total += Number(rows[r].commission.substr(1));
+            }
+        }
+        console.log(total);
+        return total;
     }
 
     rowGetter(i) {
@@ -68,12 +81,14 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             rows={this.props.rows}
             typeFilter={this.props.typeFilter}
             loading={this.props.loading}
+            totalSales={this.calculateTotalSales()}
+            totalTransactions={this.props.rows.length}
         />
     }
 }
 
 interface MappedProps {
-    rows: string[],
+    rows: Report.PvRow[],
     hostesses: any[],
     hostessFilter: string,
     typeFilter: string,

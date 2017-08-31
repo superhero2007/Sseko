@@ -6,9 +6,9 @@
         <title>@ViewData["Title"]</title>
 
         <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
     </head>
     <body>
+        <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" /> @* Moved because react datagrid dumps css at the end of the head *@
         @RenderBody()
 
         <script src="~/dist/vendor.js" asp-append-version="true"></script>

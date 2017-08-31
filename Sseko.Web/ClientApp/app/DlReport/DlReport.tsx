@@ -1,12 +1,12 @@
 ﻿import * as React from 'react';
 import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
-import { SelectList } from '../../components/SelectList';
+import { ButtonGroup } from '../../components/ButtonGroup';
 
 export const DlReport = (props: DlReportProps) => {
     return (
         <Layout>
-            <SelectList
+            <ButtonGroup
                 htmlId={"level-select"}
                 name={"levels"}
                 error={""}
@@ -17,6 +17,7 @@ export const DlReport = (props: DlReportProps) => {
                 initialValue={props.levelFilter}
             />
             <DataTable
+                label="Downline Summary"
                 rows={props.rows}
                 onGridSort={props.onGridSort}
                 columns={columns}

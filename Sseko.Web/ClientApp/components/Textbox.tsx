@@ -23,7 +23,7 @@ export class Textbox extends React.Component<TextboxProps, {}> {
             <div className={"form-group section" + (this.props.error ? " has-danger" : "")}>
                 <Label
                     htmlId={this.props.htmlId + "-label"}
-                    label={this.props.label}
+                    label={this.props.label || ""}
                     required={this.props.required}
                 />
                 <input

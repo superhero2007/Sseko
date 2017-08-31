@@ -1,24 +1,27 @@
 ﻿import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Textbox } from '../../components/Textbox'
+import loginLogo = require('../../img/logo-login.png');
+import userIcon = require('../../img/user-ico.png');
+import passwordIcon = require('../../img/password-ico.png');
 
 export const Login = (props: LoginProps) => {
     return (
         <div className="login-form scale">
             <div className="form">
-                <div className="auth-form-header">
-                    <h1>Sign in to Sseko</h1>
-                    {props.error && <div className="alert alert-danger">{props.error}</div>}
-                </div>
                 <div className="auth-form-body">
+                    {/* TODO optimize images https://survivejs.com/webpack/loading/images/ */}
+                    <img src={loginLogo} />
+                    <h1>FELLOW INFORMATION</h1>
+                    <h2>Please login to your account</h2>
                     <div className="form-group">
                         <div className="input-group">
-                            <span className="input-group-addon"><i className="fa fa-user"></i></span>
+                            <span className="input-group-addon"><img src={userIcon} /></span>
                             <div className="input-group-content">
                                 <Textbox
                                     htmlId="username"
                                     name="username"
-                                    label="Username"
+                                    placeholder="Username"
                                     type="text"
                                     onChange={props.onChange}
                                     value={props.user.username}
@@ -29,12 +32,12 @@ export const Login = (props: LoginProps) => {
                     </div>
                     <div className="form-group">
                         <div className="input-group">
-                            <span className="input-group-addon"><i className="fa fa-key"></i></span>
+                            <span className="input-group-addon"><img src={passwordIcon} /></span>
                             <div className="input-group-content">
                                 <Textbox
                                     htmlId="password"
                                     name="password"
-                                    label="Password"
+                                    placeholder="Password"
                                     type="password"
                                     onChange={props.onChange}
                                     value={props.user.password}
@@ -42,21 +45,14 @@ export const Login = (props: LoginProps) => {
                                 />
                             </div>
                         </div>
-                        <div className="form-group">
-                            <div className="input-group">
-                                <span className="input-group-addon">
-                                    <NavLink to={'/ForgotPassword'}>Forgot Password?</NavLink>
-                                    <i className="fa fa-question-circle" aria-hidden="true"></i>
-                                </span>
-                            </div>
-                        </div>
                     </div>
-
-                    <button type="submit" onClick={props.onSubmit} className="btn btn-default btn-block btn-submit signin-btn">Sign in</button>
+                    {props.error && <div className="alert alert-danger">{props.error}</div>}
+                    <button type="submit" onClick={props.onSubmit} className="btn btn-default btn-block btn-submit signin-btn">Login</button>
+                    <NavLink to={'/ForgotPassword'}>Forgot Your Password?</NavLink>
                 </div>
             </div >
         </div>
-        );
+    );
 }
 
 interface LoginProps {

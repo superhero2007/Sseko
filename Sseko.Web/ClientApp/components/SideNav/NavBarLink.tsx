@@ -10,13 +10,11 @@ interface NavBarLinkProps {
 
 export class NavBarLink extends React.Component<NavBarLinkProps, {}> {
     render() {
-        const exact = this.props.exact;
+        const exact = this.props.exact || true;
         return (
-            <li>
-                <NavLink exact={exact} to={this.props.href} activeClassName='active'>
-                    <span className={this.props.icon}></span> {this.props.label}
-                </NavLink>
-            </li>
+            <NavLink exact={exact} to={this.props.href} activeClassName='active'>
+                <img src={this.props.icon} /> {this.props.label}
+            </NavLink>
         );
     }
 }

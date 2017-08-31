@@ -30,12 +30,35 @@ module.exports = (env) => {
         module: {
             rules: [
                 { test: /\.css$/, use: ExtractTextPlugin.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                {
+                    test: /\.(png|jpg|jpeg|gif|svg)$/,
+                    use: {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 25000,
+                            name: '[name].[ext]'
+                        }
+                    }
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2)$/,
+                    use: {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]'
+                        }
+                    }
+                }
             ]
         },
         output: { path: path.join(__dirname, clientBundleOutputDir) },
         plugins: [
             new ExtractTextPlugin('site.css'),
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery",
+                Popper: "popper.js"
+            }),
             new webpack.DllReferencePlugin({
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
@@ -47,9 +70,9 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            // Plugins that apply in production builds only
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+                // Plugins that apply in production builds only
+                new webpack.optimize.UglifyJsPlugin()
+            ])
     });
 
     // Configuration for server-side (prerendering) bundle suitable for running in Node

@@ -10,15 +10,12 @@ interface SideNavProps {
 export const SideNav = (props: SideNavProps) => {
     return (
         <div className='main-nav'>
-            <div className='navbar navbar-inverse'>
+            <div className='navbar'>
                 <div className='navbar-header'>
                     <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                        <i className="glyphicon glyphicon-chevron-down"></i>
                         <span className='sr-only'>Toggle navigation</span>
-                        <span className='icon-bar'></span>
-                        <span className='icon-bar'></span>
-                        <span className='icon-bar'></span>
                     </button>
-                    <Link className='navbar-brand' to={'/'}>Sseko</Link>
                 </div>
                 <div className='clearfix'></div>
                 <div className='navbar-collapse collapse'>

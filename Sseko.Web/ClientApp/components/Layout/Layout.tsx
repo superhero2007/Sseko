@@ -7,17 +7,16 @@ import { GetRole, GetUsername } from '../../utils/AuthService';
 
 export class Layout extends React.Component<{}, {}> {
     public render() {
-        return <div className='container-fluid'>
-            <TopNav username={GetUsername()} />
-            <div className='row'>
-                <div className='col-sm-3'>
-                    <SideNav role={GetRole()} />
-                </div>
-                <div className='col-sm-9'>
-                    {this.props.children}
-                    <Footer />
+        return (
+            <div className={'container-fluid ' + this.props.containerClassName}>
+                <div className='row'>
+                    <SideNav role={GetRole()} username={GetUsername()}/>
+                    <div className='body-content'>
+                        {this.props.children}
+                        <Footer />
+                    </div>
                 </div>
             </div>
-        </div>
+        );
     }
 }

@@ -25,7 +25,7 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
     }
 
     componentWillMount = () => {
-        this.setState({element: this.props.initialValue})
+        this.setState({ element: this.props.initialValue });
     }
 
     onValueChange = (value, label) => {
@@ -51,7 +51,7 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
                     value={this.state.element}
                     className={(this.props.error ? "form-control-danger" : "")}
                     multi={this.props.multi}
-                    delimeter={','}
+                    delimiter={','}
                 />
                 {this.props.children}
                 {this.props.error && <div className="form-control-feedback">{this.props.error}</div>}

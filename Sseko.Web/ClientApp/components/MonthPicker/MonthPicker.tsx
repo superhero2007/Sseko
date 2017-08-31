@@ -2,6 +2,7 @@
 import './month-picker.css'
 import { MonthBox } from './MonthBox';
 import Picker from 'react-month-picker';
+import { Label } from '../Label'
 
 interface MonthPickerProps {
     onChange: (event: any) => any;
@@ -55,7 +56,7 @@ export class MonthPicker extends React.Component<MonthPickerProps, MonthPickerSt
 
         return (
             <div>
-                <label>Date</label>
+                <Label label="Date" />
                 <div className="edit">
                     <Picker
                         ref="pickRange"

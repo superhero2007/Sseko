@@ -18,13 +18,18 @@ export class DataTable extends React.Component<DataTableProps, {}> {
 
     render() {
         return (
-            <ReactDataGrid
-                onGridSort={this.props.onGridSort}
-                columns={this.props.columns}
-                rowGetter={this.rowGetter}
-                rowsCount={this.props.rows.length}
-                emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
-            />
+            <div>
+                <div className="grid-label">{this.props.label}</div>
+                <ReactDataGrid
+                    onGridSort={this.props.onGridSort}
+                    columns={this.props.columns}
+                    rowGetter={this.rowGetter}
+                    rowsCount={this.props.rows.length}
+                    rowHeight={35}
+                    minHeight={Math.min(this.props.rows.length * 35 + 35, 16 * 35)}
+                    emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
+                />
+            </div>
         );
     }
 }

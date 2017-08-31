@@ -30,6 +30,9 @@
     <ProjectReference Include="..\Sseko.Core\Sseko.Core.csproj" />
     <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClientApp\font\" />
+  </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="npm install" />
