@@ -24,7 +24,7 @@ namespace Sseko.Web.Controllers
 
                 var serviceFactory = new ServiceFactory();
 
-                var request = await serviceFactory.ReportService().GetDownlineReport(id.Value);
+                var request = await serviceFactory.MagentoService().GetDownlineReport(id.Value);
 
                 if (!request.IsError)
                 {
@@ -49,12 +49,34 @@ namespace Sseko.Web.Controllers
 
                 var serviceFactory = new ServiceFactory();
 
-                var request = await serviceFactory.ReportService().GetPvSummaryReport(id.Value);
+                var request = await serviceFactory.MagentoService().GetPvSummaryReport(id.Value);
 
                 if (!request.IsError)
                 {
                     return Json(request.Output.Rows);
                 }
+                throw request.Exception;
+            }
+            catch (Exception e)
+            {
+                e.ToExceptionless().Submit();
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("Transactions")]
+        public async Task<IActionResult> Transactions()
+        {
+            try
+            {
+                var id = GetMagentoId();
+
+                var serviceFactory = new ServiceFactory();
+                
+                var request = await serviceFactory.MagentoService().GetTransactions(id);
+
+                if (!request.IsError) return Json(request.Output);
+
                 throw request.Exception;
             }
             catch (Exception e)

@@ -31,5 +31,10 @@ namespace Sseko.Akka.ReportGeneration.Services
 
             return fellows;
         }
+
+        public async Task<ReportOperations.ResultList<Transaction>> GetTransactions(int fellowId)
+        {
+            return (ReportOperations.ResultList<Transaction>) await _coordinator.Ask(new ReportOperations.GetTransactions(fellowId));
+        }
     }
 }

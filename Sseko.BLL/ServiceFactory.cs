@@ -13,11 +13,11 @@ namespace Sseko.BLL
             _container = DependencyContainer.Get;
         }
 
-        public IReportService ReportService()
+        public IMagentoService MagentoService()
         {
             using (var scope = _container.BeginLifetimeScope())
             {
-                return scope.Resolve<IReportService>();
+                return scope.Resolve<IMagentoService>();
             }
         }
 
@@ -38,7 +38,7 @@ namespace Sseko.BLL
         {
             var containerBuilder = new ContainerBuilder();
 
-            containerBuilder.RegisterType<ReportService>().As<IReportService>();
+            containerBuilder.RegisterType<MagentoService>().As<IMagentoService>();
             containerBuilder.RegisterType<UserService>().As<IUserService>();
 
             _container = containerBuilder.Build();

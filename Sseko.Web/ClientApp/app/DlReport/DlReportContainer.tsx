@@ -15,7 +15,6 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
             this.props.getDlReport();
 
         this.onGridSort = this.onGridSort.bind(this);
-        this.rowGetter = this.rowGetter.bind(this);
         this.onLevelChange = this.onLevelChange.bind(this);
     }
 
@@ -32,14 +31,9 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
         this.props.updateLevelFilter(levels);
     }
 
-    rowGetter(i) {
-        return this.props.rows[i];
-    }
-
     public render() {
         return <DlReport
             rows={this.props.rows}
-            rowGetter={this.rowGetter}
             onLevelChange={this.onLevelChange}
             onGridSort={this.onGridSort}
             levelFilter={this.props.levelFilter}

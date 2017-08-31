@@ -52,7 +52,8 @@ namespace Sseko.Web.Utilities
                 Username = decoded.Claims.FirstOrDefault(c => c.Type == "unique_name").Value,
                 Id = decoded.Claims.FirstOrDefault(c => c.Type == "uId").Value,
                 MagentoId = int.Parse(decoded.Claims.FirstOrDefault(c => c.Type == "mId").Value),
-                Role = decoded.Claims.FirstOrDefault(c => c.Type == "role").Value
+                Role = decoded.Claims.FirstOrDefault(c => c.Type == "role").Value,
+                SecurityStamp = decoded.Claims.FirstOrDefault(c => c.Type == "sec").Value,
             };
         }
     }
@@ -63,5 +64,6 @@ namespace Sseko.Web.Utilities
         public string Id { get; set; }
         public int MagentoId { get; set; }
         public string Role { get; set; }
+        public string SecurityStamp { get; set; }
     }
 }

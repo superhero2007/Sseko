@@ -1,7 +1,9 @@
 using Akka.Actor;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +35,17 @@ namespace Sseko.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter("ValidStamp"));
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ValidStamp", policy => policy.Requirements.Add(new StampRequirement()));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, StampHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

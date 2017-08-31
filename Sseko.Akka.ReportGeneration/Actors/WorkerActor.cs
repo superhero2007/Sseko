@@ -34,6 +34,10 @@ namespace Sseko.Akka.ReportGeneration.Actors
                 var newFellows = GetNewFellows(message.LastUpdated);
                 Sender.Tell(new ReportOperations.ResultList<User>(newFellows));
             });
+            Receive<ReportOperations.GetTransactions>(message =>
+            {
+                Sender.Tell(new ReportOperations.ResultList<Transaction>(GetTransactions(message.FellowId)));
+            });
         }
 
         internal class FellowLite
@@ -81,15 +85,15 @@ namespace Sseko.Akka.ReportGeneration.Actors
                         let hostess = transaction.AccountName.Replace("Hostess ", "")
                         let type = GetTransactionType(transaction)
                         select new Dictionary<string, string>
-                {   
-                    { "date", transaction.CreatedTime.Value.Date.ToString("MM/dd/yy") },
-                    { "orderNumber", transaction.OrderId.ToString()},
-                    { "customer",  transaction.CustomerEmail},
-                    { "hostess", hostess},
-                    { "type", type},
-                    { "commission", transaction.Commission.ToCurrency()},
-                    { "sale", transaction.TotalAmount.ToCurrency()}
-                }).AsParallel().ToList();
+                            {   
+                                { "date", transaction.CreatedTime.Value.Date.ToString("MM/dd/yy") },
+                                { "orderNumber", transaction.OrderId.ToString()},
+                                { "customer",  transaction.CustomerEmail},
+                                { "hostess", hostess},
+                                { "type", type},
+                                { "commission", transaction.Commission.ToCurrency()},
+                                { "sale", transaction.TotalAmount.ToCurrency()}
+                            }).AsParallel().ToList();
 
             report.Rows = rows;
 
@@ -124,6 +128,21 @@ namespace Sseko.Akka.ReportGeneration.Actors
             }).AsParallel().ToList();
         }
 
+        private static List<Transaction> GetTransactions(int fellowId)
+        {
+            var transactions = DataStore.Transactions(fellowId);
+
+            var mappedTransactions = new List<Transaction>();
+            foreach (var transaction in transactions)
+            {
+                var mappedTransaction = new Transaction
+                {
+                    
+                };
+                mappedTransactions.Add(mappedTransaction);
+            }
+            return mappedTransactions;
+        }
 
     }
 

@@ -7,11 +7,10 @@ interface DataTableProps {
     rows: string[],
     columns: any[],
     onGridSort: (column: string, dir: any) => any,
-    isLoading: boolean
+    isLoading: boolean,
 }
 
 export class DataTable extends React.Component<DataTableProps, {}> {
-
     rowGetter = (i) => {
         return this.props.rows[i];
     }

@@ -63,5 +63,14 @@ namespace Sseko.Akka.ReportGeneration.Messages
             }
             public DateTime? LastUpdated { get; }
         }
+
+        public class GetTransactions : IOperation
+        {
+            public GetTransactions(int fellowId)
+            {
+                FellowId = fellowId;
+            }
+            public int FellowId { get; }
+        }
     }
 }
