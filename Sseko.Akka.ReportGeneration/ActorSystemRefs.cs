@@ -1,7 +1,7 @@
 ﻿using Akka.Actor;
 using Sseko.Data;
 
-namespace Sseko.Akka.ReportGeneration
+namespace Sseko.Akka.DataService.Magento
 {
     public static class ActorSystemRefs
     {

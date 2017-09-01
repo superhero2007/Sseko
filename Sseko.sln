@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.BLL", "Sseko.BLL\Ssek
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.DataService", "Sseko.Akka.DataService\Sseko.Akka.DataService.csproj", "{CE1D9A5D-D0E9-4FF7-9D68-6EC4197D8CA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.ReportGeneration", "Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj", "{CA45EABC-C284-493A-B411-86CF0DCFEBA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Akka.DataService.Magento", "Sseko.Akka.ReportGeneration\Sseko.Akka.DataService.Magento.csproj", "{CA45EABC-C284-493A-B411-86CF0DCFEBA2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sseko.Core", "Sseko.Core\Sseko.Core.csproj", "{D6F809DD-6B56-4F2C-8AF2-1191C8634E2B}"
 EndProject

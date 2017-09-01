@@ -1,8 +1,8 @@
 ﻿using Akka.Actor;
-using Sseko.Akka.ReportGeneration.Actors;
+using Sseko.Akka.DataService.Magento.Actors;
 using Sseko.Data;
 
-namespace Sseko.Akka.ReportGeneration
+namespace Sseko.Akka.DataService.Magento
 {
     public class Startup
     {
@@ -11,7 +11,7 @@ namespace Sseko.Akka.ReportGeneration
             ActorSystemRefs.System = system;
 
             ActorSystemRefs.ReportCoordinatorActor = system.ActorOf(
-                Props.Create(() => new ReportCoordinatorActor("reportWorkers", 1, 20)),
+                Props.Create(() => new CoordinatorActor("reportWorkers", 1, 20)),
                 ActorSystemRefs.ReportCoordinatorActorName);
 
             ActorSystemRefs.Context = new SsekoContext();

@@ -2,41 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using Akka.Actor;
-using Sseko.Akka.ReportGeneration.Messages;
+using Sseko.Akka.DataService.Magento.Entities;
+using Sseko.Akka.DataService.Magento.Messages;
 using Sseko.Data.Models;
 using Sseko.DAL.DocumentDb.Entities;
-using Sseko.Akka.ReportGeneration.Reports;
 
-namespace Sseko.Akka.ReportGeneration.Actors
+namespace Sseko.Akka.DataService.Magento.Actors
 {
     public class WorkerActor : ReceiveActor, ILogReceive
     {
         public WorkerActor()
         {
-            Receive<ReportOperations.ReportOperation>(message =>
+            Receive<DataOperations.DataOperation>(message =>
             {
                 switch (message.ReportType)
                 {
                     case ReportType.DownlineSummary:
                         var dlReport = GetDownlineReport(message);
-                        Sender.Tell(new ReportOperations.Result<Report>(dlReport));
+                        Sender.Tell(new DataOperations.Result<ReportBase>(dlReport));
                         break;
                     case ReportType.PvTransactionSummary:
                         var pvReport = GetPvTransactionSummaryReport(message);
-                        Sender.Tell(new ReportOperations.Result<Report>(pvReport));
+                        Sender.Tell(new DataOperations.Result<ReportBase>(pvReport));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             });
-            Receive<ReportOperations.GetNewFellows>(message =>
+            Receive<DataOperations.GetNewFellows>(message =>
             {
                 var newFellows = GetNewFellows(message.LastUpdated);
-                Sender.Tell(new ReportOperations.ResultList<User>(newFellows));
+                Sender.Tell(new DataOperations.ResultList<User>(newFellows));
             });
-            Receive<ReportOperations.GetTransactions>(message =>
+            Receive<DataOperations.GetTransactions>(message =>
             {
-                Sender.Tell(new ReportOperations.ResultList<Transaction>(GetTransactions(message.FellowId)));
+                Sender.Tell(new DataOperations.ResultList<Transaction>(GetTransactions(message.FellowId)));
             });
         }
 
@@ -49,9 +49,9 @@ namespace Sseko.Akka.ReportGeneration.Actors
             public string GrandParent { get; set; }
         }
 
-        private static Report GetDownlineReport(ReportOperations.ReportOperation message)
+        private static ReportBase GetDownlineReport(DataOperations.DataOperation message)
         {
-            var report = new Report();
+            var report = new ReportBase();
             var fellowId = message.FellowId;
 
             var childFellows = DataStore.GetAllChildren(fellowId);
@@ -75,23 +75,21 @@ namespace Sseko.Akka.ReportGeneration.Actors
             return report;
         }
 
-        private static Report GetPvTransactionSummaryReport(ReportOperations.ReportOperation message)
+        private static ReportBase GetPvTransactionSummaryReport(DataOperations.DataOperation message)
         {
-            var report = new Report();
+            var report = new ReportBase();
             var fellowId = message.FellowId;
-            var transactions = DataStore.Transactions(fellowId);
+            var transactions = MapTransactions(fellowId);
 
             var rows = (from transaction in transactions
-                        let hostess = transaction.AccountName.Replace("Hostess ", "")
-                        let type = GetTransactionType(transaction)
                         select new Dictionary<string, string>
-                            {   
-                                { "date", transaction.CreatedTime.Value.Date.ToString("MM/dd/yy") },
-                                { "orderNumber", transaction.OrderId.ToString()},
-                                { "customer",  transaction.CustomerEmail},
-                                { "hostess", hostess},
-                                { "type", type},
-                                { "commission", transaction.Commission.ToCurrency()},
+                            {
+                                { "date", transaction.Date.ToString("MM/dd/yy") },
+                                { "orderNumber", transaction.OrderId},
+                                { "customer",  transaction.Customer},
+                                { "hostess", transaction.Hostess},
+                                { "type", transaction.Type},
+                                { "commission", transaction.CommissionalbeSale.ToCurrency()},
                                 { "sale", transaction.TotalAmount.ToCurrency()}
                             }).AsParallel().ToList();
 
@@ -100,7 +98,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
             return report;
         }
 
-        private static string GetTransactionType(AffiliateplusTransaction transaction)
+        private static string GetTransactionType(AffiliateplusTransaction transaction, SalesFlatOrder saleOrder)
         {
             var transactionProgram = transaction.ProgramName ?? string.Empty;
 
@@ -110,7 +108,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
             if (transactionProgram.Contains("Fellows"))
                 return "Fellows Program";
 
-            if (transaction.Commission == 0)
+            if (saleOrder.CouponCode != null && saleOrder.CouponCode.StartsWith("FPP"))
                 return "Personal Purchase";
 
             return string.Empty;
@@ -128,29 +126,59 @@ namespace Sseko.Akka.ReportGeneration.Actors
             }).AsParallel().ToList();
         }
 
-        private static List<Transaction> GetTransactions(int fellowId)
+        private static List<Transaction> MapTransactions(int fellowId)
         {
-            var transactions = DataStore.Transactions(fellowId);
-
-            var mappedTransactions = new List<Transaction>();
-            foreach (var transaction in transactions)
+            try
             {
-                var mappedTransaction = new Transaction
-                {
-                    
-                };
-                mappedTransactions.Add(mappedTransaction);
+                var transactions = DataStore.Transactions(fellowId);
+                var salesFlatOrders = DataStore.SalesFlatOrders(transactions);
+
+                return (from transaction in transactions
+                        let hostess = transaction.AccountName.Contains("Hostess") ? transaction.AccountName.Replace("Hostess ", "") : string.Empty
+                        let saleOrder = salesFlatOrders.FirstOrDefault(s => s.EntityId == transaction.OrderId)
+
+                        select new Transaction
+                        {
+                            Date = transaction.CreatedTime ?? DateTime.MinValue,
+                            OrderId = transaction.OrderNumber,
+                            Customer = transaction.CustomerEmail,
+                            Hostess = hostess,
+                            Type = GetTransactionType(transaction, saleOrder),
+                            CommissionalbeSale = GetCommissionableSale(saleOrder),
+                            TotalAmount = GetTotalAmount(saleOrder)
+                        }).AsParallel().ToList();
             }
-            return mappedTransactions;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        private static decimal GetCommissionableSale(SalesFlatOrder sale)
+        {
+            if (sale.CouponCode != null && sale.CouponCode.StartsWith("FPP")) return 0;
+
+            var totalBeforeDiscounts = (sale.BaseSubtotalInvoiced ?? 0) + (sale.BaseShippingInclTax ?? 0);
+            var discounts = (sale.GrandTotal ?? 0) - totalBeforeDiscounts;
+
+            return totalBeforeDiscounts + discounts;
+        }
+        private static decimal GetTotalAmount(SalesFlatOrder sale)
+        {
+            return (sale.BaseSubtotalInvoiced ?? 0) + (sale.BaseShippingInclTax ?? 0);
         }
 
+        private static List<Transaction> GetTransactions(int fellowId)
+        {
+            return null;
+        }
     }
 
     internal static class Extensions
     {
         internal static string ToCurrency(this decimal number)
         {
-            var rounded = Math.Round(number, 2);
+            var rounded = Math.Round(number, 2).ToString("0.00");
 
             return $"${rounded}";
         }

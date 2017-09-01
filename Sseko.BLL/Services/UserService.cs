@@ -9,7 +9,6 @@ using Exceptionless;
 using Microsoft.AspNetCore.Http.Internal;
 using Sseko.Akka.DataService.Messages;
 using Sseko.Akka.DataService.Services;
-using Sseko.Akka.ReportGeneration.Services;
 using Sseko.BLL.Interfaces;
 using Sseko.DAL.DocumentDb.Entities;
 using Sseko.DAL.DocumentDb.Models;

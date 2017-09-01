@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sseko.Akka.ReportGeneration.Reports;
+using Sseko.Akka.DataService.Magento.Entities;
 
-namespace Sseko.Akka.ReportGeneration.Messages
+namespace Sseko.Akka.DataService.Magento.Messages
 {
-    public abstract class ReportOperations
+    public abstract class DataOperations
     {
 
         public interface IOperation
@@ -12,9 +12,9 @@ namespace Sseko.Akka.ReportGeneration.Messages
             
         }
 
-        public class ReportOperation : IOperation
+        public class DataOperation : IOperation
         {
-            public ReportOperation(ReportType reportType, int fellowId = 0)
+            public DataOperation(ReportType reportType, int fellowId = 0)
             {
                 ReportType = reportType;
                 FellowId = fellowId;

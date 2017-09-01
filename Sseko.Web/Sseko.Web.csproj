@@ -25,7 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sseko.Akka.DataService\Sseko.Akka.DataService.csproj" />
-    <ProjectReference Include="..\Sseko.Akka.ReportGeneration\Sseko.Akka.ReportGeneration.csproj" />
+    <ProjectReference Include="..\Sseko.Akka.ReportGeneration\Sseko.Akka.DataService.Magento.csproj" />
     <ProjectReference Include="..\Sseko.BLL\Sseko.BLL.csproj" />
     <ProjectReference Include="..\Sseko.Core\Sseko.Core.csproj" />
     <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />

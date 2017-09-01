@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sseko.Akka.ReportGeneration.Messages;
-using Sseko.Akka.ReportGeneration.Reports;
+using Sseko.Akka.DataService.Magento.Entities;
+using Sseko.Akka.DataService.Magento.Messages;
 using Sseko.DAL.DocumentDb.Entities;
 
 namespace Sseko.BLL.Interfaces
 {
     public interface IMagentoService
     {
-        Task<ReportOperations.Result<Report>> GetDownlineReport(int fellowId);
+        Task<DataOperations.Result<ReportBase>> GetDownlineReport(int fellowId);
 
-        Task<ReportOperations.Result<Report>> GetPvSummaryReport(int fellowId);
+        Task<DataOperations.Result<ReportBase>> GetPvSummaryReport(int fellowId);
 
-        Task<ReportOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated = null);
+        Task<DataOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated = null);
 
-        Task<ReportOperations.ResultList<Transaction>> GetTransactions(int fellowId);
+        Task<DataOperations.ResultList<Transaction>> GetTransactions(int fellowId);
     }
 }

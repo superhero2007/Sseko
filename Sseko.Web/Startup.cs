@@ -97,7 +97,7 @@ namespace Sseko.Web
             Sseko.Akka.DataService.Startup.StartActorSystem(dsSystem);
 
             var rSystem = ActorSystem.Create("rSk");
-            Sseko.Akka.ReportGeneration.Startup.StartActorSystem(rSystem);
+            Akka.DataService.Magento.Startup.StartActorSystem(rSystem);
         }
 
         public void ConfigureMappings()

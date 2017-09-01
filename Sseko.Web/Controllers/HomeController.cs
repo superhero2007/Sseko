@@ -10,10 +10,6 @@ namespace Sseko.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var serviceFactory = new ServiceFactory();
-
-            await serviceFactory.UserService().UpdateFellows();
-
             return View();
         }
 

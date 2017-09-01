@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Sseko.Akka.ReportGeneration.Actors;
+using Sseko.Akka.DataService.Magento.Actors;
 using Sseko.Data;
 using Sseko.Data.Models;
 
-namespace Sseko.Akka.ReportGeneration
+namespace Sseko.Akka.DataService.Magento
 {
     public static class DataStore
     {
@@ -14,6 +14,7 @@ namespace Sseko.Akka.ReportGeneration
         private static ImmutableList<AffiliateplusTransaction> _aPlusTransactions;
         private static ImmutableList<AffiliateplusAccount> _accounts;
         private static ImmutableList<AffiliatepluslevelTier> _underlings;
+        private static ImmutableList<SalesFlatOrder> _salesOrders;
 
         public static void Init()
         {
@@ -21,7 +22,9 @@ namespace Sseko.Akka.ReportGeneration
             if (_aPlusTransactions == null) _aPlusTransactions = _dataContext.AffiliateplusTransaction.ToImmutableList();
             if (_accounts == null) _accounts = _dataContext.AffiliateplusAccount.ToImmutableList();
             if (_underlings == null) _underlings = _dataContext.AffiliatepluslevelTier.ToImmutableList();
+            if (_salesOrders == null) _salesOrders = _dataContext.SalesFlatOrder.ToImmutableList();
         }
+
 
         internal static void Terminate()
         {
@@ -44,6 +47,17 @@ namespace Sseko.Akka.ReportGeneration
             return _aPlusTransactions.Where(predicate).Where(t => t.CreatedTime.HasValue).ToImmutableList();
         }
 
+        internal static ImmutableList<SalesFlatOrder> SalesFlatOrders(IEnumerable<AffiliateplusTransaction> transactions)
+        {
+            var transactionIds = transactions.Select(t => t.OrderId);
+            return SalesFlatOrders(t => transactionIds.Contains(t.EntityId));
+        }
+
+        internal static ImmutableList<SalesFlatOrder> SalesFlatOrders(Func<SalesFlatOrder, bool> predicate)
+        {
+            return _dataContext.SalesFlatOrder.Where(predicate).ToImmutableList();
+        }
+
         internal static ImmutableList<int> GetHostessIds(int overlordAccountId)
         {
             Init();
@@ -63,7 +77,7 @@ namespace Sseko.Akka.ReportGeneration
                                                 ).OrderBy(a => a.Name).ToImmutableList();
 
             return lastUpdated == null
-                    ? fellows 
+                    ? fellows
                     : fellows.Where(f => f.CreatedTime > lastUpdated).ToImmutableList();
         }
 
@@ -73,7 +87,7 @@ namespace Sseko.Akka.ReportGeneration
 
             var allUnderlingIds = _underlings.Where(u => u.ToptierId == overlordAccountId).Select(u => u.TierId).ToList();
 
-            var underlings =  _accounts.Where(a => allUnderlingIds.Contains(a.AccountId)).ToList();
+            var underlings = _accounts.Where(a => allUnderlingIds.Contains(a.AccountId)).ToList();
 
             return includeHostesses ? underlings.ToImmutableList() : underlings.Where(u => !u.Name.Contains("Hostess")).ToImmutableList();
         }

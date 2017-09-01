@@ -1,18 +1,18 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.Routing;
-using Sseko.Akka.ReportGeneration.Messages;
+using Sseko.Akka.DataService.Magento.Messages;
 
-namespace Sseko.Akka.ReportGeneration.Actors
+namespace Sseko.Akka.DataService.Magento.Actors
 {
-    public class ReportCoordinatorActor : ReceiveActor, ILogReceive
+    public class CoordinatorActor : ReceiveActor, ILogReceive
     {
         private IActorRef _workers;
         private string _poolName;
         private int _poolMin;
         private int _poolMax;
 
-        public ReportCoordinatorActor(string poolName, int poolMin, int poolMax)
+        public CoordinatorActor(string poolName, int poolMin, int poolMax)
         {
             _poolName = poolName;
             _poolMin = poolMin;
@@ -33,7 +33,7 @@ namespace Sseko.Akka.ReportGeneration.Actors
         {
             ReceiveAny(message =>
             {
-                if (message is ReportOperations.IOperation)
+                if (message is DataOperations.IOperation)
                 {
                     _workers.Forward(message);
                 }

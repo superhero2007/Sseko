@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Sseko.Akka.ReportGeneration.Reports
+namespace Sseko.Akka.DataService.Magento.Entities
 {
     public interface IReport
     {
