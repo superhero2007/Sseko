@@ -6,7 +6,7 @@ interface LabelProps {
     required: boolean
 }
 
-export class Label extends React.Component<LabelProps, {}> {
+export class Label extends React.PureComponent<LabelProps, {}> {
     render() {
         return (
             <label className={"h4 section-heading"} id={this.props.htmlId} >

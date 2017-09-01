@@ -5,7 +5,7 @@ interface NavBarLinkProps {
     href: string,
     label: string,
     icon: string,
-    exact: boolean
+    exact: boolean,
 }
 
 export class NavBarLinkGroup extends React.Component<NavBarLinkProps, {}> {

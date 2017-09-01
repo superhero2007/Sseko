@@ -116,15 +116,17 @@
                 background: var(--nav-gray);
                 color: var(--gray);
                 min-width: 100%;
-                transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius 0.1s ease-out;
+                transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius .1s ease-out;
             }
 
                 .main-nav .navbar li a:hover,
-                .main-nav .navbar li div:hover {
+                .main-nav .navbar li a:focus,
+                .main-nav .navbar li div:hover
+                .main-nav .navbar li div:focus {
                     box-shadow: var(--btn-hover-box-shadow);
                     border-top-right-radius: 10px;
                     border-bottom-right-radius: 10px;
-                    transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius 0.1s ease-in;
+                    transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius .1s ease-in;
                 }
 
                     .main-nav .navbar li a:hover::before,
@@ -143,12 +145,13 @@
                 .main-nav .navbar li a:hover,
                 .main-nav .navbar li a:focus {
                     margin-left: 10px;
-                    width: max-content;
+                    width: max-content; /* Maybe move this to shared with div properties */
                 }
 
                 .main-nav .navbar li a:active,
                 .main-nav .navbar li a:focus {
                     box-shadow: var(--btn-active-box-shadow);
+                    transition: none;
                 }
 
                 .main-nav .navbar li a.active {
@@ -308,7 +311,7 @@ footer {
             position: relative;
             min-width: 275px;
             padding: 10px;
-            border: 1px solid var(--nav-gray);
+            /*border: 1px solid var(--nav-gray);*/
         }
 
             .pvreport .body-content .totals .totals-container img {
@@ -337,8 +340,7 @@ footer {
     transition: box-shadow .1s linear;
 }
 
-    .btn.btn-secondary:hover::before,
-    .btn.btn-secondary:focus::before {
+    .btn.btn-secondary:hover::before {
         box-shadow: var(--btn-hover-box-shadow);
         /* cover */
         content: "";
@@ -358,8 +360,13 @@ footer {
         box-shadow: var(--btn-selected-box-shadow);
     }
 
+.grid-container {
+    right: 17px;
+}
+
 .grid-label {
-    width: 100%;
+    width: calc(100% - 34px);
+    margin: auto;
     background: var(--btn-gray);
     color: var(--light-orange);
     padding: 10px 0 10px 15px;
@@ -368,16 +375,27 @@ footer {
     letter-spacing: 0.2px;
 }
 
+.react-grid-Container {
+    position: relative;
+}
+
 .react-grid-Main {
     outline: none;
+    margin-right: 17px;
 }
 
 .react-grid-Grid {
     border: none;
+    left: 17px;
 }
 
 .react-grid-Header {
-    background: none;
+    background: var(--orange);
+    margin-right: 34px;
+}
+
+.react-grid-HeaderRow {
+    overflow-x: auto !important;
 }
 
 .react-grid-HeaderCell {
@@ -392,19 +410,31 @@ footer {
 }
 
     .react-grid-HeaderCell:hover {
-        min-width: auto !important;
-        /*z-index: 1;*/
+        min-width: min-content !important;
+        z-index: 1;
+        box-shadow: var(--btn-selected-box-shadow);
     }
 
 .react-grid-HeaderCell-sortable {
     overflow: hidden;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;*/
     margin: auto 0;
 }
 
-    .react-grid-HeaderCell-sortable:hover {
-        overflow: visible;
-    }
+.react-grid-HeaderCell__draggable {
+    width: 16px !important;
+}
+
+.react-grid-HeaderCell__draggable::after {
+    background: var(--btn-gray);
+    /* center over parent */
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    left: 7px;
+}
 
 .react-grid-Canvas {
     overflow-y: auto !important;

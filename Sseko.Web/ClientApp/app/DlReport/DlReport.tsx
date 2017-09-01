@@ -7,10 +7,10 @@ export const DlReport = (props: DlReportProps) => {
     return (
         <Layout>
             <ButtonGroup
-                htmlId={"level-select"}
-                name={"levels"}
-                error={""}
-                label={"Levels"}
+                htmlId="level-select"
+                name="levels"
+                error=""
+                label="Levels"
                 onChange={props.onLevelChange}
                 options={levelOptions}
                 multi

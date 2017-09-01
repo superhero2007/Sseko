@@ -21,7 +21,7 @@ export const PvReport = (props: PvReportProps) => {
                 htmlId={"hostess-select"}
                 name={"hostesses"}
                 error={""}
-                label={"Hostess"}
+                label={"Search"}
                 onChange={props.onHostessChange}
                 options={props.hostesses}
                 initialValue={props.hostessFilter}
@@ -51,7 +51,7 @@ export const PvReport = (props: PvReportProps) => {
             <DataTable
                 label="Personal Volume"
                 rows={props.rows}
-                columns={columns}
+                columns={props.columns}
                 onGridSort={props.onGridSort}
                 isLoading={props.loading}
             />
@@ -68,26 +68,17 @@ interface PvReportProps {
     onMonthChange: (value: any) => any;
     onSaleTypeChange: (event: any) => any;
     rowGetter: (i: number) => any;
-    rows: string[];
+    rows: any;
     typeFilter: string;
     loading: boolean;
     totalSales: number;
     totalTransactions: number;
+    columns: any;
 }
-
-const columns = [
-    { key: 'date', name: 'DATE', width: 100, sortable: true },
-    { key: 'orderNumber', name: 'ORDER #', width: 100, sortable: true },
-    { key: 'customer', name: 'CUSTOMER', width: 200, sortable: true },
-    { key: 'hostess', name: 'HOSTESS', width: 200, sortable: true },
-    { key: 'type', name: 'TYPE', width: 200, sortable: true },
-    { key: 'commission', name: 'COMMISSIONABLE SALES', width: 150, sortable: true },
-    { key: 'sale', name: 'GRAND TOTAL', width: 150, sortable: true }
-];
 
 const saleTypeOptions = [
     { value: 'Personal Purchase', label: 'Personal Purchase' },
     { value: 'Hostess Program', label: 'Hostess Program' },
     { value: 'Affiliate Sale', label: 'Affiliate Sale' },
     { value: 'Other', label: 'Other' }
-]
+];

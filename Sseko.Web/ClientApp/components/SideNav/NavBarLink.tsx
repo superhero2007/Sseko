@@ -5,16 +5,10 @@ interface NavBarLinkProps {
     href: string,
     label: string,
     icon: string,
-    exact: boolean
+    exact: boolean,
 }
 
-export class NavBarLink extends React.Component<NavBarLinkProps, {}> {
-    render() {
-        const exact = this.props.exact || true;
-        return (
-            <NavLink exact={exact} to={this.props.href} activeClassName='active'>
-                <img src={this.props.icon} /> {this.props.label}
-            </NavLink>
-        );
-    }
-}
+export const NavBarLink = (props: NavBarLinkProps) =>
+    <NavLink exact={props.exact || true} to={props.href} activeClassName='active'>
+        <img src={props.icon}/> {props.label}
+    </NavLink>;

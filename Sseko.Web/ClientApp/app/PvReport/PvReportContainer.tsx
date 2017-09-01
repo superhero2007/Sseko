@@ -22,6 +22,43 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         this.calculateTotalSales = this.calculateTotalSales.bind(this);
     }
 
+    getColumns = () => {
+        let columns = [
+            { key: 'date', name: 'DATE', sortable: true },
+            { key: 'orderNumber', name: 'ORDER #', sortable: true },
+            { key: 'customer', name: 'CUSTOMER', sortable: true },
+            { key: 'hostess', name: 'HOSTESS', sortable: true },
+            { key: 'type', name: 'TYPE', sortable: true },
+            { key: 'commission', name: 'CS', sortable: true },
+            { key: 'sale', name: 'TOTAL', sortable: true }
+        ];
+        for (let c in columns) { // Calculate column widths based on character counts
+            // Magic numbers
+            let headerCharacterWidth = 13;
+            let rowItemCharacterWidth = 8;
+            let headerPadding = 15;
+            let rowPadding = 15;
+            let sortable = 18;
+            //
+            let headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"] ? sortable : 0);
+            let maxRowWidth = headerWidth; // Minimum width
+            this.props.rows.map(row => { // Find the widest row item
+                maxRowWidth = Math.max(maxRowWidth, row[columns[c].key].length * rowItemCharacterWidth + rowPadding);
+            });
+            columns[c]["width"] = maxRowWidth;
+        }
+        return columns;
+    }
+
+    getTableWidth = () => {
+        let sum = 0;
+        let columns = this.getColumns();
+        for (let x in columns) {
+            sum += columns[x]["width"];
+        }
+        return sum;
+    }
+
     onGridSort(sortColumn, sortDirection) {
         this.props.updateSort(sortColumn, sortDirection);
     }
@@ -67,7 +104,6 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         return this.props.rows[i];
     }
 
-
     public render() {
         return <PvReport
             dateFilter={this.props.dateFilter}
@@ -83,6 +119,8 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             loading={this.props.loading}
             totalSales={this.calculateTotalSales()}
             totalTransactions={this.props.rows.length}
+            columns={this.getColumns()}
+            width={this.getTableWidth()}
         />
     }
 }
