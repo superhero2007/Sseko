@@ -1847,14 +1847,6 @@ var DataTable = (function (_super) {
     __extends(DataTable, _super);
     function DataTable(props) {
         var _this = _super.call(this, props) || this;
-        _this.componentDidUpdate = function (nextProps) {
-            if (_this.props.rows !== nextProps.rows) {
-                _this.scale();
-            }
-        };
-        _this.componentDidMount = function () {
-            _this.scale();
-        };
         _this.scale = function () {
             $('.grid-container').each(function () {
                 var scaled = $(this), parent = scaled.parent(), ratio = (parent.width() / scaled.width()), padding = scaled.height() * ratio;
@@ -1878,11 +1870,19 @@ var DataTable = (function (_super) {
         });
         return _this;
     }
+    DataTable.prototype.componentDidUpdate = function (nextProps) {
+        if (this.props.rows !== nextProps.rows) {
+            this.scale();
+        }
+    };
+    DataTable.prototype.componentDidMount = function () {
+        this.scale();
+    };
     DataTable.prototype.render = function () {
         var tableWidth = this.getTableWidth();
         return (React.createElement("div", { className: "grid-container", style: { width: tableWidth } },
             React.createElement("div", { className: "grid-label" }, this.props.label),
-            React.createElement(ReactDataGrid, { onGridSort: this.props.onGridSort, columns: this.props.columns, rowGetter: this.rowGetter, rowsCount: this.props.rows.length, rowHeight: 35, minWidth: tableWidth, minHeight: Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight), emptyRowsView: this.props.isLoading ? LoadingView_1.default : EmptyRowsView_1.default })));
+            React.createElement(ReactDataGrid, { onGridSort: this.props.onGridSort, columns: this.props.columns, rowGetter: this.rowGetter, rowsCount: this.props.rows.length, rowHeight: 35, minWidth: tableWidth, minHeight: Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight), emptyRowsView: this.props.isLoading ? LoadingView_1.LoadingView : EmptyRowsView_1.EmptyRowsView })));
     };
     return DataTable;
 }(React.Component));

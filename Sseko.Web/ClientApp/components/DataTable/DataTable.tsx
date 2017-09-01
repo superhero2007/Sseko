@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
 import * as $ from 'jquery';
 import * as ReactDataGrid from 'react-data-grid';
-import EmptyRowsView from './EmptyRowsView';
-import LoadingView from './LoadingView';
+import { EmptyRowsView } from './EmptyRowsView';
+import { LoadingView } from './LoadingView';
 
 interface DataTableProps {
     label: string;
@@ -25,13 +25,13 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         });
     }
 
-    componentDidUpdate = (nextProps) => {
+    componentDidUpdate(nextProps) {
         if (this.props.rows !== nextProps.rows){
             this.scale();
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         this.scale();
     }
 
