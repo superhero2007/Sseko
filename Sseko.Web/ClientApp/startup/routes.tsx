@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { Authorization } from './Authorization'
 
-import Layout from '../components/Layout/Layout';
-import PageNotFound from '../components/PageNotFound';
+import { Layout } from '../components/Layout/Layout';
+import { PageNotFound } from '../components/PageNotFound';
 import DlReport from '../app/DlReport/DlReportContainer';
 import ForgotPassword from '../app/ForgotPassword/ForgotPasswordContainer';
 import Login from '../app/Login/LoginContainer';
@@ -25,6 +25,6 @@ export const routes =
 
             <Route path="/ForgotPassword" component={ForgotPassword} />
             <Route path="/ResetPassword/:code" component={ResetPassword}/>
-            <Route path='*' component={PageNotFound} />
+            <Route path='*' component={Fellow(PageNotFound)} />
         </Switch>
     </div>

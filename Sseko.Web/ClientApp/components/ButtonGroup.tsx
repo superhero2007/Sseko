@@ -54,7 +54,7 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
             buttons.push(
                 <a
                     type="button"
-                    aria-role="button"
+                    aria-roledescription="button"
                     href="#"
                     className={"btn btn-secondary" + (this.state.values.includes(b.value) ? " selected" : "")}
                     onClick={this.onValueChange(b.value)}

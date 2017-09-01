@@ -30,7 +30,7 @@ export class MonthBox extends React.Component<MonthBoxProps, MonthBoxState> {
         return (
             <a 
                 type="button"
-                aria-role="button"
+                aria-roledescription="button"
                 href="#"
                 className="btn btn-secondary"
                 onClick={this._handleClick}

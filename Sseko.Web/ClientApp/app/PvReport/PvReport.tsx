@@ -17,16 +17,6 @@ export const PvReport = (props: PvReportProps) => {
                 <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
                 <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} money={false} />
             </Totals>
-            <SelectList
-                htmlId={"hostess-select"}
-                name={"hostesses"}
-                error={""}
-                label={"Search"}
-                onChange={props.onHostessChange}
-                options={props.hostesses}
-                initialValue={props.hostessFilter}
-                multi
-            />
             <div className="row">
                 <div className="col-sm-2"> {/* TODO to auto width column */}
                     <MonthPicker
