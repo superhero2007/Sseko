@@ -60,7 +60,6 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
                 total += Number(rows[r].commission.substr(1));
             }
         }
-        console.log(total);
         return total;
     }
 

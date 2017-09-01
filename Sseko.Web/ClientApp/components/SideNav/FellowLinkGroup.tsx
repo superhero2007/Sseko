@@ -9,38 +9,15 @@ import bannersIcon = require('../../img/banners-ico.png');
 import logoutIcon = require('../../img/logout-ico.png');
 
 export const FellowLinkGroup = () => {
-        return (
+        return ( // Refer to version control history when adding to navigation
             <ul className='nav navbar-nav'>
                 <NavBarLinkSingle
-                    icon={dashboardIcon}
-                    href='/'
-                    label='Dashboard'
-                    exact={true} // TODO fix
-                />
-                <NavBarLinkGroup icon={reportsIcon} label="Reports">
-                    <NavBarLink
-                        href='/Reports/PersonalVolume'
-                        label='Personal Volume'
-                    />
-                    <NavBarLink
-                        href='/Reports/Downline'
-                        label='Downline Summary'
-                    />
-                </NavBarLinkGroup>
-                <NavBarLinkSingle
-                    icon={storeCreditIcon}
-                    href='/' // TODO add store credit
-                    label='Store Credit'
+                    href='/Reports/PersonalVolume'
+                    label='Personal Volume Report'
                 />
                 <NavBarLinkSingle
-                    icon={bannersIcon}
-                    href='/' // TODO add banners and links
-                    label='Banners & Links'
-                />
-                <NavBarLinkSingle
-                    icon={logoutIcon}
-                    href='/Login'
-                    label='Logout'
+                    href='/Reports/Downline'
+                    label='Downline Summary Report'
                 />
             </ul>
         );

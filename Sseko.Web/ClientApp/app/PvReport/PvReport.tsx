@@ -4,36 +4,19 @@ import { Layout } from '../../components/Layout/Layout'
 import { MonthPicker } from '../../components/MonthPicker/MonthPicker';
 import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
+import { Totals, Total } from '../../components/Totals';
 import balanceIcon = require('../../img/balance-ico.png');
 import personIcon = require('../../img/personal-volume-ico.png');
 import salesIcon = require('../../img/commissionable-sales-ico.png');
 import transactionsIcon = require('../../img/transaction-ico.png');
 
-const moneyFormat = (amount) =>
-    "$" + amount.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1,");
-
-const moneyFormatDecimal = (amount) =>
-    "$" + amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-
-const totalsBlock = (iconSrc, label, amount, money = true) =>
-    <div className="totals-container">
-        <img src={iconSrc}/>
-        <span className="totals-label">
-            {label}
-            <br />
-            <span title={money ? moneyFormatDecimal(amount) : null} className="totals-money">
-                {money ? moneyFormat(amount) : amount}
-            </span>
-        </span>
-    </div>;
-
 export const PvReport = (props: PvReportProps) => {
     return (
         <Layout containerClassName="pvreport">
-            <div className="totals">
-                {totalsBlock(salesIcon, "TOTAL COMMISSIONABLE SALES", props.totalSales)}
-                {totalsBlock(transactionsIcon, "TOTAL TRANSACTIONS", props.totalTransactions, false)}
-            </div>
+            <Totals>
+                <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
+                <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} money={false} />
+            </Totals>
             <SelectList
                 htmlId={"hostess-select"}
                 name={"hostesses"}
@@ -98,8 +81,8 @@ const columns = [
     { key: 'customer', name: 'CUSTOMER', width: 200, sortable: true },
     { key: 'hostess', name: 'HOSTESS', width: 200, sortable: true },
     { key: 'type', name: 'TYPE', width: 200, sortable: true },
-    { key: 'commission', name: 'COMMISSION', width: 125, sortable: true },
-    { key: 'sale', name: 'TOTAL', width: 100, sortable: true }
+    { key: 'commission', name: 'COMMISSIONABLE SALES', width: 150, sortable: true },
+    { key: 'sale', name: 'GRAND TOTAL', width: 150, sortable: true }
 ];
 
 const saleTypeOptions = [

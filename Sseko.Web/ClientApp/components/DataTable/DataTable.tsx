@@ -10,6 +10,10 @@ interface DataTableProps {
     isLoading: boolean,
 }
 
+const dataTableRowHeight = 35;
+const dataTableRowHeaderHeight = 35;
+const horizontalScrollbarHeight = 17;
+
 export class DataTable extends React.Component<DataTableProps, {}> {
     rowGetter = (i) => {
         return this.props.rows[i];
@@ -25,7 +29,7 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                     rowGetter={this.rowGetter}
                     rowsCount={this.props.rows.length}
                     rowHeight={35}
-                    minHeight={Math.min(this.props.rows.length * 35 + 35, 16 * 35)}
+                    minHeight={Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight)}
                     emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
                 />
             </div>
