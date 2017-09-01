@@ -12,12 +12,19 @@ export const FellowLinkGroup = () => {
         return ( // Refer to version control history when adding to navigation
             <ul className='nav navbar-nav'>
                 <NavBarLinkSingle
+                    icon={reportsIcon}
                     href='/Reports/PersonalVolume'
                     label='Personal Volume Report'
                 />
                 <NavBarLinkSingle
+                    icon={reportsIcon}
                     href='/Reports/Downline'
                     label='Downline Summary Report'
+                />
+                <NavBarLinkSingle
+                    icon={logoutIcon}
+                    href='/Login'
+                    label='Logout'
                 />
             </ul>
         );

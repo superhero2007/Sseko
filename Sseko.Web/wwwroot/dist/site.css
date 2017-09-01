@@ -108,77 +108,82 @@
             background: var(--gray);
         }
 
-        .main-nav .navbar li a,
-        .main-nav .navbar li div {
-            padding: 10px 16px;
-            background: var(--nav-gray);
-            color: var(--gray);
-            min-width: 100%;
-            transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear;
-        }
-
-            .main-nav .navbar li a:hover,
-            .main-nav .navbar li div:hover {
-                box-shadow: var(--btn-hover-box-shadow);
+            .main-nav .navbar li a,
+            .main-nav .navbar li div {
+                min-height: 52px;
+                padding: 10px 16px;
+                line-height: 32px;
+                background: var(--nav-gray);
+                color: var(--gray);
+                min-width: 100%;
+                transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius 0.1s ease-out;
             }
 
-                .main-nav .navbar li a:hover::before,
-                .main-nav .navbar li a:focus::before {
-                    /* arrow */
-                    content: "";
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    margin-top: -5px;
-                    border-width: 5px;
-                    border-style: solid;
-                    border-color: transparent transparent transparent var(--gray);
+                .main-nav .navbar li a:hover,
+                .main-nav .navbar li div:hover {
+                    box-shadow: var(--btn-hover-box-shadow);
+                    border-top-right-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                    transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius 0.1s ease-in;
                 }
 
-            .main-nav .navbar li a:hover,
-            .main-nav .navbar li a:focus {
-                margin-left: 10px;
-                width: max-content;
+                    .main-nav .navbar li a:hover::before,
+                    .main-nav .navbar li a:focus::before {
+                        /* arrow */
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        margin-top: -5px;
+                        border-width: 5px;
+                        border-style: solid;
+                        border-color: transparent transparent transparent var(--gray);
+                    }
+
+                .main-nav .navbar li a:hover,
+                .main-nav .navbar li a:focus {
+                    margin-left: 10px;
+                    width: max-content;
+                }
+
+                .main-nav .navbar li a:active,
+                .main-nav .navbar li a:focus {
+                    box-shadow: var(--btn-active-box-shadow);
+                }
+
+                .main-nav .navbar li a.active {
+                    background: var(--gray);
+                    color: var(--nav-gray);
+                }
+
+            .main-nav .navbar li.nav-group a {
+                height: 40px;
+                min-width: calc(100% - 10px);
+                width: calc(100% - 10px);
+                left: 10px;
             }
 
-            .main-nav .navbar li a:active,
-            .main-nav .navbar li a:focus {
-                box-shadow: var(--btn-active-box-shadow);
+            .main-nav .navbar li.nav-group.collapsed a {
+                height: 0;
+                padding: 0 16px;
             }
 
-            .main-nav .navbar li a.active {
-                background: var(--gray);
-                color: var(--nav-gray);
+            .main-nav .navbar li.nav-group div i.glyphicon {
+                position: absolute;
+                top: 9px;
+                right: 9px;
+                padding: 9px;
+                transition: color .1s linear;
+                color: transparent;
             }
 
-        .main-nav .navbar li.nav-group a {
-            height: 40px;
-            min-width: calc(100% - 10px);
-            width: calc(100% - 10px);
-            left: 10px;
-        }
-
-        .main-nav .navbar li.nav-group.collapsed a {
-            height: 0;
-            padding: 0 16px;
-        }
-
-        .main-nav .navbar li.nav-group div i.glyphicon {
-            position: absolute;
-            top: 9px;
-            right: 9px;
-            padding: 9px;
-            transition: color .1s linear;
-            color: transparent;
-        }
-
-        .main-nav .navbar li.nav-group div:hover {
-            cursor: pointer;
-        }
-
-            .main-nav .navbar li.nav-group div:hover i.glyphicon {
-                color: var(--gray);
+            .main-nav .navbar li.nav-group div:hover {
+                cursor: pointer;
             }
+
+                .main-nav .navbar li.nav-group div:hover i.glyphicon {
+                    color: var(--gray);
+                }
 
 .body-content {
     margin-bottom: var(--footer-height);
