@@ -52,14 +52,16 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
         for (let button in this.props.options) {
             let b = this.props.options[button];
             buttons.push(
-                <button
+                <a
                     type="button"
+                    aria-role="button"
+                    href="#"
                     className={"btn btn-secondary" + (this.state.values.includes(b.value) ? " selected" : "")}
                     onClick={this.onValueChange(b.value)}
                     key={b.label}
                 >
                     {b.label}
-                </button>
+                </a>
             );
         }
         return buttons;

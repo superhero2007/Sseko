@@ -55,9 +55,9 @@ module.exports = (env) => {
         plugins: [
             new ExtractTextPlugin('site.css'),
             new webpack.ProvidePlugin({
-                $: "jquery",
-                jQuery: "jquery",
-                Popper: "popper.js"
+                //$: "jquery",
+                //jQuery: "jquery",
+                //Popper: "popper.js"
             }),
             new webpack.DllReferencePlugin({
                 context: __dirname,

@@ -6,12 +6,12 @@ interface LabelProps {
     required: boolean
 }
 
-export class Label extends React.Component<LabelProps, {}> {
+export class Label extends React.PureComponent<LabelProps, {}> {
     render() {
         return (
-            <label className={"h5 section-heading"} id={this.props.htmlId} >
+            <label className={"h4 section-heading"} id={this.props.htmlId} >
                 {this.props.label} {this.props.required && <span className="text-danger"> *</span>}
-            </label >
+            </label>
         );
     }
 }

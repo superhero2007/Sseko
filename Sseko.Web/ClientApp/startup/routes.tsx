@@ -2,9 +2,8 @@ import * as React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { Authorization } from './Authorization'
 
-import { Home } from '../app/Home';
-import { Layout } from '../components/Layout/Layout';
-import { PageNotFound } from '../components/PageNotFound';
+import Layout from '../components/Layout/Layout';
+import PageNotFound from '../components/PageNotFound';
 import DlReport from '../app/DlReport/DlReportContainer';
 import ForgotPassword from '../app/ForgotPassword/ForgotPasswordContainer';
 import Login from '../app/Login/LoginContainer';
@@ -18,7 +17,7 @@ const Admin = Authorization(['admin'])
 export const routes =
     <div>
         <Switch>
-            <Route exact path='/' component={Fellow(Home)} />
+            <Route exact path='/' component={Fellow(PvReport)} />
             <Route path='/Login' component={Login} />
             <Route path='/Reports/PersonalVolume/' component={Fellow(PvReport)} />
             <Route path='/Reports/DownLine/' component={Fellow(DlReport)} />

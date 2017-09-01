@@ -105,7 +105,6 @@ namespace Sseko.Web
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<User, UserDto>();
-
             });
         }
     }

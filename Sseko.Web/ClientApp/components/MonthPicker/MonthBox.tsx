@@ -28,9 +28,15 @@ export class MonthBox extends React.Component<MonthBoxProps, MonthBoxState> {
 
     render() {
         return (
-            <div className="box" onClick={this._handleClick}>
-                <label>{this.state.value}</label>
-            </div>
+            <a 
+                type="button"
+                aria-role="button"
+                href="#"
+                className="btn btn-secondary"
+                onClick={this._handleClick}
+            >
+                {this.state.value}
+            </a>
         )
     }
 

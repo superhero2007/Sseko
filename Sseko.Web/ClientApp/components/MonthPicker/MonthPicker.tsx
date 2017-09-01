@@ -2,7 +2,7 @@
 import './month-picker.css'
 import { MonthBox } from './MonthBox';
 import Picker from 'react-month-picker';
-import { Label } from '../Label'
+import { Label } from '../Label';
 
 interface MonthPickerProps {
     onChange: (event: any) => any;
@@ -49,26 +49,24 @@ export class MonthPicker extends React.Component<MonthPickerProps, MonthPickerSt
         }
         let mrange = this.state.mrange;
 
-        let makeText = m => {
-            if (m && m.year && m.month) return (pickerLang.months[m.month - 1] + '. ' + m.year)
-            return '?'
+        let dateToString = date => {
+            if (date && date.year && date.month) return (pickerLang.months[date.month - 1] + ' ' + date.year);
+            return '?';
         }
 
         return (
             <div>
                 <Label label="Date" />
-                <div className="edit">
-                    <Picker
-                        ref="pickRange"
-                        years={{ min: 2013 }} 
-                        range={mrange}
-                        lang={pickerLang}
-                        theme="light"
-                        onDismiss={this.handleRangeDissmis}
-                    >
-                        <MonthBox value={makeText(mrange.from) + ' ~ ' + makeText(mrange.to)} onClick={this._handleClickRangeBox} />
-                    </Picker>
-                </div>
+                <Picker
+                    ref="pickRange"
+                    years={{ min: 2013 }} 
+                    range={mrange}
+                    lang={pickerLang}
+                    theme="light"
+                    onDismiss={this.handleRangeDissmis}
+                >
+                    <MonthBox value={dateToString(mrange.from) + ' - ' + dateToString(mrange.to)} onClick={this._handleClickRangeBox} />
+                </Picker>
             </div>
         )
     }

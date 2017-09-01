@@ -21,6 +21,7 @@ export const Login = (props: LoginProps) => {
                                 <Textbox
                                     htmlId="username"
                                     name="username"
+                                    label={null}
                                     placeholder="Username"
                                     type="text"
                                     onChange={props.onChange}
@@ -37,6 +38,7 @@ export const Login = (props: LoginProps) => {
                                 <Textbox
                                     htmlId="password"
                                     name="password"
+                                    label={null}
                                     placeholder="Password"
                                     type="password"
                                     onChange={props.onChange}
