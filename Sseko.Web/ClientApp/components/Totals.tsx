@@ -8,11 +8,8 @@ const moneyFormatDecimal = (amount) =>
     "$" + amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
 
 const Totals = ({ children }) =>
-    <div>
-        <Label htmlId="totals-label" label="Filtered totals" />
-        <div id="totals">
-            {children}
-        </div>
+    <div id="totals">
+        {children}
     </div>;
 
 const Total = ({ iconSrc, label, amount, money = true }) =>

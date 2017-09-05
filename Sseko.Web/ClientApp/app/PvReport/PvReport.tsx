@@ -15,10 +15,9 @@ export const PvReport = (props: PvReportProps) => {
     return (
         <Layout containerClassName="pvreport">
             <Totals>
-                <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
-                <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} money={false} />
+                <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
+                <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} money={false} />
             </Totals>
-            <Label htmlId="" label="Filters" />
             <div className="row grid-sibling-row">
                 <div className="col-sm-4">
                     <SelectList

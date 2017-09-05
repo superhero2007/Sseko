@@ -3511,15 +3511,13 @@ var Layout_1 = __webpack_require__(10);
 var SelectList_1 = __webpack_require__(62);
 var ButtonGroup_1 = __webpack_require__(27);
 var Totals_1 = __webpack_require__(68);
-var Label_1 = __webpack_require__(8);
 var salesIcon = __webpack_require__(111);
 var transactionsIcon = __webpack_require__(114);
 exports.PvReport = function (props) {
     return (React.createElement(Layout_1.Layout, { containerClassName: "pvreport" },
         React.createElement(Totals_1.Totals, null,
-            React.createElement(Totals_1.Total, { iconSrc: salesIcon, label: "TOTAL COMMISSIONABLE SALES", amount: props.totalSales }),
-            React.createElement(Totals_1.Total, { iconSrc: transactionsIcon, label: "TOTAL TRANSACTIONS", amount: props.totalTransactions, money: false })),
-        React.createElement(Label_1.Label, { htmlId: "", label: "Filters" }),
+            React.createElement(Totals_1.Total, { iconSrc: salesIcon, label: "FILTERED COMMISSIONABLE SALES", amount: props.totalSales }),
+            React.createElement(Totals_1.Total, { iconSrc: transactionsIcon, label: "FILTERED TRANSACTIONS", amount: props.totalTransactions, money: false })),
         React.createElement("div", { className: "row grid-sibling-row" },
             React.createElement("div", { className: "col-sm-4" },
                 React.createElement(SelectList_1.SelectList, { htmlId: "pvreport-month", name: "", error: "", label: "Time", 
@@ -4030,7 +4028,6 @@ exports.SideNav = function (props) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Label_1 = __webpack_require__(8);
 var moneyFormat = function (amount) {
     return "$" + amount.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1,");
 };
@@ -4039,9 +4036,7 @@ var moneyFormatDecimal = function (amount) {
 };
 var Totals = function (_a) {
     var children = _a.children;
-    return React.createElement("div", null,
-        React.createElement(Label_1.Label, { htmlId: "totals-label", label: "Filtered totals" }),
-        React.createElement("div", { id: "totals" }, children));
+    return React.createElement("div", { id: "totals" }, children);
 };
 exports.Totals = Totals;
 var Total = function (_a) {
