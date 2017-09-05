@@ -2,15 +2,14 @@
 
 interface LabelProps {
     htmlId: string,
-    label: string,
-    required: boolean
+    label: string
 }
 
 export class Label extends React.PureComponent<LabelProps, {}> {
     render() {
         return (
-            <label className={"h4 section-heading"} id={this.props.htmlId} >
-                {this.props.label} {this.props.required && <span className="text-danger"> *</span>}
+            <label className={"h4 section-heading"} id={this.props.htmlId}>
+                {this.props.label}
             </label>
         );
     }

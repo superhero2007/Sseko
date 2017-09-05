@@ -32,7 +32,8 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             { key: 'commission', name: 'CS', sortable: true },
             { key: 'sale', name: 'TOTAL', sortable: true }
         ];
-        for (let c in columns) { // Calculate column widths based on character counts
+        // Calculate column widths based on character counts
+        for (let c in columns) {
             // Magic numbers
             let headerCharacterWidth = 13;
             let rowItemCharacterWidth = 8;
@@ -40,9 +41,12 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             let rowPadding = 15;
             let sortable = 18;
             //
+
             let headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"] ? sortable : 0);
-            let maxRowWidth = headerWidth; // Minimum width
-            this.props.rows.map(row => { // Find the widest row item
+
+            // Find the widest row item
+            let maxRowWidth = headerWidth;
+            this.props.rows.map(row => {
                 maxRowWidth = Math.max(maxRowWidth, row[columns[c].key].length * rowItemCharacterWidth + rowPadding);
             });
             columns[c]["width"] = maxRowWidth;
@@ -73,7 +77,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     }
 
     onHostessChange(event) {
-        var values = event.value;
+        const values = event.value;
         var hostess = [];
         for (var x in values) {
             hostess.push(values[x].value);
@@ -82,10 +86,8 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     }
 
     onMonthChange(value) {
-        var start = value.from;
-        var end = value.to;
-        var startDate = new Date(start.year, start.month - 1);
-        var endDate = new Date(end.year, end.month, 0);
+        const startDate = value.value.value[0]; // me code good
+        const endDate = value.value.value[1];
         this.props.updateDateFilter(startDate, endDate);
     }
 
@@ -120,7 +122,6 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             totalSales={this.calculateTotalSales()}
             totalTransactions={this.props.rows.length}
             columns={this.getColumns()}
-            width={this.getTableWidth()}
         />
     }
 }

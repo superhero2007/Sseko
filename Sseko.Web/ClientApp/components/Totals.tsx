@@ -9,19 +9,19 @@ const moneyFormatDecimal = (amount) =>
 
 const Totals = ({ children }) =>
     <div>
-        <Label label="Filtered totals" />
-        <div className="totals">
+        <Label htmlId="totals-label" label="Filtered totals" />
+        <div id="totals">
             {children}
         </div>
     </div>;
 
 const Total = ({ iconSrc, label, amount, money = true }) =>
-    <div className="totals-container">
+    <div className="total-container">
         <img src={iconSrc} />
-        <span className="totals-label">
+        <span className="total-label">
             {label}
             <br />
-            <span title={money ? moneyFormatDecimal(amount) : null} className="totals-money">
+            <span title={money ? moneyFormatDecimal(amount) : null} className="total-money">
                 {money ? moneyFormat(amount) : amount}
             </span>
         </span>

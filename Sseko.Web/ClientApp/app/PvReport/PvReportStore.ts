@@ -32,7 +32,7 @@ export const actionCreators = {
                 dispatch({ type: 'GET_PV_ROWS', payload: response.data });
             })
             .catch((error) => {
-
+                console.log(error);
             });
     },
 
@@ -62,7 +62,7 @@ const unloadedState: PvReportState = {
     startDate: new Date(today.getFullYear(), today.getMonth(), 1),
     endDate: new Date(today.getFullYear(), today.getMonth() + 1, 0),
     sortColumn: 'date',
-    sortDirection: 'ASC',
+    sortDirection: 'DESC',
     loading: true
 }
 

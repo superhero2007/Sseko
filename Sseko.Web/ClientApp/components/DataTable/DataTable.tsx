@@ -20,13 +20,29 @@ export class DataTable extends React.Component<DataTableProps, {}> {
     constructor(props) {
         super(props);
 
-        $(window).on("resize", () => {
-            this.scale();
+        //$(window).on("resize", () => {
+        //    this.scale();
+        //});
+
+        // throttle resize events
+        var running = false;
+        window.addEventListener("resize", () => {
+            if (running) { return; }
+            running = true;
+            requestAnimationFrame(function () {
+                window.dispatchEvent(new CustomEvent("optimizedResize"));
+                running = false;
+            });
+        });
+
+        const scale = this.scale;
+        window.addEventListener("optimizedResize", function () {
+            scale();
         });
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.rows !== nextProps.rows){
+        if (this.props.rows !== nextProps.rows) {
             this.scale();
         }
     }
@@ -35,12 +51,13 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         this.scale();
     }
 
+    // resize datatable
     scale = () => {
-        $('.grid-container').each(function() {
+        $('.grid-container').each(function () { // TODO remove jquery
             var scaled = $(this),
-            parent = scaled.parent(),
-            ratio = (parent.width() / scaled.width()),
-            padding = scaled.height() * ratio;
+                parent = scaled.parent(),
+                ratio = parent.width() / scaled.width(),
+                padding = scaled.height() * ratio;
 
             scaled.css({
                 'transform': 'scale(' + ratio + ')',
@@ -56,26 +73,24 @@ export class DataTable extends React.Component<DataTableProps, {}> {
     }
 
     getTableWidth = () => {
-        let tableWidth = 0
-        this.props.columns.map(column => { tableWidth += column["width"] });
-        return tableWidth + 34;
+        return this.props.columns.reduce((tableWidth, column) => tableWidth + column["width"], 0) + 34;
     }
 
     render() {
         let tableWidth = this.getTableWidth()
         return (
-                <div className="grid-container" style={{ width: tableWidth }}>
-                    <div className="grid-label">{this.props.label}</div>
-                    <ReactDataGrid
-                        onGridSort={this.props.onGridSort}
-                        columns={this.props.columns}
-                        rowGetter={this.rowGetter}
-                        rowsCount={this.props.rows.length}
-                        rowHeight={35}
-                        minWidth={tableWidth}
-                        minHeight={Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight)}
-                        emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
-                    />
+            <div className="grid-container" style={{ width: tableWidth }}>
+                <div className="grid-label">{this.props.label}</div>
+                <ReactDataGrid
+                    onGridSort={this.props.onGridSort}
+                    columns={this.props.columns}
+                    rowGetter={this.rowGetter}
+                    rowsCount={this.props.rows.length}
+                    rowHeight={35}
+                    minWidth={tableWidth}
+                    minHeight={Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight)}
+                    emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
+                />
             </div>
         );
     }

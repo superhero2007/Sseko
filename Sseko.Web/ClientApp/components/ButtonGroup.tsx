@@ -11,7 +11,6 @@ interface ButtonGroupProps {
     onChange: (event: any) => any,
     error: string,
     initialValue?: string,
-    required?: boolean,
     multi?: boolean
 }
 
@@ -73,7 +72,6 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
                 <Label
                     htmlId={this.props.htmlId + "-label"}
                     label={this.props.label}
-                    required={this.props.required}
                 />
                 <br />
                 <div className="btn-group" role="group">

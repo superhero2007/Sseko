@@ -6,23 +6,25 @@ import { ButtonGroup } from '../../components/ButtonGroup';
 export const DlReport = (props: DlReportProps) => {
     return (
         <Layout>
-            <ButtonGroup
-                htmlId="level-select"
-                name="levels"
-                error=""
-                label="Levels"
-                onChange={props.onLevelChange}
-                options={levelOptions}
-                multi
-                initialValue={props.levelFilter}
-            />
+            <div className="row grid-sibling-row">
+                <ButtonGroup
+                    htmlId="level-select"
+                    name="levels"
+                    error=""
+                    label="Levels"
+                    onChange={props.onLevelChange}
+                    options={levelOptions}
+                    multi
+                    initialValue={props.levelFilter}
+                />
+            </div>
             <DataTable
                 label="Downline Summary"
                 rows={props.rows}
                 onGridSort={props.onGridSort}
                 columns={columns}
                 isLoading={props.loading}
-            />  
+            />
         </Layout>
     )
 }

@@ -5,6 +5,7 @@ import { MonthPicker } from '../../components/MonthPicker/MonthPicker';
 import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
 import { Totals, Total } from '../../components/Totals';
+import { Label } from "../../components/Label";
 import balanceIcon = require('../../img/balance-ico.png');
 import personIcon = require('../../img/personal-volume-ico.png');
 import salesIcon = require('../../img/commissionable-sales-ico.png');
@@ -17,17 +18,23 @@ export const PvReport = (props: PvReportProps) => {
                 <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
                 <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} money={false} />
             </Totals>
-            <div className="row">
-                <div className="col-sm-2"> {/* TODO to auto width column */}
-                    <MonthPicker
+            <Label htmlId="" label="Filters" />
+            <div className="row grid-sibling-row">
+                <div className="col-sm-4">
+                    <SelectList
+                        htmlId={"pvreport-month"}
+                        name={""}
+                        error={""}
+                        label={"Time"}
+                        //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
+                        options={timeOptions}
+                        initialValue={timeOptions[1]}
                         onChange={props.onMonthChange}
-                        start={props.dateFilter.start}
-                        end={props.dateFilter.end}
                     />
                 </div>
-                <div className="col-sm-10">
+                <div className="col-sm-4">
                     <ButtonGroup
-                        htmlId={"program-select"}
+                        htmlId={"pvreport-transactiontype"}
                         name={"programs"}
                         error={""}
                         label={"Transaction Type"}
@@ -36,6 +43,18 @@ export const PvReport = (props: PvReportProps) => {
                         initialValue={props.typeFilter}
                         multi
                     />
+                </div>
+                <div className="col-sm-4">
+                    <SelectList
+                        htmlId={"hostess-select"}
+                        name={"hostesses"}
+                        error={""}
+                        label={"Hostess"}
+                        onChange={props.onHostessChange}
+                        options={props.hostesses}
+                        multi
+                    />
+
                 </div>
             </div>
             <DataTable
@@ -72,3 +91,27 @@ const saleTypeOptions = [
     { value: 'Affiliate Sale', label: 'Affiliate Sale' },
     { value: 'Other', label: 'Other' }
 ];
+
+const now = new Date();
+const timeOptions = [
+    {
+        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "All time"
+    },
+    {
+        value: [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "This month"
+    },
+    {
+        value: [new Date(now.getFullYear(), now.getMonth() - 3, 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "Last 3 months"
+    },
+    {
+        value: [new Date(now.getFullYear(), now.getMonth() - 6, 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "Last 6 months"
+    },
+    {
+        value: [new Date(now.getFullYear(), 0, 0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "This year"
+    }
+]

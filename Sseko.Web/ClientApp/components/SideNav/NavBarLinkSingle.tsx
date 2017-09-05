@@ -11,6 +11,6 @@ interface NavBarLinkProps {
 export const NavBarLinkSingle = (props: NavBarLinkProps) =>
     <li>
         <NavLink exact={props.exact || true} to={props.href} activeClassName='active'>
-            <img src={props.icon}/> {props.label}
+            {/*<img src={props.icon} />*/}<i className={"glyphicon glyphicon-" + props.icon} /> {props.label}
         </NavLink>
     </li>;

@@ -1,6 +1,6 @@
 ﻿import 'react-select/dist/react-select.css';
 import * as React from 'react';
-import * as Select  from 'react-select';
+import * as Select from 'react-select';
 import { Label } from './Label'
 
 interface SelectListProps {
@@ -10,22 +10,30 @@ interface SelectListProps {
     label: string,
     onChange: (event: any) => any,
     error: string,
-    initialValue?: string,
-    required?: boolean,
+    initialValue?: any,
     multi?: boolean
 }
 
 interface SelectListState {
-    element: string
+    element: string;
+    options?: Array<object>;
 }
 
-export class SelectList extends React.Component<SelectListProps, SelectListState>  {
-    state = {
-        element: null
+export class SelectList extends React.Component<SelectListProps, SelectListState> {
+    constructor(props) {
+        super(props)
+
+        if (props.options[0] && !props.options[0].label) {
+            // this is a list of strings "value"; transform it into a list of objects {"value", "label"}
+            this.state = { element: this.props.initialValue, options: props.options.map(o => ({ value: o, label: o })) };
+        } else {
+            this.state = { element: this.props.initialValue, options: null };
+        }
     }
 
-    componentWillMount = () => {
-        this.setState({ element: this.props.initialValue });
+    state = {
+        element: null,
+        options: null
     }
 
     onValueChange = (value, label) => {
@@ -42,11 +50,10 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
                 <Label
                     htmlId={this.props.htmlId + "-label"}
                     label={this.props.label}
-                    required={this.props.required}
                 />
                 <Select
                     name={this.props.name}
-                    options={this.props.options}
+                    options={this.state.options ? this.state.options : this.props.options}
                     onChange={this.onValueChange}
                     value={this.state.element}
                     className={(this.props.error ? "form-control-danger" : "")}

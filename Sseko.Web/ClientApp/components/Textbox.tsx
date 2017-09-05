@@ -9,14 +9,12 @@ interface TextboxProps {
     label: string,
     value: string,
     onChange: (event: any) => any,
-    error: string,
-    required?: boolean
+    error: string
 }
 
 export class Textbox extends React.Component<TextboxProps, {}> {
     defaultProps: Partial<TextboxProps> = {
-        placeholder: '',
-        required: false
+        placeholder: ''
     };
     render() {
         return (
@@ -24,7 +22,6 @@ export class Textbox extends React.Component<TextboxProps, {}> {
                 <Label
                     htmlId={this.props.htmlId + "-label"}
                     label={this.props.label || ""}
-                    required={this.props.required}
                 />
                 <input
                     id={this.props.htmlId}
