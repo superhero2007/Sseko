@@ -484,8 +484,8 @@ exports.Layout = function (props) {
     return React.createElement("div", { className: 'container-fluid ' + (props.className || "") },
         React.createElement("div", { className: 'row' },
             React.createElement(SideNav_1.SideNav, { role: AuthService_1.GetRole(), username: AuthService_1.GetUsername() }),
-            React.createElement("div", { className: 'body-content' },
-                props.children,
+            React.createElement("div", { className: 'body-container' },
+                React.createElement("div", { className: 'body-content' }, props.children),
                 React.createElement(Footer_1.Footer, null))));
 };
 
@@ -1878,7 +1878,7 @@ var DataTable = /** @class */ (function (_super) {
         var tableWidth = this.getTableWidth();
         return (React.createElement("div", { className: "grid-container", style: { width: tableWidth } },
             React.createElement("div", { className: "grid-label" }, this.props.label),
-            React.createElement(ReactDataGrid, { onGridSort: this.props.onGridSort, columns: this.props.columns, rowGetter: this.rowGetter, rowsCount: this.props.rows.length, rowHeight: 35, minWidth: tableWidth, minHeight: Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight), emptyRowsView: this.props.isLoading ? LoadingView_1.LoadingView : EmptyRowsView_1.EmptyRowsView })));
+            React.createElement(ReactDataGrid, { onGridSort: this.props.onGridSort, columns: this.props.columns, rowGetter: this.rowGetter, rowsCount: this.props.rows.length, rowHeight: 32, headerRowHeight: 32, minWidth: tableWidth, minHeight: Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight), emptyRowsView: this.props.isLoading ? LoadingView_1.LoadingView : EmptyRowsView_1.EmptyRowsView })));
     };
     return DataTable;
 }(React.Component));
@@ -3495,13 +3495,13 @@ exports.PvReport = function (props) {
             React.createElement(Totals_1.Total, { iconSrc: salesIcon, label: "FILTERED COMMISSIONABLE SALES", amount: props.totalSales }),
             React.createElement(Totals_1.Total, { iconSrc: transactionsIcon, label: "FILTERED TRANSACTIONS", amount: props.totalTransactions, money: false })),
         React.createElement("div", { className: "row grid-sibling-row", id: "pvreport-filters" },
-            React.createElement("div", { className: "col-sm-4" },
+            React.createElement("div", null,
                 React.createElement(SelectList_1.SelectList, { htmlId: "pvreport-month", name: "", error: "", label: "Time", 
                     //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
                     options: timeOptions, initialValue: timeOptions[1], onChange: props.onMonthChange })),
-            React.createElement("div", { className: "col-sm-4" },
+            React.createElement("div", null,
                 React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "pvreport-transactiontype", name: "programs", error: "", label: "Transaction Type", onChange: props.onSaleTypeChange, options: saleTypeOptions, initialValue: props.typeFilter, multi: true })),
-            React.createElement("div", { className: "col-sm-4" },
+            React.createElement("div", null,
                 React.createElement(SelectList_1.SelectList, { htmlId: "hostess-select", name: "hostesses", error: "", label: "Hostess", onChange: props.onHostessChange, options: props.hostesses, multi: true }))),
         React.createElement(DataTable_1.DataTable, { label: "Personal Volume", rows: props.rows, columns: props.columns, onGridSort: props.onGridSort, isLoading: props.loading })));
 };

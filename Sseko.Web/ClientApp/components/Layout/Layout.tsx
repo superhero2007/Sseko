@@ -13,8 +13,10 @@ export const Layout = (props: LayoutProps) =>
     <div className={'container-fluid ' + (props.className || "")}>
         <div className='row'>
             <SideNav role={GetRole()} username={GetUsername()} />
-            <div className='body-content'>
-                {props.children}
+            <div className='body-container'>
+                <div className='body-content'>
+                    {props.children}
+                </div>
                 <Footer />
             </div>
         </div>

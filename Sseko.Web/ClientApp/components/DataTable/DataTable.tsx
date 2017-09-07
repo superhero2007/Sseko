@@ -86,7 +86,8 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                     columns={this.props.columns}
                     rowGetter={this.rowGetter}
                     rowsCount={this.props.rows.length}
-                    rowHeight={35}
+                    rowHeight={32}
+                    headerRowHeight={32}
                     minWidth={tableWidth}
                     minHeight={Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight)}
                     emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}

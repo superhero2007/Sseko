@@ -19,7 +19,7 @@ export const PvReport = (props: PvReportProps) => {
                 <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} money={false} />
             </Totals>
             <div className="row grid-sibling-row" id="pvreport-filters">
-                <div className="col-sm-4">
+                <div>
                     <SelectList
                         htmlId={"pvreport-month"}
                         name={""}
@@ -31,7 +31,7 @@ export const PvReport = (props: PvReportProps) => {
                         onChange={props.onMonthChange}
                     />
                 </div>
-                <div className="col-sm-4">
+                <div>
                     <ButtonGroup
                         htmlId={"pvreport-transactiontype"}
                         name={"programs"}
@@ -43,7 +43,7 @@ export const PvReport = (props: PvReportProps) => {
                         multi
                     />
                 </div>
-                <div className="col-sm-4">
+                <div>
                     <SelectList
                         htmlId={"hostess-select"}
                         name={"hostesses"}
