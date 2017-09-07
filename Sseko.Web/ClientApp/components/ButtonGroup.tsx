@@ -4,18 +4,18 @@ import * as Select  from 'react-select';
 import { Label } from './Label'
 
 interface ButtonGroupProps {
-    htmlId: string,
-    name: string,
-    options: any,
-    label: string,
-    onChange: (event: any) => any,
-    error: string,
-    initialValue?: string,
-    multi?: boolean
+    htmlId: string;
+    name: string;
+    options: any;
+    label: string;
+    onChange: (event: any) => any;
+    error: string;
+    initialValue?: string;
+    multi?: boolean;
 }
 
 interface ButtonGroupState {
-    element: string
+    values: Number[];
 }
 
 // Drop-in replacement for SelectList
@@ -24,8 +24,8 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
         values: []
     }
 
-    componentWillMount = () => {
-        let initialValue = this.props.initialValue.split(",");
+    componentWillMount() {
+        let initialValue: Array<any> = this.props.initialValue.split(",");
         initialValue.pop();
         this.setState({ values: initialValue });
     }

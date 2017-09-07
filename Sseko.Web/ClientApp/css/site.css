@@ -30,7 +30,7 @@
     --nav-gray: #eee;
     --footer-height: 30px;
     --nav-height: 46px;
-    --nav-width: 175px;
+    --nav-width: 200px;
     --btn-hover-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.125);
     --btn-hover-gradient: linear-gradient(to bottom, rgba(61,61,61,0.05) 0%, rgba(117,117,117,0.05) 20%, rgba(148,148,148,0.05) 50%, rgba(82,82,82,0.05) 80%, rgba(0,0,0,0.05) 100%);
     --btn-selected-box-shadow: inset 0 5px 7px rgba(0, 0, 0, 0.2);
@@ -110,26 +110,43 @@
 
         .main-nav .navbar li a,
         .main-nav .navbar li div {
+            min-width: 100%;
             min-height: 52px;
             padding: 10px 16px;
             line-height: 32px;
             background: var(--nav-gray);
             color: var(--gray);
-            min-width: 100%;
             transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius .1s ease-out;
         }
 
-            .main-nav .navbar li a:hover,
-            .main-nav .navbar li a:focus,
-            .main-nav .navbar li div:hover .main-nav .navbar li div:focus {
+            .main-nav .navbar li a img,
+            .main-nav .navbar li div img {
+                display: none;
+                margin-right: 10px;
+            }
+
+            .main-nav .navbar li a:not(.active) img:not(.active),
+            .main-nav .navbar li div:not(.active) img:not(.active) {
+                display: inline;
+            }
+
+            .main-nav .navbar li a.active img.active,
+            .main-nav .navbar li div.active img.active {
+                display: inline;
+            }
+
+            .main-nav .navbar li a:not(.active):hover,
+            .main-nav .navbar li a:not(.active):focus,
+            .main-nav .navbar li div:not(.active):hover,
+            .main-nav .navbar li div:not(.active):focus {
                 box-shadow: var(--btn-hover-box-shadow);
                 border-top-right-radius: 10px;
                 border-bottom-right-radius: 10px;
                 transition: margin-left .1s linear, height .2s linear, padding .2s linear, box-shadow .1s linear, border-radius .1s ease-in;
             }
 
-                .main-nav .navbar li a:hover::before,
-                .main-nav .navbar li a:focus::before {
+                .main-nav .navbar li a:not(.active):hover::before,
+                .main-nav .navbar li a:not(.active):focus::before {
                     /* arrow */
                     content: "";
                     position: absolute;
@@ -141,8 +158,8 @@
                     border-color: transparent transparent transparent var(--gray);
                 }
 
-            .main-nav .navbar li a:hover,
-            .main-nav .navbar li a:focus {
+            .main-nav .navbar li a:not(.active):hover,
+            .main-nav .navbar li a:not(.active):focus {
                 margin-left: 10px;
                 width: max-content; /* Maybe move this to shared with div properties */
             }
@@ -297,32 +314,32 @@ footer {
                 color: var(--gray);
             }
 
-.pvreport .body-content {
+.report .body-content {
     max-width: 1500px;
 }
 
-    .pvreport .body-content #totals-label {
+    .report .body-content #totals-label {
         margin: auto;
     }
 
-    .pvreport .body-content #totals {
+    .report .body-content #totals {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
     }
 
-        .pvreport .body-content #totals .total-container {
+        .report .body-content #totals .total-container {
             position: relative;
             min-width: 275px;
             padding: 10px;
             /*border: 1px solid var(--nav-gray);*/
         }
 
-            .pvreport .body-content #totals .total-container img {
+            .report .body-content #totals .total-container img {
                 max-width: 70px;
             }
 
-            .pvreport .body-content #totals .total-container .total-label {
+            .report .body-content #totals .total-container .total-label {
                 font-size: 10px;
                 position: absolute;
                 left: 95px;
@@ -330,7 +347,7 @@ footer {
                 white-space: nowrap;
             }
 
-            .pvreport .body-content #totals .total-container .total-money {
+            .report .body-content #totals .total-container .total-money {
                 font-size: 24px;
                 font-weight: 900;
                 position: absolute;
@@ -455,8 +472,8 @@ footer {
 }
 
 .react-grid-Cell {
-    --row-outline: 1px solid var(--nav-gray);
     border: none;
+    --row-outline: 1px solid var(--nav-gray);
     border-bottom: var(--row-outline);
 }
 
