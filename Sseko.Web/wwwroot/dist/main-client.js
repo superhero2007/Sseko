@@ -3169,7 +3169,7 @@ var DataTable_1 = __webpack_require__(13);
 var Layout_1 = __webpack_require__(9);
 var ButtonGroup_1 = __webpack_require__(27);
 exports.DlReport = function (props) {
-    return (React.createElement(Layout_1.Layout, { containerClassName: "dlreport" },
+    return (React.createElement(Layout_1.Layout, { containerClassName: "report" },
         React.createElement("div", { className: "row grid-sibling-row" },
             React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "level-select", name: "levels", error: "", label: "Levels", onChange: props.onLevelChange, options: levelOptions, multi: true, initialValue: props.levelFilter })),
         React.createElement(DataTable_1.DataTable, { label: "Downline Summary", rows: props.rows, onGridSort: props.onGridSort, columns: columns, isLoading: props.loading })));
@@ -3494,7 +3494,7 @@ exports.PvReport = function (props) {
         React.createElement(Totals_1.Totals, null,
             React.createElement(Totals_1.Total, { iconSrc: salesIcon, label: "FILTERED COMMISSIONABLE SALES", amount: props.totalSales }),
             React.createElement(Totals_1.Total, { iconSrc: transactionsIcon, label: "FILTERED TRANSACTIONS", amount: props.totalTransactions, money: false })),
-        React.createElement("div", { className: "row grid-sibling-row" },
+        React.createElement("div", { className: "row grid-sibling-row", id: "pvreport-filters" },
             React.createElement("div", { className: "col-sm-4" },
                 React.createElement(SelectList_1.SelectList, { htmlId: "pvreport-month", name: "", error: "", label: "Time", 
                     //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}

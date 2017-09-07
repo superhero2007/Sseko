@@ -315,7 +315,7 @@ footer {
             }
 
 .report .body-content {
-    max-width: 1500px;
+    max-width: 1200px;
 }
 
     .report .body-content #totals-label {
@@ -353,6 +353,17 @@ footer {
                 position: absolute;
                 top: 10px;
             }
+
+    .report .body-content #pvreport-filters > div:nth-child(1),
+    .report .body-content #pvreport-filters > div:nth-child(3) {
+        max-width: 200px;
+    }
+
+@media (min-width: 768px) {
+    .report .body-content #pvreport-filters > div:nth-child(2) {
+        width: 475px;
+    }
+}
 
 .btn.btn-secondary {
     position: inherit;
