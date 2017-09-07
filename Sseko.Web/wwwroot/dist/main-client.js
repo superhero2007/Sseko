@@ -481,7 +481,7 @@ var SideNav_1 = __webpack_require__(66);
 var Footer_1 = __webpack_require__(59);
 var AuthService_1 = __webpack_require__(28);
 exports.Layout = function (props) {
-    return React.createElement("div", { className: 'container-fluid ' + (props.containerClassName || "") },
+    return React.createElement("div", { className: 'container-fluid ' + (props.className || "") },
         React.createElement("div", { className: 'row' },
             React.createElement(SideNav_1.SideNav, { role: AuthService_1.GetRole(), username: AuthService_1.GetUsername() }),
             React.createElement("div", { className: 'body-content' },
@@ -3490,7 +3490,7 @@ var Totals_1 = __webpack_require__(67);
 var salesIcon = __webpack_require__(110);
 var transactionsIcon = __webpack_require__(117);
 exports.PvReport = function (props) {
-    return (React.createElement(Layout_1.Layout, { containerClassName: "report" },
+    return (React.createElement(Layout_1.Layout, { className: "report" },
         React.createElement(Totals_1.Totals, null,
             React.createElement(Totals_1.Total, { iconSrc: salesIcon, label: "FILTERED COMMISSIONABLE SALES", amount: props.totalSales }),
             React.createElement(Totals_1.Total, { iconSrc: transactionsIcon, label: "FILTERED TRANSACTIONS", amount: props.totalTransactions, money: false })),
