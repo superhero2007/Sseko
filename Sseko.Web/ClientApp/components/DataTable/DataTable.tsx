@@ -2,6 +2,7 @@
 import * as ReactDataGrid from 'react-data-grid';
 import { EmptyRowsView } from './EmptyRowsView';
 import { LoadingView } from './LoadingView';
+declare let $: any;
 
 interface DataTableProps {
     label?: string;

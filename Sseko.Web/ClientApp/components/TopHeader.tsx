@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { smoothlyMenu } from './Helpers';
+declare let $: any;
 
 class TopHeader extends React.Component<{}, {}> {
 

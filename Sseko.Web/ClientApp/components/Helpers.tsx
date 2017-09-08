@@ -1,4 +1,5 @@
-﻿export function correctHeight() {
+﻿declare let $: any;
+export function correctHeight() {
 
     var pageWrapper = $('#page-wrapper');
     var navbarHeight = $('nav.navbar-default').height();
