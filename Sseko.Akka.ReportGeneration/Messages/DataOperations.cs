@@ -14,15 +14,22 @@ namespace Sseko.Akka.DataService.Magento.Messages
 
         public class DataOperation : IOperation
         {
-            public DataOperation(ReportType reportType, int fellowId = 0)
+            public DataOperation(ReportType reportType, int fellowId = 0, DateTime? start = null, DateTime? end = null )
             {
                 ReportType = reportType;
                 FellowId = fellowId;
+
+                StartDate = start ?? DateTime.MinValue;
+                EndDate = end ?? DateTime.MaxValue;
             }
 
-            public ReportType ReportType { get; internal set; }
+            public ReportType ReportType { get; }
 
-            public int FellowId { get; internal set; }
+            public int FellowId { get; }
+
+            public DateTime StartDate { get; }
+
+            public DateTime EndDate { get; }
         }
 
         public class Result<T> : Data.QueryModels.Result<T>

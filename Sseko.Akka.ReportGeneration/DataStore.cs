@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Sseko.Akka.DataService.Magento.Actors;
+using Sseko.Akka.DataService.Magento.Entities;
 using Sseko.Data;
 using Sseko.Data.Models;
 
@@ -92,44 +93,44 @@ namespace Sseko.Akka.DataService.Magento
             return includeHostesses ? underlings.ToImmutableList() : underlings.Where(u => !u.Name.Contains("Hostess")).ToImmutableList();
         }
 
-        internal static ImmutableList<WorkerActor.FellowLite> GetAllChildren(int fellowId)
+        internal static ImmutableList<FellowLite> GetAllChildren(int fellowId)
         {
-            var fellows = new List<WorkerActor.FellowLite>();
+            var fellows = new List<FellowLite>();
             var children = GetUnderlings(fellowId);
 
             foreach (var child in children)
             {
                 var grandChildren = GetUnderlings(child.AccountId);
 
-                fellows.Add(new WorkerActor.FellowLite
+                fellows.Add(new FellowLite
                 {
                     Name = child.Name,
                     Id = child.AccountId,
                     Level = 1,
                     Parent = "Me",
-                    GrandParent = string.Empty
+                    Grandparent = string.Empty
                 });
                 foreach (var grandChild in grandChildren)
                 {
                     var greatGrandChildren = GetUnderlings(grandChild.AccountId);
 
-                    fellows.Add(new WorkerActor.FellowLite
+                    fellows.Add(new FellowLite
                     {
                         Name = grandChild.Name,
                         Id = grandChild.AccountId,
                         Level = 2,
                         Parent = child.Name,
-                        GrandParent = "Me"
+                        Grandparent = "Me"
                     });
                     foreach (var greatGrandChild in greatGrandChildren)
                     {
-                        fellows.Add(new WorkerActor.FellowLite
+                        fellows.Add(new FellowLite
                         {
                             Name = greatGrandChild.Name,
                             Id = greatGrandChild.AccountId,
                             Level = 3,
                             Parent = grandChild.Name,
-                            GrandParent = child.Name
+                            Grandparent = child.Name
                         });
                     }
                 }

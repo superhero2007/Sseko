@@ -2,7 +2,8 @@
 {
     public enum ReportType
     {
-        PvTransactionSummary,
-        DownlineSummary
+        PersonalVolume,
+        DownlineSummary,
+        AdminSummary
     }
 }

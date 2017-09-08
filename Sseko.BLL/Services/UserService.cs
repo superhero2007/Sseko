@@ -90,20 +90,28 @@ namespace Sseko.BLL.Services
             return await UpsertAsync(user);
         }
 
+        public async Task<DataOperations.Result<User>> SetPasswordResetById(string id)
+        {
+            var request = await GetAsync(id);
+
+            if (request.IsError) throw request.Exception;
+
+            if (request.Output == null) return null;
+
+            var user = request.Output;
+
+            ResetPassword(user);
+
+            return await UpsertAsync(user);
+        }
+
         public async Task<DataOperations.Result<User>> SetPasswordReset(string username)
         {
             var user = await GetByUserNameAsync(username);
 
             if (user == null) return null;
 
-            //Invalidate the current password
-            var rand = new Random();
-            user.PasswordHash = string.Concat(rand.Next(int.MaxValue).ToString(), user.PasswordHash);
-
-            //Change the security stamp. This will force already authenticated users to logout
-            user.SecurityStamp = Guid.NewGuid().ToString();
-
-            user.PasswordResetDetails = new PasswordResetDetails();
+            ResetPassword(user);
 
             return await UpsertAsync(user);
         }
@@ -232,6 +240,18 @@ namespace Sseko.BLL.Services
 
             return users?.Select(u => u.Created).OrderByDescending(d => d.Date).FirstOrDefault()
                    ?? DateTime.MinValue;
+        }
+
+        private static void ResetPassword(User user)
+        {
+            //Invalidate the current password
+            var rand = new Random();
+            user.PasswordHash = string.Concat(rand.Next(int.MaxValue).ToString(), user.PasswordHash);
+
+            //Change the security stamp. This will force already authenticated users to logout
+            user.SecurityStamp = Guid.NewGuid().ToString();
+
+            user.PasswordResetDetails = new PasswordResetDetails();
         }
     }
 }

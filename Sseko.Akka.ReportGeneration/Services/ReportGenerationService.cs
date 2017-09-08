@@ -10,16 +10,25 @@ namespace Sseko.Akka.DataService.Magento.Services
     public class ReportGenerationService
     {
         private IActorRef _coordinator;
+
         public ReportGenerationService()
         {
             _coordinator = ActorSystemRefs.ReportCoordinatorActor;
         }
 
-        public async Task<DataOperations.Result<ReportBase>> CreateAsync(ReportType reportType, int fellowId)
+        public async Task<DataOperations.Result<Report>> CreatePvReport(int fellowId)
         {
-            var report = (DataOperations.Result<ReportBase>)await _coordinator.Ask(new DataOperations.DataOperation(reportType, fellowId));
+            return (DataOperations.Result<Report>)await _coordinator.Ask(new DataOperations.DataOperation(ReportType.PersonalVolume, fellowId));
+        }
 
-            return report;
+        public async Task<DataOperations.Result<Report>> CreateDownlineReport(int fellowId)
+        {
+            return (DataOperations.Result<Report>)await _coordinator.Ask(new DataOperations.DataOperation(ReportType.DownlineSummary, fellowId));
+        }
+
+        public async Task<DataOperations.Result<Report>> CreateAdminSummaryReport(int fellowId)
+        {
+            return (DataOperations.Result<Report>)await _coordinator.Ask(new DataOperations.DataOperation(ReportType.AdminSummary, fellowId));
         }
 
         public async Task<DataOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated)
@@ -27,11 +36,6 @@ namespace Sseko.Akka.DataService.Magento.Services
             var fellows = (DataOperations.ResultList<User>) await _coordinator.Ask(new DataOperations.GetNewFellows(lastUpdated));
 
             return fellows;
-        }
-
-        public async Task<DataOperations.ResultList<Transaction>> GetTransactions(int fellowId)
-        {
-            return (DataOperations.ResultList<Transaction>) await _coordinator.Ask(new DataOperations.GetTransactions(fellowId));
         }
     }
 }
