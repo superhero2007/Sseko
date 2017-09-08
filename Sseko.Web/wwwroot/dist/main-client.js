@@ -3584,7 +3584,7 @@ var DataTable_1 = __webpack_require__(13);
 var Layout_1 = __webpack_require__(8);
 var ButtonGroup_1 = __webpack_require__(27);
 exports.DlReport = function (props) {
-    return (React.createElement(Layout_1.Layout, { className: "report" },
+    return (React.createElement(Layout_1.Layout, null,
         React.createElement("div", { className: "row grid-sibling-row" },
             React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "level-select", name: "levels", error: "", label: "Levels", onChange: props.onLevelChange, options: levelOptions, multi: true, initialValue: props.levelFilter })),
         React.createElement(DataTable_1.DataTable, { label: "Downline Summary", rows: props.rows, onGridSort: props.onGridSort, columns: columns, isLoading: props.loading })));

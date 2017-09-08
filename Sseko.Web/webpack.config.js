@@ -17,7 +17,6 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' }
             ]
         },
         plugins: [new CheckerPlugin()]
@@ -29,6 +28,7 @@ module.exports = (env) => {
         entry: { 'main-client': './ClientApp/startup/boot-client.tsx' },
         module: {
             rules: [
+                { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
                 { test: /\.css$/, use: ExtractTextPlugin.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) },
                 {
                     test: /\.(png|jpg|jpeg|gif|svg)$/,
@@ -75,30 +75,5 @@ module.exports = (env) => {
             ])
     });
 
-    // Configuration for server-side (prerendering) bundle suitable for running in Node
-    const serverBundleConfig = merge(sharedConfig(), {
-        resolve: { mainFields: ['main'] },
-        entry: { 'main-server': './ClientApp/startup/boot-server.tsx' },
-        module: {
-            rules: [
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'ignore-loader' }
-            ]
-        },
-        plugins: [
-            new webpack.DllReferencePlugin({
-                context: __dirname,
-                manifest: require('./ClientApp/dist/vendor-manifest.json'),
-                sourceType: 'commonjs2',
-                name: './vendor'
-            })
-        ],
-        output: {
-            libraryTarget: 'commonjs',
-            path: path.join(__dirname, './ClientApp/dist')
-        },
-        target: 'node',
-        devtool: 'inline-source-map'
-    });
-
-    return [clientBundleConfig, serverBundleConfig];
+    return [clientBundleConfig];
 };

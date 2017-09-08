@@ -5,7 +5,7 @@ import { ButtonGroup } from '../../components/ButtonGroup';
 
 export const DlReport = (props: DlReportProps) => {
     return (
-        <Layout className="report">
+        <Layout>
             <div className="row grid-sibling-row">
                 <ButtonGroup
                     htmlId="level-select"
