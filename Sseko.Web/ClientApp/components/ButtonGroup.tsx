@@ -48,16 +48,13 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
         for (let button in this.props.options) {
             let b = this.props.options[button];
             buttons.push(
-                <a
-                    //type="button"
-                    aria-roledescription="button"
-                    href="#"
-                    className={"btn btn-secondary" + (this.state.values.includes(b.value) ? " selected" : "")}
+                <button
+                    className={"btn btn-primary" + (this.state.values.includes(b.value) ? " selected" : "")}
                     onClick={this.onValueChange(b.value)}
                     key={b.label}
                 >
                     {b.label}
-                </a>
+                </button>
             );
         }
         return buttons;
@@ -71,7 +68,7 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
                     label={this.props.label}
                 />
                 <br />
-                <div className="btn-group" role="group">
+                <div className="btn-group" data-toggle="buttons-checkbox">
                     {this.buttons()}
                 </div>
                 {this.props.children}

@@ -1,6 +1,7 @@
-import '../css/site.css';
+import '../css/style.css'; // Inspinia
 import 'bootstrap';
-import 'metismenu';
+import '../css/site.css';
+import '../css/font-awesome.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';  
 import { AppContainer } from 'react-hot-loader';

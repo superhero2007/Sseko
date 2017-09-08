@@ -4,6 +4,7 @@ import Navigation from '../Navigation';
 import Footer from '../Footer';
 import TopHeader from '../TopHeader';
 import { correctHeight, detectBody } from '../Helpers';
+declare let $: any;
 
 export class Layout extends React.Component<{}, {}> {
     render() {

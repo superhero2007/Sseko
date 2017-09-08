@@ -19,9 +19,12 @@
   <ItemGroup>
     <!-- Files not to show in IDE -->
     <None Remove="yarn.lock" />
+    <Compile Remove="ClientApp\font\**" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\font\**" />
+    <None Remove="ClientApp\font\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sseko.Akka.DataService\Sseko.Akka.DataService.csproj" />
@@ -29,9 +32,6 @@
     <ProjectReference Include="..\Sseko.BLL\Sseko.BLL.csproj" />
     <ProjectReference Include="..\Sseko.Core\Sseko.Core.csproj" />
     <ProjectReference Include="..\Sseko.DAL.DocumentDb\Sseko.DAL.DocumentDb.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClientApp\font\" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

@@ -3,7 +3,8 @@ import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
 import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
-import { Totals, Total } from '../../components/Totals';
+import Total from '../../components/Totals/Total';
+import TotalGroup from '../../components/Totals/TotalGroup';
 import { Label } from "../../components/Label";
 import balanceIcon = require('../../img/balance.png');
 import personIcon = require('../../img/personal-volume.png');
@@ -13,12 +14,12 @@ import transactionsIcon = require('../../img/transaction.png');
 export const PvReport = (props: PvReportProps) => {
     return (
         <Layout>
-            <Totals>
-                <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
-                <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} money={false} />
-            </Totals>
-            <div className="row grid-sibling-row" id="pvreport-filters">
-                <div>
+            <TotalGroup>
+                <Total titleLabel={"FILTERED COMMISSIONABLE SALES"} mainContent={props.totalSales} />
+                <Total titleLabel={"FILTERED TRANSACTIONS"} mainContent={props.totalTransactions} />
+            </TotalGroup>
+            <div className="row" id="filters">
+                <div className="col-lg-4">
                     <SelectList
                         htmlId={"pvreport-month"}
                         name={""}
@@ -30,7 +31,7 @@ export const PvReport = (props: PvReportProps) => {
                         onChange={props.onMonthChange}
                     />
                 </div>
-                <div>
+                <div className="col-lg-4">
                     <ButtonGroup
                         htmlId={"pvreport-transactiontype"}
                         name={"programs"}
@@ -42,7 +43,7 @@ export const PvReport = (props: PvReportProps) => {
                         multi
                     />
                 </div>
-                <div>
+                <div className="col-lg-4">
                     <SelectList
                         htmlId={"hostess-select"}
                         name={"hostesses"}
@@ -52,7 +53,6 @@ export const PvReport = (props: PvReportProps) => {
                         options={props.hostesses}
                         multi
                     />
-
                 </div>
             </div>
             <DataTable
@@ -78,7 +78,7 @@ interface PvReportProps {
     rows: any;
     typeFilter: string;
     loading: boolean;
-    totalSales: number;
+    totalSales: string;
     totalTransactions: number;
     columns: any;
 }

@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+declare let $: any;
 
 class Navigation extends React.Component<{}, {}> {
 

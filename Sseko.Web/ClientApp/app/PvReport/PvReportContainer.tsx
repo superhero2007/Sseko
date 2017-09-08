@@ -4,6 +4,7 @@ import { ApplicationState } from '../../store';
 import { connect } from 'react-redux';
 import { PvReport } from './PvReport';
 import { sortGrid, typeFilterer, hostessFilterer, dateFilterer } from '../../utils/DatatableFilters';
+import { Formatters } from '../../utils/Formatters'
 
 type PvReportProps = MappedProps & typeof Report.actionCreators;
 
@@ -99,7 +100,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
                 total += Number(rows[r].commission.substr(1));
             }
         }
-        return total;
+        return Formatters.moneyRounded(total);
     }
 
     rowGetter(i) {
