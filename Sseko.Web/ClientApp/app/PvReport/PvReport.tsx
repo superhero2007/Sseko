@@ -1,7 +1,6 @@
 ﻿import * as React from 'react';
 import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
-import { MonthPicker } from '../../components/MonthPicker/MonthPicker';
 import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
 import { Totals, Total } from '../../components/Totals';
@@ -13,7 +12,7 @@ import transactionsIcon = require('../../img/transaction.png');
 
 export const PvReport = (props: PvReportProps) => {
     return (
-        <Layout className="report">
+        <Layout>
             <Totals>
                 <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
                 <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} money={false} />

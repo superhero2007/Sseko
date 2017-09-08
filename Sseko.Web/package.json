@@ -4,7 +4,7 @@
   "dependencies": {
     "@types/history": "4.5.1",
     "@types/react": "^15.6.2",
-    "@types/react-data-grid": "^2.0.3",
+    "@types/react-data-grid": "^2.0.4",
     "@types/react-dom": "^15.5.4",
     "@types/react-redux": "^4.4.47",
     "@types/react-router-dom": "^4.0.7",
@@ -20,16 +20,20 @@
     "css-loader": "0.28.1",
     "domain-task": "^3.0.0",
     "event-source-polyfill": "0.0.9",
+    "expose-loader": "^0.7.3",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "0.11.1",
     "history": "4.6.1",
+    "ignore-loader": "^0.1.2",
     "jquery": "3.2.1",
     "jquery-ui": "^1.12.1",
     "json-loader": "0.5.4",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
+    "metismenu": "^2.7.0",
     "node-noop": "1.0.0",
     "react": "15.5.4",
+    "react-bootstrap": "^0.31.3",
     "react-cookie": "^2.1.0",
     "react-data-grid": "^2.0.58",
     "react-dom": "15.5.4",
@@ -49,5 +53,6 @@
     "webpack": "2.5.1",
     "webpack-hot-middleware": "2.18.0",
     "webpack-merge": "4.1.0"
-  }
+  },
+  "devDependencies": {}
 }

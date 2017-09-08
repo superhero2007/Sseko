@@ -15,15 +15,12 @@ interface ButtonGroupProps {
 }
 
 interface ButtonGroupState {
-    values: Number[];
+    values: number[];
 }
 
 // Drop-in replacement for SelectList
 export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupState>  {
-    state = {
-        values: []
-    }
-
+    // TODO maybe redeclare state
     componentWillMount() {
         let initialValue: Array<any> = this.props.initialValue.split(",");
         initialValue.pop();
@@ -52,7 +49,7 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
             let b = this.props.options[button];
             buttons.push(
                 <a
-                    type="button"
+                    //type="button"
                     aria-roledescription="button"
                     href="#"
                     className={"btn btn-secondary" + (this.state.values.includes(b.value) ? " selected" : "")}

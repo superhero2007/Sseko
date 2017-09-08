@@ -1,5 +1,5 @@
 ﻿import axios from 'axios';
-import { Action, Reducer, ActionCreator } from 'redux';
+import { Reducer, ActionCreator } from 'redux';
 import * as Cookies from 'universal-cookie';
 import * as Decoder from 'jwt-decode';
 import { AppThunkAction } from '../../store';

@@ -22,18 +22,21 @@ export const FellowLinkGroup = () => {
                     iconActive={reportsIconActive}
                     href='/Reports/PersonalVolume'
                     label='Personal Volume'
+                    exact={false}
                 />
                 <NavBarLinkSingle
                     icon={reportsIcon}
                     iconActive={reportsIconActive}
                     href='/Reports/Downline'
                     label='Downline Summary'
+                    exact={false}
                 />
                 <NavBarLinkSingle
                     icon={logoutIcon}
                     iconActive={logoutIconActive}
                     href='/Login'
                     label='Logout'
+                    exact={false}
                 />
             </ul>
         );

@@ -1,11 +1,10 @@
 ﻿import * as React from 'react';
-import * as $ from 'jquery';
 import * as ReactDataGrid from 'react-data-grid';
 import { EmptyRowsView } from './EmptyRowsView';
 import { LoadingView } from './LoadingView';
 
 interface DataTableProps {
-    label: string;
+    label?: string;
     rows: any,
     columns: any[],
     onGridSort: (column: string, dir: any) => any,

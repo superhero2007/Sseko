@@ -79,6 +79,11 @@ module.exports = (env) => {
     const serverBundleConfig = merge(sharedConfig(), {
         resolve: { mainFields: ['main'] },
         entry: { 'main-server': './ClientApp/startup/boot-server.tsx' },
+        module: {
+            rules: [
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'ignore-loader' }
+            ]
+        },
         plugins: [
             new webpack.DllReferencePlugin({
                 context: __dirname,
