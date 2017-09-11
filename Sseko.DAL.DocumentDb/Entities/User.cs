@@ -35,5 +35,8 @@ namespace Sseko.DAL.DocumentDb.Entities
 
         [JsonProperty(PropertyName = "magentoAccountId")]
         public int MagentoAccountId { get; set; }
+
+        [JsonProperty(PropertyName = "enabled")]
+        public bool Enabled { get; set; }
     }
 }

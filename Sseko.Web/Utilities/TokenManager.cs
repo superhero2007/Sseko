@@ -9,32 +9,41 @@ namespace Sseko.Web.Utilities
 {
     public static class TokenManager
     {
-        public static string GenerateTokenAsync(User user, string userToImpersonateId = "")
+        public static string GenerateTokenAsync(User user, User userToImpersonate = null)
         {
             var symmetricKey = GetSecurityKey();
             var tokenHandler = new JwtSecurityTokenHandler();
 
+            var claims = new ClaimsIdentity();
+            if (userToImpersonate != null)
+            {
+                claims.AddClaim(new Claim(ClaimTypes.Name, userToImpersonate.UserName));
+                claims.AddClaim(new Claim("uId", userToImpersonate.Id));
+                claims.AddClaim(new Claim("mId", userToImpersonate.MagentoAccountId.ToString()));
+                claims.AddClaim(new Claim("role", userToImpersonate.Role));
+                claims.AddClaim(new Claim("sec", userToImpersonate.SecurityStamp));
+                claims.AddClaim(new Claim("imp", "true"));
+                claims.AddClaim(new Claim("pId", user.Id));
+            }
+            else
+            {
+                claims.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+                claims.AddClaim(new Claim("uId", user.Id));
+                claims.AddClaim(new Claim("mId", user.MagentoAccountId.ToString()));
+                claims.AddClaim(new Claim("role", user.Role));
+                claims.AddClaim(new Claim("sec", user.SecurityStamp));
+                claims.AddClaim(new Claim("imp", "false"));
+                claims.AddClaim(new Claim("pId", Guid.Empty.ToString()));
+            }
+
             var now = DateTime.UtcNow;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("uId", user.Id),
-                    new Claim("mId", user.MagentoAccountId.ToString()),
-                    new Claim("role", user.Role),
-                    new Claim("sec", user.SecurityStamp),
-                }),
+                Subject = claims,
                 Expires = now.AddHours(24),
 
                 SigningCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature)
             };
-
-            if (!string.IsNullOrWhiteSpace(userToImpersonateId))
-            {
-                tokenDescriptor.Subject.AddClaim(new Claim("imp", "true"));
-                tokenDescriptor.Subject.AddClaim(new Claim("iId", userToImpersonateId));
-            }
 
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(stoken);

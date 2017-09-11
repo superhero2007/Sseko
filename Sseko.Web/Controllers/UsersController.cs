@@ -38,8 +38,39 @@ namespace Sseko.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                e.ToExceptionless().Submit();
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("ToggleEnabled/{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ToggleEnabled(string id)
+        {
+            try
+            {
+                if(string.IsNullOrWhiteSpace(id)) return BadRequest();
+
+                var request = await _serviceFactory.UserService().GetAsync(id);
+
+                if (request.IsError) throw request.Exception;
+
+                var user = request.Output;
+
+                if(user == null) return NotFound();
+
+                user.Enabled = !user.Enabled;
+
+                request = await _serviceFactory.UserService().UpsertAsync(user);
+
+                if (request.IsError) throw request.Exception;
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                e.ToExceptionless().Submit();
+                return StatusCode(500);
             }
         }
     }

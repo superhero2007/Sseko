@@ -28,8 +28,8 @@ export const Account = {
         return axios.post('/api/account/UpdatePassword/', user, { headers: Utilities.GetHeaders() })
     },
 
-    ImpersonateUser(user: dtos.UserForImpersonationDto): AxiosPromise {
-        return axios.post('/api/account/Impersonate/', user, { headers: Utilities.GetHeaders() })
+    ImpersonateUser(id: string): AxiosPromise {
+        return axios.get('/api/account/Impersonate/' + id, { headers: Utilities.GetHeaders() })
     },
 
     AdminResetPassword(id: string): AxiosPromise {

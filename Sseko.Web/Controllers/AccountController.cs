@@ -149,24 +149,29 @@ namespace Sseko.Web.Controllers
             }
         }
 
-        [HttpPost("Impersonate")]
+        [HttpGet("Impersonate/{userToImpersonateId}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ImpersonateUser([FromBody] UserForImpersonationDto model)
+        public async Task<IActionResult> ImpersonateUser(string userToImpersonateId)
         {
             try
             {
+                var id = GetId();
+
                 var userService = _serviceFactory.UserService();
 
-                //Just validate that the requested user to impersonate exists
-                var request = await userService.GetAsync(model.UserToImpersonateId);
+                var request = await userService.GetAsync(userToImpersonateId);
 
                 if (request.IsError) throw request.Exception;
 
-                request = await userService.GetAsync(model.UserImpersonatingId);
+                var userToImpersonate = request.Output;
+
+                request = await userService.GetAsync(id);
 
                 if (request.IsError) throw request.Exception;
 
-                var token = TokenManager.GenerateTokenAsync(request.Output, model.UserToImpersonateId);
+                var user = request.Output;
+
+                var token = TokenManager.GenerateTokenAsync(user, userToImpersonate);
 
                 return Json(new { token });
             }
