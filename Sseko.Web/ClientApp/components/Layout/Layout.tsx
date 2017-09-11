@@ -4,6 +4,7 @@ import Navigation from '../SideNav/Navigation';
 import Footer from '../Footer';
 import TopHeader from '../TopHeader';
 import { correctHeight, detectBody } from '../Helpers';
+import { GetRole } from '../../utils/AuthService';
 declare let $: any;
 
 export class Layout extends React.Component<{}, {}> {
@@ -25,7 +26,7 @@ export class Layout extends React.Component<{}, {}> {
     render() {
         return (
             <div id="wrapper">
-                <Navigation />
+                <Navigation role={GetRole()}/>
                 <div id="page-wrapper" className="gray-bg">
                     <TopHeader />
                         {this.props.children}
