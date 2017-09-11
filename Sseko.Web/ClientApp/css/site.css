@@ -23,6 +23,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
+/* Fix margin on wrapped titles */
 .ibox-title > h5 {
     margin-bottom: 0;
 }
@@ -39,27 +40,132 @@
 
 @media (min-width: 768px) {
     #filters > div:nth-child(2) {
-        width: 550px;
+        width: 600px;
         display: flex;
         justify-content: space-around;
     }
 }
 
-#filters .btn:not(.selected) {
-    background: transparent;
-    color: black;
+.btn-3d {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 0;
+    margin: -4px 2px 0px 2px;
+    border: none;
+    background: none !important;
+    outline: none !important;
+    box-shadow: 0 8px 0 var(--primary-shade), 0 15px 20px rgba(0, 0, 0, .35);
+    transition: box-shadow .1s ease-in-out;
+    font-size: 18px;
+    z-index: 1;
+}
+
+    .btn-3d.selected {
+        box-shadow: 0 8px 0 var(--primary-shade), 0 12px 10px rgba(0, 0, 0, .3);
+    }
+
+        .btn-3d.selected > span {
+            transform: translate(0, 4px);
+        }
+
+        .btn-3d.selected:active {
+            box-shadow: 0 8px 0 var(--primary-shade), 0 10px 8px rgba(0, 0, 0, .3);
+        }
+
+            .btn-3d.selected:active > span {
+                transform: translate(0, 6px);
+            }
+
+    .btn-3d:active {
+        box-shadow: 0 8px 0 var(--primary-shade), 0 10px 8px rgba(0, 0, 0, .3);
+    }
+
+        .btn-3d:active > span {
+            transform: translate(0, 6px);
+        }
+
+    /* The "side" of the button */
+    .btn-3d > span {
+        display: inline-block;
+        border-radius: 8px;
+        padding: 8px 8px;
+        background-color: var(--primary-shade);
+        background-image: linear-gradient(to bottom, hsla(167.8, 74.6%, 47.8%, .8), hsla(167.9, 74.4%, 55.5%, .2));
+        box-shadow: inset 0 -1px 1px rgba(255, 255, 255, .15);
+        line-height: 1;
+        text-shadow: 0 -1px 1px rgba(21, 145, 120, .7);
+        transition: background-color .2s ease-in-out, transform .1s ease-in-out;
+        z-index: 1;
+    }
+
+    .btn-3d:hover > span {
+        /* Glow */
+        background-color: var(--primary);
+        text-shadow: 0 -1px 1px rgba(21, 145, 120, .9), 0 0 5px rgba(255, 255, 255, .8);
+    }
+
+    /* The text of the button */
+    .btn-3d:not(.selected) > span {
+        z-index: 2;
+    }
+
+    /* The text of the button */
+    .btn-3d:not(.selected) > span > span {
+        opacity: 0.5;
+        z-index: 2;
+    }
+
+/* Support button groups */
+.btn-group > .btn-3d {
+    position: relative;
+    /*float: left;*/
+}
+
+    .btn-group > .btn-3d:hover > span,
+    .btn-group > .btn-3d:focus > span,
+    .btn-group > .btn-3d:active > span,
+    .btn-group > .btn-3d.active > span {
+        /*z-index: 1;*/
+    }
+
+.btn-group .btn-3d + .btn-3d {
+    margin-left: -2px;
+}
+
+.btn-group > .btn-3d:not(:first-child):not(:last-child),
+.btn-group > .btn-3d:not(:first-child):not(:last-child) > span {
+    border-radius: 0;
+}
+
+.btn-group > .btn-3d:first-child {
+    margin-left: 0;
+}
+
+    .btn-group > .btn-3d:first-child:not(:last-child),
+    .btn-group > .btn-3d:first-child:not(:last-child) > span {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+.btn-group > .btn-3d:last-child:not(:first-child),
+.btn-group > .btn-3d:last-child:not(:first-child) > span {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 :root {
     /* Inspinia Colors */
-    --primary: rgb(26, 179, 148);
-    --background: #f3f3f4;
-    /* Colors */
+    --primary-light: #1fd5b0;
+    --primary: #1ab394;
+    --primary-shade: #159178;
+    --gray: #f3f3f4;
+    --dark-gray: #676a6c;
+    /* Colors
     --gray: #6a6a6a;
     --btn-gray: #222;
     --orange: #fda868;
     --light-orange: #f8e5d6;
-    --nav-gray: #eee;
+    --nav-gray: #eee; */
     --footer-height: 30px;
     --nav-height: 46px;
     --nav-width: 200px;
@@ -106,7 +212,7 @@ body {
                 font-weight: 700;
                 letter-spacing: .2px;
                 margin: 0 0 8px 0;
-                color: var(--gray);
+                /*color: var(--gray);*/
             }
 
             .login-form .form .auth-form-body h2 {
@@ -147,13 +253,15 @@ body {
                 border: none;
                 font: 26px NTR, sans-serif;
                 line-height: 50px;
-                color: var(--orange);
+                /*color: var(--orange);*/
                 text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+                transition: box-shadow .2s, background .2s;
             }
 
                 .login-form .form .auth-form-body .btn-submit:focus,
                 .login-form .form .auth-form-body .btn-submit:hover {
                     outline: none;
+                    box-shadow: var(--btn-hover-box-shadow);
                     background: var(--gray);
                 }
 
@@ -161,12 +269,12 @@ body {
                 .login-form .form .auth-form-body .btn-submit:active:focus,
                 .login-form .form .auth-form-body .btn-submit:active:hover {
                     outline: none;
-                    /*box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.8);*/
                     box-shadow: var(--btn-active-box-shadow);
-                    background: linear-gradient(to bottom, var(--gray), var(--btn-gray));
+                    background: var(--gray);
+                    transition: none;
                 }
 
             .login-form .form .auth-form-body > a {
                 font: 22px NTR, sans-serif;
-                color: var(--gray);
+                /*color: var(--gray);*/
             }

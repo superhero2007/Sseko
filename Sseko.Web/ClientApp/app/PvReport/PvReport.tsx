@@ -11,61 +11,6 @@ import personIcon = require('../../img/personal-volume.png');
 import salesIcon = require('../../img/commissionable-sales.png');
 import transactionsIcon = require('../../img/transaction.png');
 
-export const PvReport = (props: PvReportProps) => {
-    return (
-        <Layout>
-            <TotalGroup>
-                <Total titleLabel={"FILTERED COMMISSIONABLE SALES"} mainContent={props.totalSales} />
-                <Total titleLabel={"FILTERED TRANSACTIONS"} mainContent={props.totalTransactions} />
-            </TotalGroup>
-            <div className="row" id="filters">
-                <div className="col-lg-4">
-                    <SelectList
-                        htmlId={"pvreport-month"}
-                        name={""}
-                        error={""}
-                        label={"Time"}
-                        //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
-                        options={timeOptions}
-                        initialValue={timeOptions[1]}
-                        onChange={props.onMonthChange}
-                    />
-                </div>
-                <div className="col-lg-4">
-                    <ButtonGroup
-                        htmlId={"pvreport-transactiontype"}
-                        name={"programs"}
-                        error={""}
-                        label={"Transaction Type"}
-                        onChange={props.onSaleTypeChange}
-                        options={saleTypeOptions}
-                        initialValue={props.typeFilter}
-                        multi
-                    />
-                </div>
-                <div className="col-lg-4">
-                    <SelectList
-                        htmlId={"hostess-select"}
-                        name={"hostesses"}
-                        error={""}
-                        label={"Hostess"}
-                        onChange={props.onHostessChange}
-                        options={props.hostesses}
-                        multi
-                    />
-                </div>
-            </div>
-            <DataTable
-                label="Personal Volume"
-                rows={props.rows}
-                columns={props.columns}
-                onGridSort={props.onGridSort}
-                isLoading={props.loading}
-            />
-        </Layout>
-    );
-}
-
 interface PvReportProps {
     dateFilter: { start: any, end: any };
     hostesses: string[];
@@ -83,6 +28,58 @@ interface PvReportProps {
     columns: any;
 }
 
+export const PvReport = (props: PvReportProps) =>
+    <Layout>
+        <TotalGroup>
+            <Total titleLabel={"FILTERED COMMISSIONABLE SALES"} mainContent={props.totalSales} />
+            <Total titleLabel={"FILTERED TRANSACTIONS"} mainContent={props.totalTransactions} />
+        </TotalGroup>
+        <div className="row" id="filters">
+            <div className="col-lg-4">
+                <SelectList
+                    htmlId={"pvreport-month"}
+                    name={""}
+                    error={""}
+                    label={"Time"}
+                    //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
+                    options={timeOptions}
+                    initialValue={timeOptions[0]}
+                    onChange={props.onMonthChange}
+                />
+            </div>
+            <div className="col-lg-4">
+                <ButtonGroup
+                    htmlId={"pvreport-transactiontype"}
+                    name={"programs"}
+                    error={""}
+                    label={"Transaction Type"}
+                    onChange={props.onSaleTypeChange}
+                    options={saleTypeOptions}
+                    initialValue={props.typeFilter}
+                    multi
+                />
+            </div>
+            <div className="col-lg-4">
+                <SelectList
+                    htmlId={"hostess-select"}
+                    name={"hostesses"}
+                    error={""}
+                    label={"Hostess"}
+                    onChange={props.onHostessChange}
+                    options={props.hostesses}
+                    multi
+                />
+            </div>
+        </div>
+        <DataTable
+            label="Personal Volume"
+            rows={props.rows}
+            columns={props.columns}
+            onGridSort={props.onGridSort}
+            isLoading={props.loading}
+        />
+    </Layout>
+
 const saleTypeOptions = [
     { value: 'Personal Purchase', label: 'Personal Purchase' },
     { value: 'Hostess Program', label: 'Hostess Program' },
@@ -92,10 +89,6 @@ const saleTypeOptions = [
 
 const now = new Date();
 const timeOptions = [
-    {
-        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "All time"
-    },
     {
         value: [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
         label: "This month"
@@ -111,5 +104,9 @@ const timeOptions = [
     {
         value: [new Date(now.getFullYear(), 0, 0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
         label: "This year"
+    },
+    {
+        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "All time"
     }
 ]

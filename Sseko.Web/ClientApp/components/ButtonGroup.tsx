@@ -49,11 +49,11 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
             let b = this.props.options[button];
             buttons.push(
                 <button
-                    className={"btn btn-primary" + (this.state.values.includes(b.value) ? " selected" : "")}
+                    className={"btn-3d btn-primary" + (this.state.values.includes(b.value) ? " selected" : "")}
                     onClick={this.onValueChange(b.value)}
                     key={b.label}
                 >
-                    {b.label}
+                    <span><span>{b.label}</span></span>
                 </button>
             );
         }
