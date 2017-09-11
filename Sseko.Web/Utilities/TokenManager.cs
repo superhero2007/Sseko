@@ -9,7 +9,7 @@ namespace Sseko.Web.Utilities
 {
     public static class TokenManager
     {
-        public static string GenerateTokenAsync(User user)
+        public static string GenerateTokenAsync(User user, string userToImpersonateId = "")
         {
             var symmetricKey = GetSecurityKey();
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -29,6 +29,12 @@ namespace Sseko.Web.Utilities
 
                 SigningCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature)
             };
+
+            if (!string.IsNullOrWhiteSpace(userToImpersonateId))
+            {
+                tokenDescriptor.Subject.AddClaim(new Claim("imp", "true"));
+                tokenDescriptor.Subject.AddClaim(new Claim("iId", userToImpersonateId));
+            }
 
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(stoken);
@@ -54,6 +60,7 @@ namespace Sseko.Web.Utilities
                 MagentoId = int.Parse(decoded.Claims.FirstOrDefault(c => c.Type == "mId").Value),
                 Role = decoded.Claims.FirstOrDefault(c => c.Type == "role").Value,
                 SecurityStamp = decoded.Claims.FirstOrDefault(c => c.Type == "sec").Value,
+                IsImpersonating = decoded.Claims.FirstOrDefault(c => c.Type == "imp").Value
             };
         }
     }
@@ -65,5 +72,6 @@ namespace Sseko.Web.Utilities
         public int MagentoId { get; set; }
         public string Role { get; set; }
         public string SecurityStamp { get; set; }
+        public string IsImpersonating { get; set; }
     }
 }

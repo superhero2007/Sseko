@@ -19,11 +19,15 @@ namespace Sseko.Akka.DataService.Magento.Actors
                 {
                     case ReportType.DownlineSummary:
                         var dlReport = GetDownlineReport(message);
-                        Sender.Tell(new DataOperations.Result<ReportBase>(dlReport));
+                        Sender.Tell(new DataOperations.Result<Report>(dlReport));
                         break;
-                    case ReportType.PvTransactionSummary:
+                    case ReportType.PersonalVolume:
                         var pvReport = GetPvTransactionSummaryReport(message);
-                        Sender.Tell(new DataOperations.Result<ReportBase>(pvReport));
+                        Sender.Tell(new DataOperations.Result<Report>(pvReport));
+                        break;
+                    case ReportType.AdminSummary:
+                        var adminReport = GetAdminSummaryReport(message);
+                        Sender.Tell(new DataOperations.Result<Report>(adminReport));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -34,24 +38,11 @@ namespace Sseko.Akka.DataService.Magento.Actors
                 var newFellows = GetNewFellows(message.LastUpdated);
                 Sender.Tell(new DataOperations.ResultList<User>(newFellows));
             });
-            Receive<DataOperations.GetTransactions>(message =>
-            {
-                Sender.Tell(new DataOperations.ResultList<Transaction>(GetTransactions(message.FellowId)));
-            });
         }
 
-        internal class FellowLite
+        private static Report GetDownlineReport(DataOperations.DataOperation message)
         {
-            public string Name { get; set; }
-            public int Id { get; set; }
-            public int Level { get; set; }
-            public string Parent { get; set; }
-            public string GrandParent { get; set; }
-        }
-
-        private static ReportBase GetDownlineReport(DataOperations.DataOperation message)
-        {
-            var report = new ReportBase();
+            var report = new Report();
             var fellowId = message.FellowId;
 
             var childFellows = DataStore.GetAllChildren(fellowId);
@@ -64,7 +55,7 @@ namespace Sseko.Akka.DataService.Magento.Actors
                 {
                     {"fellow", fellow.Name},
                     {"parent", fellow.Parent},
-                    {"grandparent", fellow.GrandParent},
+                    {"grandparent", fellow.Grandparent},
                     {"level", fellow.Level.ToString()},
                     {"commissionableSales", (pv - personalPurchases).ToCurrency()},
                     {"pv", pv.ToCurrency()}
@@ -75,9 +66,9 @@ namespace Sseko.Akka.DataService.Magento.Actors
             return report;
         }
 
-        private static ReportBase GetPvTransactionSummaryReport(DataOperations.DataOperation message)
+        private static Report GetPvTransactionSummaryReport(DataOperations.DataOperation message)
         {
-            var report = new ReportBase();
+            var report = new Report();
             var fellowId = message.FellowId;
             var transactions = MapTransactions(fellowId);
 
@@ -91,6 +82,26 @@ namespace Sseko.Akka.DataService.Magento.Actors
                                 { "type", transaction.Type},
                                 { "commission", transaction.CommissionalbeSale.ToCurrency()},
                                 { "sale", transaction.TotalAmount.ToCurrency()}
+                            }).AsParallel().ToList();
+
+            report.Rows = rows;
+
+            return report;
+        }
+
+        private static Report GetAdminSummaryReport(DataOperations.DataOperation message)
+        {
+            var report = new Report();
+            var transactions = DataStore.SalesFlatOrders(t => message.StartDate < (t.CreatedAt ?? DateTime.MinValue) && (t.CreatedAt ?? DateTime.MaxValue) < message.EndDate);
+
+            var rows = (from transaction in transactions
+                        select new Dictionary<string, string>
+                            {
+                            {"orderNo", transaction.ExtOrderId},
+                            {"date", transaction.CreatedAt.Value.ToString("d")  },
+                            {"firstName", transaction.CustomerFirstname },
+                            {"lastName", transaction.CustomerLastname },
+                            {"status", transaction.Status }
                             }).AsParallel().ToList();
 
             report.Rows = rows;
@@ -145,7 +156,7 @@ namespace Sseko.Akka.DataService.Magento.Actors
                             Hostess = hostess,
                             Type = GetTransactionType(transaction, saleOrder),
                             CommissionalbeSale = GetCommissionableSale(saleOrder),
-                            TotalAmount = GetTotalAmount(saleOrder)
+                            TotalAmount = (saleOrder.BaseSubtotalInvoiced ?? 0) + (saleOrder.BaseShippingInclTax ?? 0)
                         }).AsParallel().ToList();
             }
             catch (Exception e)
@@ -154,6 +165,7 @@ namespace Sseko.Akka.DataService.Magento.Actors
                 throw;
             }
         }
+
         private static decimal GetCommissionableSale(SalesFlatOrder sale)
         {
             if (sale.CouponCode != null && sale.CouponCode.StartsWith("FPP")) return 0;
@@ -162,15 +174,6 @@ namespace Sseko.Akka.DataService.Magento.Actors
             var discounts = (sale.GrandTotal ?? 0) - totalBeforeDiscounts;
 
             return totalBeforeDiscounts + discounts;
-        }
-        private static decimal GetTotalAmount(SalesFlatOrder sale)
-        {
-            return (sale.BaseSubtotalInvoiced ?? 0) + (sale.BaseShippingInclTax ?? 0);
-        }
-
-        private static List<Transaction> GetTransactions(int fellowId)
-        {
-            return null;
         }
     }
 

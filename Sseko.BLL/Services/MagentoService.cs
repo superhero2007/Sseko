@@ -18,25 +18,20 @@ namespace Sseko.BLL.Services
             _ds = new ReportGenerationService();
         }
 
-        public async Task<DataOperations.Result<ReportBase>> GetDownlineReport(int fellowId)
+        public async Task<DataOperations.Result<Report>> GetDownlineReport(int fellowId)
         {
 
-            return await _ds.CreateAsync(ReportType.DownlineSummary, fellowId);
+            return await _ds.CreateDownlineReport(fellowId);
         }
 
-        public async Task<DataOperations.Result<ReportBase>> GetPvSummaryReport(int fellowId)
+        public async Task<DataOperations.Result<Report>> GetPvSummaryReport(int fellowId)
         {
-            return  await _ds.CreateAsync(ReportType.PvTransactionSummary, fellowId);
+            return  await _ds.CreateDownlineReport(fellowId);
         }
 
         public async Task<DataOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated)
         {
             return await _ds.GetNewFellows(lastUpdated);
-        }
-
-        public async Task<DataOperations.ResultList<Transaction>> GetTransactions(int fellowId)
-        {
-            return await _ds.GetTransactions(fellowId);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Sseko.Akka.DataService.Magento.Entities
 {
-    public class ReportBase : IReport
+    public class Report
     {
         public string UserId { get; set; }
         public int MagentoId { get; set; }
