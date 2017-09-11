@@ -392,10 +392,36 @@ module.exports = {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(1))(139);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Cookies = __webpack_require__(114);
+
+var _Cookies2 = _interopRequireDefault(_Cookies);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Cookies2.default;
+module.exports = exports['default'];
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(139);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(77);
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -432,107 +458,19 @@ module.exports = factory(
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(1))(7);
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Cookies = __webpack_require__(114);
-
-var _Cookies2 = _interopRequireDefault(_Cookies);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _Cookies2.default;
-module.exports = exports['default'];
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var Cookies = __webpack_require__(6);
-var api = __webpack_require__(15);
-;
-;
-exports.actionCreators = {
-    loginUser: function (user) { return function (dispatch, getState) {
-        api.Account.Login(user)
-            .then(function (response) {
-            var cookies = new Cookies();
-            cookies.set('token', response.data.token, { path: '/' });
-            window.location.href = '/';
-        })
-            .catch(function (error) {
-        });
-    }; },
-    sendResetLink: function (email) { return function (dispatch, getState) {
-        api.Account.SendPasswordResetLink(email)
-            .then(function (response) {
-            dispatch({ type: 'SUBMIT_RESET_REQUEST' });
-        });
-    }; },
-    getEmail: function (code) { return function (dispatch, getState) {
-        api.Account.VerifyResetLink(code).then(function (response) {
-            dispatch({ type: 'CODE_IS_VERIFIED', email: response.data.email });
-        })
-            .catch(function (error) {
-        });
-    }; },
-    resetPassword: function (user) { return function (dispatch, getState) {
-        api.Account.ResetForgottenPassword(user).then(function (response) {
-            dispatch({ type: 'RESET_PASSWORD' });
-        })
-            .catch(function (error) {
-        });
-    }; }
-};
-var unloadedState = {
-    resetPasswordLinkSent: false,
-    passwordResetFormSent: false,
-    error: '',
-    email: ''
-};
-exports.reducer = function (state, action) {
-    switch (action.type) {
-        case 'SUBMIT_RESET_REQUEST':
-            return __assign({}, state, { resetPasswordLinkSent: true });
-        case 'RESET_PASSWORD':
-            return __assign({}, state, { error: '', submitted: true });
-        case 'RESET_PASSWORD_ERROR':
-            return __assign({}, state, { error: action.error, submitted: false });
-        case 'CODE_IS_VERIFIED':
-            return __assign({}, state, { error: '', email: action.email, submitted: false });
-        default:
-            var exhaustiveCheck = action;
-    }
-    return state || unloadedState;
-};
-
-
-/***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(140);
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -549,9 +487,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Progress_1 = __webpack_require__(67);
-var Navigation_1 = __webpack_require__(65);
-var Footer_1 = __webpack_require__(64);
+var Navigation_1 = __webpack_require__(68);
+var Footer_1 = __webpack_require__(61);
 var TopHeader_1 = __webpack_require__(69);
 var Helpers_1 = __webpack_require__(28);
 var Layout = /** @class */ (function (_super) {
@@ -559,38 +496,31 @@ var Layout = /** @class */ (function (_super) {
     function Layout() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Layout.prototype.render = function () {
-        return (React.createElement("div", { id: "wrapper" },
-            React.createElement(Progress_1.default, null),
-            React.createElement(Navigation_1.default, null),
-            React.createElement("div", { id: "page-wrapper", className: "gray-bg" },
-                React.createElement(TopHeader_1.default, null),
-                this.props.children,
-                React.createElement(Footer_1.default, null))));
-    };
     Layout.prototype.componentDidMount = function () {
         // Run correctHeight function on load and resize window event
         $(window).bind("load resize", function () {
             Helpers_1.correctHeight();
             Helpers_1.detectBody();
         });
-        // Correct height of wrapper after metisMenu animation.
+        // Correct height of wrapper after metisMenu animation
         $('.metismenu a').click(function () {
             setTimeout(function () {
                 Helpers_1.correctHeight();
             }, 300);
         });
     };
+    Layout.prototype.render = function () {
+        return (React.createElement("div", { id: "wrapper" },
+            React.createElement(Navigation_1.default, null),
+            React.createElement("div", { id: "page-wrapper", className: "gray-bg" },
+                React.createElement(TopHeader_1.default, null),
+                this.props.children,
+                React.createElement(Footer_1.default, null))));
+    };
     return Layout;
 }(React.Component));
 exports.Layout = Layout;
 
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(77);
 
 /***/ }),
 /* 10 */
@@ -676,15 +606,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = __webpack_require__(4);
+var _createReactClass = __webpack_require__(6);
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactDom = __webpack_require__(13);
+var _reactDom = __webpack_require__(12);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -1899,45 +1829,10 @@ module.exports = exports['default'];
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(1))(140);
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
 module.exports = (__webpack_require__(1))(138);
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Cookies = __webpack_require__(6);
-exports.GetHeaders = function () {
-    var cookies = new Cookies();
-    return { Authorization: "Bearer " + cookies.get("token") };
-};
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(47));
-__export(__webpack_require__(48));
-__export(__webpack_require__(49));
-
-
-/***/ }),
-/* 16 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1955,8 +1850,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
 var ReactDataGrid = __webpack_require__(101);
-var EmptyRowsView_1 = __webpack_require__(62);
-var LoadingView_1 = __webpack_require__(63);
+var EmptyRowsView_1 = __webpack_require__(59);
+var LoadingView_1 = __webpack_require__(60);
 var dataTableRowHeight = 35;
 var dataTableRowHeaderHeight = 35;
 var horizontalScrollbarHeight = 17;
@@ -2022,7 +1917,7 @@ exports.DataTable = DataTable;
 
 
 /***/ }),
-/* 17 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2053,7 +1948,7 @@ exports.Label = Label;
 
 
 /***/ }),
-/* 18 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2070,7 +1965,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Label_1 = __webpack_require__(17);
+var Label_1 = __webpack_require__(14);
 var Textbox = /** @class */ (function (_super) {
     __extends(Textbox, _super);
     function Textbox() {
@@ -2092,7 +1987,7 @@ exports.Textbox = Textbox;
 
 
 /***/ }),
-/* 19 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2167,7 +2062,7 @@ exports.sortGrid = sortGrid;
 
 
 /***/ }),
-/* 20 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2264,10 +2159,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
-/* 21 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2300,203 +2195,19 @@ module.exports.InvalidTokenError = InvalidTokenError;
 
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports) {
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
+module.exports = (__webpack_require__(1))(14);
 
 /***/ }),
-/* 23 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(1))(141);
 
 /***/ }),
-/* 24 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2510,12 +2221,16 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var api = __webpack_require__(15);
+var Cookies = __webpack_require__(3);
+var axios_1 = __webpack_require__(5);
 exports.actionCreators = {
     getDlReport: function () { return function (dispatch, getState) {
-        api.Reports.Downline()
+        var cookies = new Cookies();
+        axios_1.default.get('/api/reports/downline', { headers: { Authorization: "Bearer " + cookies.get("token") } })
             .then(function (response) {
             dispatch({ type: 'GET_DL_ROWS', payload: response.data });
+        })
+            .catch(function (error) {
         });
     }; },
     updateLevelFilter: function (levelFilter) { return function (dispatch, getState) {
@@ -2549,7 +2264,48 @@ exports.reducer = function (state, action) {
 
 
 /***/ }),
-/* 25 */
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var axios_1 = __webpack_require__(5);
+var Cookies = __webpack_require__(3);
+;
+exports.actionCreators = {
+    submitRequest: function (email) { return function (dispatch, getState) {
+        var cookies = new Cookies();
+        axios_1.default.post('/api/users/sendResetPasswordLink', { email: email })
+            .then(function (response) {
+            dispatch({ type: 'SUBMIT_RESET_REQUEST' });
+        })
+            .catch(function (error) {
+        });
+    }; }
+};
+var unloadedState = {
+    submitted: false
+};
+exports.reducer = function (state, action) {
+    switch (action.type) {
+        case 'SUBMIT_RESET_REQUEST':
+            return __assign({}, state, { submitted: true });
+    }
+    return state || unloadedState;
+};
+
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2564,8 +2320,74 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __webpack_require__(9);
-var Cookies = __webpack_require__(6);
+var Cookies = __webpack_require__(3);
+var Decoder = __webpack_require__(18);
+var axios_1 = __webpack_require__(5);
+exports.actionCreators = {
+    errorHandler: function (dispatch, error, type) {
+        var errorMessage = '';
+        errorMessage = error;
+        if (error.status === 401) {
+            dispatch({
+                type: type,
+                payload: 'Invalid username or password'
+            });
+        }
+        else {
+            dispatch({
+                type: type,
+                payload: 'Server error. Please try again'
+            });
+        }
+    },
+    loginUser: function (email, password) { return function (dispatch, getState) {
+        axios_1.default.post("/api/users/login", { username: email, password: password })
+            .then(function (response) {
+            var cookies = new Cookies();
+            cookies.set('token', response.data.token, { path: '/' });
+            var decodedToken = Decoder(response.data.token);
+            dispatch({ type: 'AUTH_USER' });
+            window.location.href = '/';
+        })
+            .catch(function (error) {
+            _this.actionCreators.errorHandler(dispatch, error.response, 'AUTH_ERROR');
+        });
+    }; }
+};
+var unloadedState = { error: '', message: '', content: '', authenticated: false };
+exports.reducer = function (state, action) {
+    switch (action.type) {
+        case 'AUTH_USER':
+            return __assign({}, state, { error: '', message: '', authenticated: true });
+        case 'UNAUTH_USER':
+            return __assign({}, state, { authenticated: false });
+        case 'AUTH_ERROR':
+            return __assign({}, state, { error: action.payload });
+        default:
+            var exhaustiveCheck = action;
+    }
+    return state || unloadedState;
+};
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
+var axios_1 = __webpack_require__(5);
+var Cookies = __webpack_require__(3);
 exports.actionCreators = {
     errorHandler: function (dispatch, error, type) {
         var errorMessage = '';
@@ -2620,7 +2442,7 @@ exports.reducer = function (state, action) {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2634,14 +2456,17 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var api = __webpack_require__(15);
+var axios_1 = __webpack_require__(5);
+var Cookies = __webpack_require__(3);
 exports.actionCreators = {
     getPvReport: function () { return function (dispatch, getState) {
-        api.Reports.PersonalVolume()
+        var cookies = new Cookies();
+        axios_1.default.get('/api/reports/personalvolume', { headers: { Authorization: "Bearer " + cookies.get("token") } })
             .then(function (response) {
             dispatch({ type: 'GET_PV_ROWS', payload: response.data });
         })
             .catch(function (error) {
+            console.log(error);
         });
     }; },
     updateSaleFilter: function (saleTypes) { return function (dispatch, getState) {
@@ -2689,6 +2514,72 @@ exports.reducer = function (state, action) {
 
 
 /***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
+var axios_1 = __webpack_require__(5);
+var Cookies = __webpack_require__(3);
+;
+exports.actionCreators = {
+    errorHandler: function (dispatch, error) {
+        dispatch({
+            type: 'RESET_PASSWORD_ERROR',
+            error: 'Server error. Please try again'
+        });
+    },
+    getEmail: function (code) { return function (dispatch, getState) {
+        var valid = axios_1.default.post('/api/users/verifyresetlink', { code: code })
+            .then(function (response) {
+            dispatch({ type: 'CODE_IS_VERIFIED', email: response.data.email });
+        })
+            .catch(function (error) {
+            _this.actionCreators.errorHandler(dispatch, error.response);
+        });
+    }; },
+    submitRequest: function (email, password) { return function (dispatch, getState) {
+        var cookies = new Cookies();
+        axios_1.default.post('/api/users/resetPassword', { email: email, password: password })
+            .then(function (response) {
+            dispatch({ type: 'RESET_PASSWORD' });
+        })
+            .catch(function (error) {
+            _this.actionCreators.errorHandler(dispatch, error.response);
+        });
+    }; }
+};
+var unloadedState = {
+    submitted: false,
+    error: '',
+    email: ''
+};
+exports.reducer = function (state, action) {
+    switch (action.type) {
+        case 'RESET_PASSWORD':
+            return __assign({}, state, { error: '', submitted: true });
+        case 'RESET_PASSWORD_ERROR':
+            return __assign({}, state, { error: action.error, submitted: false });
+        case 'CODE_IS_VERIFIED':
+            return __assign({}, state, { error: '', email: action.email, submitted: false });
+        default:
+            var exhaustiveCheck = action;
+    }
+    return state || unloadedState;
+};
+
+
+/***/ }),
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2707,7 +2598,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(34);
 var React = __webpack_require__(0);
-var Label_1 = __webpack_require__(17);
+var Label_1 = __webpack_require__(14);
 // Drop-in replacement for SelectList
 var ButtonGroup = /** @class */ (function (_super) {
     __extends(ButtonGroup, _super);
@@ -2733,7 +2624,9 @@ var ButtonGroup = /** @class */ (function (_super) {
             var buttons = [];
             for (var button in _this.props.options) {
                 var b = _this.props.options[button];
-                buttons.push(React.createElement("button", { className: "btn btn-primary" + (_this.state.values.includes(b.value) ? " selected" : ""), onClick: _this.onValueChange(b.value), key: b.label }, b.label));
+                buttons.push(React.createElement("button", { className: "btn-3d btn-primary" + (_this.state.values.includes(b.value) ? " selected" : ""), onClick: _this.onValueChange(b.value), key: b.label },
+                    React.createElement("span", null,
+                        React.createElement("span", null, b.label))));
             }
             return buttons;
         };
@@ -3008,7 +2901,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
 /* 30 */
@@ -3241,9 +3134,9 @@ module.exports = (__webpack_require__(1))(3);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var redux_1 = __webpack_require__(125);
-var redux_thunk_1 = __webpack_require__(123);
-var react_router_redux_1 = __webpack_require__(23);
+var redux_1 = __webpack_require__(129);
+var redux_thunk_1 = __webpack_require__(127);
+var react_router_redux_1 = __webpack_require__(20);
 var store_1 = __webpack_require__(74);
 function configureStore(history, initialState) {
     // Build middleware. These are functions that can process the actions before they reach the store.
@@ -3277,15 +3170,15 @@ function buildRootReducer(allReducers) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var react_router_dom_1 = __webpack_require__(12);
+var react_router_dom_1 = __webpack_require__(8);
 var Authorization_1 = __webpack_require__(72);
-var PageNotFound_1 = __webpack_require__(66);
-var DlReportContainer_1 = __webpack_require__(51);
-var ForgotPasswordContainer_1 = __webpack_require__(57);
-var LoginContainer_1 = __webpack_require__(59);
-var ManageUsersContainer_1 = __webpack_require__(53);
-var PvReportContainer_1 = __webpack_require__(55);
-var ResetPasswordContainer_1 = __webpack_require__(61);
+var PageNotFound_1 = __webpack_require__(62);
+var DlReportContainer_1 = __webpack_require__(48);
+var ForgotPasswordContainer_1 = __webpack_require__(50);
+var LoginContainer_1 = __webpack_require__(52);
+var ManageUsersContainer_1 = __webpack_require__(54);
+var PvReportContainer_1 = __webpack_require__(56);
+var ResetPasswordContainer_1 = __webpack_require__(58);
 var Fellow = Authorization_1.Authorization(['fellow', 'admin']);
 var Admin = Authorization_1.Authorization(['admin']);
 exports.routes = React.createElement("div", null,
@@ -3344,81 +3237,9 @@ module.exports = (__webpack_require__(1))(137);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Utilities = __webpack_require__(14);
-var axios_1 = __webpack_require__(9);
-exports.Account = {
-    Login: function (user) {
-        return axios_1.default.post('/api/account/login/', user, { headers: Utilities.GetHeaders() });
-    },
-    SignUp: function (user) {
-        return axios_1.default.post('/api/account/signup/', user, { headers: Utilities.GetHeaders() });
-    },
-    SendPasswordResetLink: function (email) {
-        return axios_1.default.post('/api/account/SendResetPasswordLink/', email, { headers: Utilities.GetHeaders() });
-    },
-    VerifyResetLink: function (code) {
-        return axios_1.default.post('/api/account/VerifyResetLink/', code, { headers: Utilities.GetHeaders() });
-    },
-    ResetForgottenPassword: function (user) {
-        return axios_1.default.post('/api/account/ResetPassword/', user, { headers: Utilities.GetHeaders() });
-    },
-    UpdatePassword: function (user) {
-        return axios_1.default.post('/api/account/UpdatePassword/', user, { headers: Utilities.GetHeaders() });
-    },
-    ImpersonateUser: function (user) {
-        return axios_1.default.post('/api/account/Impersonate/', user, { headers: Utilities.GetHeaders() });
-    },
-    AdminResetPassword: function (id) {
-        return axios_1.default.post('/api/account/adminresetpassword/', id, { headers: Utilities.GetHeaders() });
-    }
-};
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Utilities = __webpack_require__(14);
-var axios_1 = __webpack_require__(9);
-exports.Reports = {
-    PersonalVolume: function () {
-        return axios_1.default.get('/api/reports/personalvolume/', { headers: Utilities.GetHeaders() });
-    },
-    Downline: function () {
-        return axios_1.default.get('/api/reports/downline/', { headers: Utilities.GetHeaders() });
-    }
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Utilities = __webpack_require__(14);
-var axios_1 = __webpack_require__(9);
-exports.Users = {
-    Get: function () {
-        return axios_1.default.get('/api/users/', { headers: Utilities.GetHeaders() });
-    }
-};
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var DataTable_1 = __webpack_require__(16);
-var Layout_1 = __webpack_require__(8);
+var DataTable_1 = __webpack_require__(13);
+var Layout_1 = __webpack_require__(9);
 var ButtonGroup_1 = __webpack_require__(27);
 exports.DlReport = function (props) {
     return (React.createElement(Layout_1.Layout, null,
@@ -3442,7 +3263,7 @@ var levelOptions = [
 
 
 /***/ }),
-/* 51 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3459,10 +3280,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Report = __webpack_require__(24);
-var react_redux_1 = __webpack_require__(3);
-var DlReport_1 = __webpack_require__(50);
-var DatatableFilters_1 = __webpack_require__(19);
+var Report = __webpack_require__(21);
+var react_redux_1 = __webpack_require__(4);
+var DlReport_1 = __webpack_require__(47);
+var DatatableFilters_1 = __webpack_require__(16);
 var DlReportContainer = /** @class */ (function (_super) {
     __extends(DlReportContainer, _super);
     function DlReportContainer(props) {
@@ -3502,27 +3323,29 @@ exports.default = react_redux_1.connect(function (state) { return mapStateToProp
 
 
 /***/ }),
-/* 52 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var DataTable_1 = __webpack_require__(16);
-var Layout_1 = __webpack_require__(8);
-exports.ManageUsers = function (props) {
-    return (React.createElement(Layout_1.Layout, null,
-        React.createElement(DataTable_1.DataTable, { columns: columns, rows: props.users, onGridSort: props.onGridSort, isLoading: props.loading })));
+var Textbox_1 = __webpack_require__(15);
+exports.ForgotPassword = function (props) {
+    return (React.createElement("div", { className: "login-form" },
+        React.createElement("div", { className: "form" }, !props.submitted
+            ? React.createElement("div", null,
+                React.createElement(Textbox_1.Textbox, { htmlId: "email-reset-input", label: "Email", name: "email", error: "", type: "text", value: props.email, onChange: props.onEmailChange }),
+                React.createElement("button", { type: "submit", onClick: props.onSubmit, className: "btn btn-default" }, "Send Reset Email"))
+            : React.createElement("div", null,
+                React.createElement("h4", null,
+                    "Password reset sent to ",
+                    props.email)))));
 };
-var columns = [
-    { key: 'username', name: 'Fellow', width: 250, sortable: true },
-    { key: 'role', name: 'Role', width: 100, sortable: true }
-];
 
 
 /***/ }),
-/* 53 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3538,11 +3361,166 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ManageUserStore = __webpack_require__(25);
 var React = __webpack_require__(0);
-var react_redux_1 = __webpack_require__(3);
-var ManageUsers_1 = __webpack_require__(52);
-var DatatableFilters_1 = __webpack_require__(19);
+var ResetStore = __webpack_require__(22);
+var react_redux_1 = __webpack_require__(4);
+var ForgotPassword_1 = __webpack_require__(49);
+var ForgotPasswordContainer = /** @class */ (function (_super) {
+    __extends(ForgotPasswordContainer, _super);
+    function ForgotPasswordContainer(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onChange = function (event) {
+            _this.setState({ email: event.target.value });
+        };
+        _this.state = { email: '' };
+        _this.onSubmit = _this.onSubmit.bind(_this);
+        _this.onChange = _this.onChange.bind(_this);
+        return _this;
+    }
+    ForgotPasswordContainer.prototype.onSubmit = function () {
+        this.props.submitRequest(this.state.email);
+    };
+    ForgotPasswordContainer.prototype.render = function () {
+        return React.createElement(ForgotPassword_1.ForgotPassword, { onSubmit: this.onSubmit, submitted: this.props.submitted, email: this.state.email, onEmailChange: this.onChange });
+    };
+    return ForgotPasswordContainer;
+}(React.Component));
+exports.default = react_redux_1.connect(function (state) { return state.forgotPassword; }, ResetStore.actionCreators)(ForgotPasswordContainer);
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var react_router_dom_1 = __webpack_require__(8);
+var Textbox_1 = __webpack_require__(15);
+var loginLogo = __webpack_require__(116);
+var userIcon = __webpack_require__(122);
+var passwordIcon = __webpack_require__(119);
+exports.Login = function (props) {
+    return (React.createElement("div", { className: "login-form scale" },
+        React.createElement("div", { className: "form" },
+            React.createElement("div", { className: "auth-form-body" },
+                React.createElement("img", { src: loginLogo }),
+                React.createElement("h1", null, "FELLOW INFORMATION"),
+                React.createElement("h2", null, "Please login to your account"),
+                React.createElement("div", { className: "form-group" },
+                    React.createElement("div", { className: "input-group" },
+                        React.createElement("span", { className: "input-group-addon" },
+                            React.createElement("img", { src: userIcon })),
+                        React.createElement("div", { className: "input-group-content" },
+                            React.createElement(Textbox_1.Textbox, { htmlId: "username", name: "username", label: null, placeholder: "Username", type: "text", onChange: props.onChange, value: props.user.username, error: props.errors.username })))),
+                React.createElement("div", { className: "form-group" },
+                    React.createElement("div", { className: "input-group" },
+                        React.createElement("span", { className: "input-group-addon" },
+                            React.createElement("img", { src: passwordIcon })),
+                        React.createElement("div", { className: "input-group-content" },
+                            React.createElement(Textbox_1.Textbox, { htmlId: "password", name: "password", label: null, placeholder: "Password", type: "password", onChange: props.onChange, value: props.user.password, error: props.errors.password })))),
+                props.error && React.createElement("div", { className: "alert alert-danger" }, props.error),
+                React.createElement("button", { type: "submit", onClick: props.onSubmit, className: "btn btn-default btn-block btn-submit signin-btn" }, "Login"),
+                React.createElement(react_router_dom_1.NavLink, { to: '/ForgotPassword' }, "Forgot Your Password?")))));
+};
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Auth = __webpack_require__(23);
+var React = __webpack_require__(0);
+var react_redux_1 = __webpack_require__(4);
+var Login_1 = __webpack_require__(51);
+var AuthService_1 = __webpack_require__(75);
+var LoginContainer = /** @class */ (function (_super) {
+    __extends(LoginContainer, _super);
+    function LoginContainer(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onSubmit = function () {
+            _this.props.loginUser(_this.state.user.username, _this.state.user.password);
+        };
+        _this.onChange = function (event) {
+            var user = _this.state.user;
+            user[event.target.name] = event.target.value;
+            _this.setState({ user: user });
+        };
+        _this.state = {
+            user: { username: '', password: '' },
+            errors: { username: '', password: '' }
+        };
+        _this.onChange = _this.onChange.bind(_this);
+        _this.onSubmit = _this.onSubmit.bind(_this);
+        return _this;
+    }
+    LoginContainer.prototype.componentWillMount = function () {
+        AuthService_1.LogoutWithoutRedirect();
+    };
+    LoginContainer.prototype.render = function () {
+        return (React.createElement(Login_1.Login, { user: this.state.user, errors: this.state.errors, onChange: this.onChange, onSubmit: this.onSubmit, error: this.props.error }));
+    };
+    return LoginContainer;
+}(React.Component));
+exports.default = react_redux_1.connect(function (state) { return state.auth; }, Auth.actionCreators)(LoginContainer);
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var DataTable_1 = __webpack_require__(13);
+var Layout_1 = __webpack_require__(9);
+exports.ManageUsers = function (props) {
+    return (React.createElement(Layout_1.Layout, null,
+        React.createElement(DataTable_1.DataTable, { columns: columns, rows: props.users, onGridSort: props.onGridSort, isLoading: props.loading })));
+};
+var columns = [
+    { key: 'username', name: 'Fellow', width: 250, sortable: true },
+    { key: 'role', name: 'Role', width: 100, sortable: true }
+];
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var ManageUserStore = __webpack_require__(24);
+var React = __webpack_require__(0);
+var react_redux_1 = __webpack_require__(4);
+var ManageUsers_1 = __webpack_require__(53);
+var DatatableFilters_1 = __webpack_require__(16);
 var ManageUsersContainer = /** @class */ (function (_super) {
     __extends(ManageUsersContainer, _super);
     function ManageUsersContainer(props) {
@@ -3570,21 +3548,21 @@ exports.default = react_redux_1.connect(function (state) { return mapStateToProp
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var DataTable_1 = __webpack_require__(16);
-var Layout_1 = __webpack_require__(8);
-var SelectList_1 = __webpack_require__(68);
+var DataTable_1 = __webpack_require__(13);
+var Layout_1 = __webpack_require__(9);
+var SelectList_1 = __webpack_require__(63);
 var ButtonGroup_1 = __webpack_require__(27);
 var Total_1 = __webpack_require__(70);
 var TotalGroup_1 = __webpack_require__(71);
 exports.PvReport = function (props) {
-    return (React.createElement(Layout_1.Layout, null,
+    return React.createElement(Layout_1.Layout, null,
         React.createElement(TotalGroup_1.default, null,
             React.createElement(Total_1.default, { titleLabel: "FILTERED COMMISSIONABLE SALES", mainContent: props.totalSales }),
             React.createElement(Total_1.default, { titleLabel: "FILTERED TRANSACTIONS", mainContent: props.totalTransactions })),
@@ -3592,12 +3570,12 @@ exports.PvReport = function (props) {
             React.createElement("div", { className: "col-lg-4" },
                 React.createElement(SelectList_1.SelectList, { htmlId: "pvreport-month", name: "", error: "", label: "Time", 
                     //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
-                    options: timeOptions, initialValue: timeOptions[1], onChange: props.onMonthChange })),
+                    options: timeOptions, initialValue: timeOptions[0], onChange: props.onMonthChange })),
             React.createElement("div", { className: "col-lg-4" },
                 React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "pvreport-transactiontype", name: "programs", error: "", label: "Transaction Type", onChange: props.onSaleTypeChange, options: saleTypeOptions, initialValue: props.typeFilter, multi: true })),
             React.createElement("div", { className: "col-lg-4" },
                 React.createElement(SelectList_1.SelectList, { htmlId: "hostess-select", name: "hostesses", error: "", label: "Hostess", onChange: props.onHostessChange, options: props.hostesses, multi: true }))),
-        React.createElement(DataTable_1.DataTable, { label: "Personal Volume", rows: props.rows, columns: props.columns, onGridSort: props.onGridSort, isLoading: props.loading })));
+        React.createElement(DataTable_1.DataTable, { label: "Personal Volume", rows: props.rows, columns: props.columns, onGridSort: props.onGridSort, isLoading: props.loading }));
 };
 var saleTypeOptions = [
     { value: 'Personal Purchase', label: 'Personal Purchase' },
@@ -3607,10 +3585,6 @@ var saleTypeOptions = [
 ];
 var now = new Date();
 var timeOptions = [
-    {
-        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "All time"
-    },
     {
         value: [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
         label: "This month"
@@ -3626,12 +3600,16 @@ var timeOptions = [
     {
         value: [new Date(now.getFullYear(), 0, 0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
         label: "This year"
+    },
+    {
+        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
+        label: "All time"
     }
 ];
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3648,10 +3626,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Report = __webpack_require__(26);
-var react_redux_1 = __webpack_require__(3);
-var PvReport_1 = __webpack_require__(54);
-var DatatableFilters_1 = __webpack_require__(19);
+var Report = __webpack_require__(25);
+var react_redux_1 = __webpack_require__(4);
+var PvReport_1 = __webpack_require__(55);
+var DatatableFilters_1 = __webpack_require__(16);
 var Formatters_1 = __webpack_require__(76);
 var PvReportContainer = /** @class */ (function (_super) {
     __extends(PvReportContainer, _super);
@@ -3785,172 +3763,15 @@ exports.default = react_redux_1.connect(function (state) { return mapStateToProp
 
 
 /***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-var Textbox_1 = __webpack_require__(18);
-exports.ForgotPassword = function (props) {
-    return (React.createElement("div", { className: "login-form" },
-        React.createElement("div", { className: "form" }, !props.submitted
-            ? React.createElement("div", null,
-                React.createElement(Textbox_1.Textbox, { htmlId: "email-reset-input", label: "Email", name: "email", error: "", type: "text", value: props.email, onChange: props.onEmailChange }),
-                React.createElement("button", { type: "submit", onClick: props.onSubmit, className: "btn btn-default" }, "Send Reset Email"))
-            : React.createElement("div", null,
-                React.createElement("h4", null,
-                    "Password reset sent to ",
-                    props.email)))));
-};
-
-
-/***/ }),
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var AuthStore = __webpack_require__(7);
-var React = __webpack_require__(0);
-var react_redux_1 = __webpack_require__(3);
-var ForgotPassword_1 = __webpack_require__(56);
-var ForgotPasswordContainer = /** @class */ (function (_super) {
-    __extends(ForgotPasswordContainer, _super);
-    function ForgotPasswordContainer(props) {
-        var _this = _super.call(this, props) || this;
-        _this.onChange = function (event) {
-            _this.setState({ email: event.target.value });
-        };
-        _this.state = { email: '' };
-        _this.onSubmit = _this.onSubmit.bind(_this);
-        _this.onChange = _this.onChange.bind(_this);
-        return _this;
-    }
-    ForgotPasswordContainer.prototype.onSubmit = function () {
-        this.props.sendResetLink(this.state.email);
-    };
-    ForgotPasswordContainer.prototype.render = function () {
-        return React.createElement(ForgotPassword_1.ForgotPassword, { onSubmit: this.onSubmit, submitted: this.props.passwordResetFormSent, email: this.state.email, onEmailChange: this.onChange });
-    };
-    return ForgotPasswordContainer;
-}(React.Component));
-exports.default = react_redux_1.connect(function (state) { return state.auth; }, AuthStore.actionCreators)(ForgotPasswordContainer);
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var react_router_dom_1 = __webpack_require__(12);
-var Textbox_1 = __webpack_require__(18);
-var loginLogo = __webpack_require__(116);
-var userIcon = __webpack_require__(118);
-var passwordIcon = __webpack_require__(117);
-exports.Login = function (props) {
-    return (React.createElement("div", { className: "login-form scale" },
-        React.createElement("div", { className: "form" },
-            React.createElement("div", { className: "auth-form-body" },
-                React.createElement("img", { src: loginLogo }),
-                React.createElement("h1", null, "FELLOW INFORMATION"),
-                React.createElement("h2", null, "Please login to your account"),
-                React.createElement("div", { className: "form-group" },
-                    React.createElement("div", { className: "input-group" },
-                        React.createElement("span", { className: "input-group-addon" },
-                            React.createElement("img", { src: userIcon })),
-                        React.createElement("div", { className: "input-group-content" },
-                            React.createElement(Textbox_1.Textbox, { htmlId: "username", name: "username", label: null, placeholder: "Username", type: "text", onChange: props.onChange, value: props.user.username, error: props.errors.username })))),
-                React.createElement("div", { className: "form-group" },
-                    React.createElement("div", { className: "input-group" },
-                        React.createElement("span", { className: "input-group-addon" },
-                            React.createElement("img", { src: passwordIcon })),
-                        React.createElement("div", { className: "input-group-content" },
-                            React.createElement(Textbox_1.Textbox, { htmlId: "password", name: "password", label: null, placeholder: "Password", type: "password", onChange: props.onChange, value: props.user.password, error: props.errors.password })))),
-                props.error && React.createElement("div", { className: "alert alert-danger" }, props.error),
-                React.createElement("button", { type: "submit", onClick: props.onSubmit, className: "btn btn-default btn-block btn-submit signin-btn" }, "Login"),
-                React.createElement(react_router_dom_1.NavLink, { to: '/ForgotPassword' }, "Forgot Your Password?")))));
-};
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var AuthStore = __webpack_require__(7);
-var React = __webpack_require__(0);
-var react_redux_1 = __webpack_require__(3);
-var Login_1 = __webpack_require__(58);
-var AuthService_1 = __webpack_require__(75);
-var LoginContainer = /** @class */ (function (_super) {
-    __extends(LoginContainer, _super);
-    function LoginContainer(props) {
-        var _this = _super.call(this, props) || this;
-        _this.onSubmit = function () {
-            _this.props.loginUser(_this.state.user);
-        };
-        _this.onChange = function (event) {
-            var user = _this.state.user;
-            user[event.target.name] = event.target.value;
-            _this.setState({ user: user });
-        };
-        _this.state = {
-            user: { username: '', password: '' },
-            errors: { username: '', password: '' }
-        };
-        _this.onChange = _this.onChange.bind(_this);
-        _this.onSubmit = _this.onSubmit.bind(_this);
-        return _this;
-    }
-    LoginContainer.prototype.componentWillMount = function () {
-        AuthService_1.LogoutWithoutRedirect();
-    };
-    LoginContainer.prototype.render = function () {
-        return (React.createElement(Login_1.Login, { user: this.state.user, errors: this.state.errors, onChange: this.onChange, onSubmit: this.onSubmit, error: this.props.error }));
-    };
-    return LoginContainer;
-}(React.Component));
-exports.default = react_redux_1.connect(function (state) { return state.auth; }, AuthStore.actionCreators)(LoginContainer);
-
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-var react_router_dom_1 = __webpack_require__(12);
-var Textbox_1 = __webpack_require__(18);
+var react_router_dom_1 = __webpack_require__(8);
+var Textbox_1 = __webpack_require__(15);
 exports.ResetPassword = function (props) {
     var submitError = props.submitError, errors = props.errors, auth = props.auth, onChange = props.onChange, onSubmit = props.onSubmit, submitted = props.submitted, email = props.email;
     return (React.createElement("div", { className: "login-form" },
@@ -3971,7 +3792,7 @@ exports.ResetPassword = function (props) {
 
 
 /***/ }),
-/* 61 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3988,14 +3809,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var AuthStore = __webpack_require__(7);
-var react_redux_1 = __webpack_require__(3);
-var ResetPassword_1 = __webpack_require__(60);
+var ResetStore = __webpack_require__(26);
+var react_redux_1 = __webpack_require__(4);
+var ResetPassword_1 = __webpack_require__(57);
 var ResetPasswordContainer = /** @class */ (function (_super) {
     __extends(ResetPasswordContainer, _super);
     function ResetPasswordContainer(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = { user: null, errors: [] };
+        _this.state = { auth: { password: '', passwordConfirmation: '' }, errors: [] };
         _this.onSubmit = _this.onSubmit.bind(_this);
         _this.onChange = _this.onChange.bind(_this);
         return _this;
@@ -4003,36 +3824,36 @@ var ResetPasswordContainer = /** @class */ (function (_super) {
     ResetPasswordContainer.prototype.onSubmit = function () {
         if (!this.validate())
             return;
-        this.props.resetPassword(this.state.user);
+        this.props.submitRequest(this.props.email, this.state.auth.password);
     };
     ResetPasswordContainer.prototype.componentWillMount = function () {
         this.props.getEmail(this.props.match.params.code);
     };
     ResetPasswordContainer.prototype.validate = function () {
-        var user = this.state.user;
-        if (user.password != user.passwordConfirmation)
+        var auth = this.state.auth;
+        if (auth.password != auth.passwordConfirmation)
             this.setState({ errors: { passwordConfirmation: 'Passwords must match' } });
-        else if (user.password.length > 8)
+        else if (auth.password.length > 8)
             this.setState({ errors: { password: 'Password must be at least 8 characters' } });
         else
             return true;
         return false;
     };
     ResetPasswordContainer.prototype.onChange = function (event) {
-        var user = this.state.user;
-        user[event.target.name] = event.target.value;
-        this.setState({ user: user });
+        var auth = this.state.auth;
+        auth[event.target.name] = event.target.value;
+        this.setState({ auth: auth });
     };
     ResetPasswordContainer.prototype.render = function () {
-        return React.createElement(ResetPassword_1.ResetPassword, { auth: this.state.user, errors: this.state.errors, onChange: this.onChange, onSubmit: this.onSubmit, submitError: this.props.error, submitted: this.props.passwordResetFormSent, email: this.props.email });
+        return React.createElement(ResetPassword_1.ResetPassword, { auth: this.state.auth, errors: this.state.errors, onChange: this.onChange, onSubmit: this.onSubmit, submitError: this.props.error, submitted: this.props.submitted, email: this.props.email });
     };
     return ResetPasswordContainer;
 }(React.Component));
-exports.default = react_redux_1.connect(function (state) { return state.auth; }, AuthStore.actionCreators)(ResetPasswordContainer);
+exports.default = react_redux_1.connect(function (state) { return state.resetPassword; }, ResetStore.actionCreators)(ResetPasswordContainer);
 
 
 /***/ }),
-/* 62 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4045,7 +3866,7 @@ exports.EmptyRowsView = function () {
 
 
 /***/ }),
-/* 63 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4058,7 +3879,7 @@ exports.LoadingView = function () {
 
 
 /***/ }),
-/* 64 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4096,87 +3917,14 @@ exports.default = Footer;
 
 
 /***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-var react_router_dom_1 = __webpack_require__(12);
-var Navigation = /** @class */ (function (_super) {
-    __extends(Navigation, _super);
-    function Navigation() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Navigation.prototype.componentDidMount = function () {
-        var menu = this.refs.menu;
-        $(menu).metisMenu();
-    };
-    Navigation.prototype.activeRoute = function (routeName) {
-        return -1 > -1 ? "active" : "";
-    };
-    Navigation.prototype.secondLevelActive = function (routeName) {
-        return -1 > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
-    };
-    Navigation.prototype.render = function () {
-        return (React.createElement("nav", { className: "navbar-default navbar-static-side", role: "navigation" },
-            React.createElement("ul", { className: "nav metismenu", id: "side-menu", ref: "menu" },
-                React.createElement("li", { className: "nav-header" },
-                    React.createElement("div", { className: "dropdown profile-element" },
-                        " ",
-                        React.createElement("span", null),
-                        React.createElement("a", { "data-toggle": "dropdown", className: "dropdown-toggle", href: "#" },
-                            React.createElement("span", { className: "clear" },
-                                " ",
-                                React.createElement("span", { className: "block m-t-xs" },
-                                    " ",
-                                    React.createElement("strong", { className: "font-bold" }, "Example user")),
-                                " ",
-                                React.createElement("span", { className: "text-muted text-xs block" },
-                                    "Example position",
-                                    React.createElement("b", { className: "caret" })),
-                                " "),
-                            " "),
-                        React.createElement("ul", { className: "dropdown-menu animated fadeInRight m-t-xs" },
-                            React.createElement("li", null,
-                                React.createElement("a", { href: "#" }, " Logout")))),
-                    React.createElement("div", { className: "logo-element" }, "IN+")),
-                React.createElement("li", { className: this.activeRoute("/main") },
-                    React.createElement(react_router_dom_1.NavLink, { to: "/main" },
-                        React.createElement("i", { className: "fa fa-th-large" }),
-                        " ",
-                        React.createElement("span", { className: "nav-label" }, "Main view"))),
-                React.createElement("li", { className: this.activeRoute("/minor") },
-                    React.createElement(react_router_dom_1.NavLink, { to: "/minor" },
-                        React.createElement("i", { className: "fa fa-th-large" }),
-                        " ",
-                        React.createElement("span", { className: "nav-label" }, "Minor view"))))));
-    };
-    return Navigation;
-}(React.Component));
-exports.default = Navigation;
-
-
-/***/ }),
-/* 66 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Layout_1 = __webpack_require__(8);
+var Layout_1 = __webpack_require__(9);
 exports.PageNotFound = function () {
     return (React.createElement(Layout_1.Layout, null,
         React.createElement("div", null, "404 page not found.")));
@@ -4184,42 +3932,7 @@ exports.PageNotFound = function () {
 
 
 /***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(0);
-//import pace from '../../../public/vendor/pace/pace';
-var Progress = /** @class */ (function (_super) {
-    __extends(Progress, _super);
-    function Progress() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Progress.prototype.componentDidMount = function () {
-        //pace.start();
-    };
-    Progress.prototype.render = function () {
-        return (null);
-    };
-    return Progress;
-}(React.Component));
-exports.default = Progress;
-
-
-/***/ }),
-/* 68 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4238,7 +3951,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(34);
 var React = __webpack_require__(0);
 var Select = __webpack_require__(11);
-var Label_1 = __webpack_require__(17);
+var Label_1 = __webpack_require__(14);
 var SelectList = /** @class */ (function (_super) {
     __extends(SelectList, _super);
     function SelectList(props) {
@@ -4273,6 +3986,140 @@ var SelectList = /** @class */ (function (_super) {
     return SelectList;
 }(React.Component));
 exports.SelectList = SelectList;
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var NavBarLink_1 = __webpack_require__(66);
+exports.AdminLinkGroup = function () {
+    return (React.createElement("ul", { className: 'nav navbar-nav' },
+        React.createElement(NavBarLink_1.NavBarLink, { icon: 'glyphicon glyphicon-home', href: '/', label: 'Home', exact: true }),
+        React.createElement(NavBarLink_1.NavBarLink, { icon: 'glyphicon glyphicon-education', href: '/Manage/Users', label: 'Manage Users', exact: false })));
+};
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var NavBarLinkSingle_1 = __webpack_require__(67);
+var reportsIcon = __webpack_require__(121);
+var logoutIcon = __webpack_require__(118);
+var reportsIconActive = __webpack_require__(120);
+var logoutIconActive = __webpack_require__(117);
+exports.FellowLinkGroup = function () {
+    return (React.createElement("ul", { className: 'nav navbar-nav' },
+        React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { icon: reportsIcon, iconActive: reportsIconActive, href: '/Reports/PersonalVolume', label: 'Personal Volume', exact: false }),
+        React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { icon: reportsIcon, iconActive: reportsIconActive, href: '/Reports/Downline', label: 'Downline Summary', exact: false }),
+        React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { icon: logoutIcon, iconActive: logoutIconActive, href: '/Login', label: 'Logout', exact: false })));
+};
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var react_router_dom_1 = __webpack_require__(8);
+exports.NavBarLink = function (props) {
+    return React.createElement(react_router_dom_1.NavLink, { exact: props.exact || true, to: props.href, activeClassName: 'active' },
+        React.createElement("img", { src: props.icon }),
+        " ",
+        props.label);
+};
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var react_router_dom_1 = __webpack_require__(8);
+exports.NavBarLinkSingle = function (props) {
+    return React.createElement("li", null,
+        React.createElement(react_router_dom_1.NavLink, { exact: props.exact || true, to: props.href, activeClassName: 'active' },
+            React.createElement("img", { src: props.icon }),
+            React.createElement("img", { className: "active", src: props.iconActive }),
+            props.label));
+};
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(0);
+var FellowLinkGroup_1 = __webpack_require__(65);
+var AdminLinkGroup_1 = __webpack_require__(64);
+var Navigation = /** @class */ (function (_super) {
+    __extends(Navigation, _super);
+    function Navigation() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Navigation.prototype.componentDidMount = function () {
+        var menu = this.refs.menu;
+        $(menu).metisMenu();
+    };
+    Navigation.prototype.activeRoute = function (routeName) {
+        return -1 > -1 ? "active" : "";
+    };
+    Navigation.prototype.secondLevelActive = function (routeName) {
+        return -1 > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
+    };
+    Navigation.prototype.render = function () {
+        return (React.createElement("nav", { className: "navbar-default navbar-static-side", role: "navigation" },
+            React.createElement("ul", { className: "nav metismenu", id: "side-menu", ref: "menu" },
+                React.createElement("li", { className: "nav-header" },
+                    React.createElement("div", { className: "dropdown profile-element" },
+                        " ",
+                        React.createElement("span", null),
+                        React.createElement("a", { "data-toggle": "dropdown", className: "dropdown-toggle", href: "#" },
+                            React.createElement("span", { className: "clear" },
+                                React.createElement("span", { className: "block m-t-xs" },
+                                    " ",
+                                    React.createElement("strong", { className: "font-bold" }, "Example user")),
+                                React.createElement("span", { className: "text-muted text-xs block" },
+                                    "Example position",
+                                    React.createElement("b", { className: "caret" })))),
+                        React.createElement("ul", { className: "dropdown-menu animated fadeInRight m-t-xs" },
+                            React.createElement("li", null,
+                                React.createElement("a", { href: "Login" }, " Logout")))),
+                    React.createElement("div", { className: "logo-element" }, "IN+")),
+                this.props.role === 'fellow' && React.createElement(FellowLinkGroup_1.FellowLinkGroup, null),
+                this.props.role === 'admin' && React.createElement(AdminLinkGroup_1.AdminLinkGroup, null))));
+    };
+    return Navigation;
+}(React.Component));
+exports.default = Navigation;
 
 
 /***/ }),
@@ -4409,8 +4256,8 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(0);
-var Cookies = __webpack_require__(6);
-var Decoder = __webpack_require__(21);
+var Cookies = __webpack_require__(3);
+var Decoder = __webpack_require__(18);
 exports.Authorization = function (allowedRoles) {
     return function (WrappedComponent) {
         return /** @class */ (function (_super) {
@@ -4451,10 +4298,10 @@ __webpack_require__(45);
 __webpack_require__(42);
 __webpack_require__(41);
 var React = __webpack_require__(0);
-var ReactDOM = __webpack_require__(13);
+var ReactDOM = __webpack_require__(12);
 var react_hot_loader_1 = __webpack_require__(44);
-var react_redux_1 = __webpack_require__(3);
-var react_router_redux_1 = __webpack_require__(23);
+var react_redux_1 = __webpack_require__(4);
+var react_router_redux_1 = __webpack_require__(20);
 var history_1 = __webpack_require__(46);
 var configureStore_1 = __webpack_require__(39);
 var RoutesModule = __webpack_require__(40);
@@ -4488,10 +4335,12 @@ if (false) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Auth = __webpack_require__(7);
-var PvReport = __webpack_require__(26);
-var DlReport = __webpack_require__(24);
-var ManageUsers = __webpack_require__(25);
+var Auth = __webpack_require__(23);
+var PvReport = __webpack_require__(25);
+var DlReport = __webpack_require__(21);
+var ManageUser = __webpack_require__(24);
+var ForgotPassword = __webpack_require__(22);
+var ResetPassword = __webpack_require__(26);
 // Whenever an action is dispatched, Redux will update each top-level application state property using
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
@@ -4499,7 +4348,9 @@ exports.reducers = {
     auth: Auth.reducer,
     pvReport: PvReport.reducer,
     dlReport: DlReport.reducer,
-    users: ManageUsers.reducer,
+    users: ManageUser.reducer,
+    forgotPassword: ForgotPassword.reducer,
+    resetPassword: ResetPassword.reducer
 };
 
 
@@ -4510,8 +4361,8 @@ exports.reducers = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cookies = __webpack_require__(6);
-var Decoder = __webpack_require__(21);
+var Cookies = __webpack_require__(3);
+var Decoder = __webpack_require__(18);
 exports.GetRole = function () {
     var cookies = new Cookies();
     var token = cookies.get('token');
@@ -4560,7 +4411,7 @@ exports.Formatters = {
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(33);
 var Axios = __webpack_require__(79);
-var defaults = __webpack_require__(20);
+var defaults = __webpack_require__(17);
 
 /**
  * Create an instance of Axios
@@ -4680,7 +4531,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(20);
+var defaults = __webpack_require__(17);
 var utils = __webpack_require__(2);
 var InterceptorManager = __webpack_require__(80);
 var dispatchRequest = __webpack_require__(81);
@@ -4835,7 +4686,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(2);
 var transformData = __webpack_require__(84);
 var isCancel = __webpack_require__(31);
-var defaults = __webpack_require__(20);
+var defaults = __webpack_require__(17);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -5612,11 +5463,11 @@ function tryDecode(str, decode) {
 
 var _assign = __webpack_require__(38);
 
-var emptyObject = __webpack_require__(124);
-var _invariant = __webpack_require__(121);
+var emptyObject = __webpack_require__(128);
+var _invariant = __webpack_require__(123);
 
 if (process.env.NODE_ENV !== 'production') {
-  var warning = __webpack_require__(122);
+  var warning = __webpack_require__(124);
 }
 
 var MIXINS_KEY = 'mixins';
@@ -6471,7 +6322,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 
 module.exports = factory;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
 /* 96 */
@@ -23673,7 +23524,7 @@ module.exports = function(str) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(119), __webpack_require__(120)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(125), __webpack_require__(126)(module)))
 
 /***/ }),
 /* 100 */
@@ -23681,7 +23532,7 @@ module.exports = function(str) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(true)
-		module.exports = factory(__webpack_require__(0), __webpack_require__(13));
+		module.exports = factory(__webpack_require__(0), __webpack_require__(12));
 	else if(typeof define === 'function' && define.amd)
 		define(["react", "react-dom"], factory);
 	else if(typeof exports === 'object')
@@ -36929,8 +36780,8 @@ module.exports.AppContainer = __webpack_require__(102);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var React = __webpack_require__(0);
-var PropTypes = __webpack_require__(5);
-var createClass = __webpack_require__(4);
+var PropTypes = __webpack_require__(7);
+var createClass = __webpack_require__(6);
 
 var sizerStyle = {
 	position: 'absolute',
@@ -37119,7 +36970,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -37381,7 +37232,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = __webpack_require__(4);
+var _createReactClass = __webpack_require__(6);
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
@@ -37454,11 +37305,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = __webpack_require__(4);
+var _createReactClass = __webpack_require__(6);
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -37784,11 +37635,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = __webpack_require__(4);
+var _createReactClass = __webpack_require__(6);
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -37907,11 +37758,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = __webpack_require__(4);
+var _createReactClass = __webpack_require__(6);
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -38251,95 +38102,76 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHIAAABhCAYAAAAK
 /* 117 */
 /***/ (function(module, exports) {
 
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTMxQzMyNzk4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTMxQzMyN0E4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMzU1NzdCMjgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MzFDMzI3ODgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Psik7t4AAALESURBVHja7JdNaBNBFMdnNhvTRGuirUixCIKgNKCohap48OTNXvTguQfxkFtFvAgePFS0gtKDKFovgqAg1ls96EEqfqEWghVErUhSrEmTmjQx2Z3x/9ZZjdttPtqVImTglwnZmXn/efPe2wmXUrLlbLwp4L8SEIvFtlIHDoKNjsefwX0whDbhuQAY70F3B3SCl8pgZSNBu8AXcBginnomAMZXo3sCtoCjYARkHMMioBdcAe/AHoiYrbW2XqendoMucPFSb+cN9FeVsYhjXOba89TEm2QhSnPE6MCoduBk1YW1OgXsUP0zFQN9oF1toJL27R3BqGOOJwJaVV8EPdUG+n3cOccTAaYdM6Cl2kA5f44nAlzWXyCqvaoDiHwKsEGwDWxWAZdoC+krV/h42HU3sJ4rCZYtWpunLHkPxkE/MiLTaBZsUMEmwCcwRe6fKRgcrVjFA6ZP43OmkOTdnaAbXHBJ25oCbG/eBceU+7mgz9q1Q6r5l8GhaidTTx0owH3fkNMf8N1Xb3DR2OsvUmtfJwpLLkR2oG5q9EWja9zzLPC8LbsAfbETKRhR863vKL9M4//OA64h/8MQ7Pb4jLz5Kp3LFM1T9JPXAgzbSyhK8/ano+YHdE2UTDl1+kHyvDPPpfKSY62GBNCCk6oKht2KhJCSq2MkU6HK58WyYNN5y+7kQkWoloCsuoREFYm/yy5nkSCVBesGZKga8bslvxssOVuWao1swwJQfCjChtXb71y+JB46635fdxsZOIJLChWnwJ/4kOxePMMMYXloWK21uCsZzp/Otx+Mxfaui3a06uGQX2N4H9iRHzd/Geqag9u/5gw28jbLPqZL9GwQxo8vNQ3PKBefGBqb5muCvvT6Vf4ALh4tnEKBW8dD8SBSeROuL9sZeRYMeHkr3k/uBvtUTLi1OHgMbmHnj5r/jJoC6mk/BRgAwLwNOyd1s3MAAAAASUVORK5CYII="
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkMyQjBGRTI4QUU1MTFFNzlBQTVDOENFMTBFMkI3MjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkMyQjBGRTM4QUU1MTFFNzlBQTVDOENFMTBFMkI3MjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCQzJCMEZFMDhBRTUxMUU3OUFBNUM4Q0UxMEUyQjcyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCQzJCMEZFMThBRTUxMUU3OUFBNUM4Q0UxMEUyQjcyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi6H2U0AAAJfSURBVHja1NdLSFRRHMfxmaupi7SNRFZSJEHQpkJ6uDN7bQ0KqaBFifaCxIqglimE1kJaFD2oTZRgtSrpCb3oAbqpCAoTfFHUIkLLHkzfP/wGhph7vTPd49SBD3ce9875z3n+TzyRSMRyWeLjQ6+yea4Y81EhM/AJI3iLR/gR5ofyM6x4BXZhAwoC7vuM6ziJ+1G0gFV8Akv0/j3u4Z18QCnKsBSrUaR7r+EA3mQbwG4cxxQ8Rwc68T3gmanYgqMowSi2oiuTAKzC89iEr9iBCxl2WTlOYy1stB9Ga+oNXsDD7aq8D1VZVG5lAOtQjy9owbYwLbARl9W3izEcwYyrwS3NDnv90K8F5uIsfqEuosqt3MEpzR7rljy/AEo1gvdppEdZ9qMfC5Jd4dcFtj78dLT4Vas1BjHHbxC6qjymVr2rGbLszwCmadC5Lld1XZ8awCq8RA8qHQfQretyC6AQx3ATs/TFbMcBDOhaZoPwhhaL1DIWdjcLGEMHcSbgno/2571Yjou1QKHW5yZ7r89rtYu5KrYYjVvu4OlFM9ZgSDcMOv7j5bqOpCYkt7EQ89DrOIDkmHvipclkeieh62t1veJFlKpluhSv1FR8mi6ASiUgex1UbpnSOQ32I5akeD7z85sSkuqIA2jTdv9aW37a7bhfW6Xt15cwM6LKLQlpUC5Zr3zDNyXrVPI5HQ+w6C8r324DTk2/M5kNTZQTWkJyUdPysbLabOZ7tzIgO8wcSjZ9mABsL9iMPZoVliE/U7pdEGKwNeKFMuJRHWZa/8uDyT9xNHN2OI3n+nj+W4ABANiop/GefvpnAAAAAElFTkSuQmCC"
 
 /***/ }),
 /* 118 */
 /***/ (function(module, exports) {
 
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTMxQzMyN0Q4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTMxQzMyN0U4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MzFDMzI3QjgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MzFDMzI3QzgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkzVnrIAAALjSURBVHja7JdNaBNBFMdnN9l8mRCjwX6laNVUg6lfFKke6qX25BeiFC9FFKtiEL8iHjwoiPhd0YhYhaK3gqciFgQPRbAqUWttD/WDgklTa7OGinST1ib+H52DVBLdzZaCdOHHm515M+/tm5k3s0Imk2HT+Yhsmp8ZB4xaOgUCgQaIg6CYV8XAzVAo1KR2LEHNIoRhMvgAVIHb4Dlvovd9/H07HInpFoH04/O/v94DC4Hv+mZPL+R+sJYa3n1Rztx5KR8gHfTZ8Mdc157Mbw0cao3WQ9QQMJ6AJAduAaqvryi0ng6uL0hSO9fVfRHuBs0w3g35BJRPVih1SvNXFVsTXFc/B/BFdggvIOO7gD+b7gKXyWUyCCt4H10jYOZrpiKX0vjEmrboGgGE/QdED1gJfubS7R8eY06LYYj30TUCV8DOtt7vo9kUPsRT7FX/CFtWYGnRfRHii1ohHsKBU92Dyc7J7Z/kFLvxbIgtmmuWt/lnB6cqE26hrdf0It5Q7jbHvW6zmyojCHvXgMKwAwbexBTPVKbiEuCkwvt4yg0yAmVT3gjj7Tw9R3WfAmyrixCfQSHYwxekA8btvEx19PUR6F7QNQIY8C43cARr4RpkNVWDSrCYq30E4canX9/2JUZPoM8c6O7N+zDCAXQJ4jhYhwE7IBvB4Vx9wtGRlvuvv9WheBl9gprPAhj3cePHuPGOvxmnp9Jjq6v1OvqoLyLhy2cNnAPtMH6V54Gqf53bjT5n2Ty7McLHUO8Avp7y/VZ+/tOcH1V72agus5fSGIiCX0sElgIZdIEdWm5ORQ6J4WBKobhEiwNrQJy2N1iuxYESp8RsJjHNx1K9DYuAgvknuVqLAzZJZBajaJplyni1RABJjtENx8Ymko2mB1NgEAVB0hIBMu5pDss12FZM7f+TCP/TyDHDyXFmFLMf4bkcaAObOmPK2Z7BJA2g+h8OlxMDIjDmshoe6XItn/k1+y8d+CXAAIve5pk6s5hSAAAAAElFTkSuQmCC"
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjBDOEYyRjk4QUUzMTFFNzlBQTVDOENFMTBFMkI3MjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjBDOEYyRkE4QUUzMTFFNzlBQTVDOENFMTBFMkI3MjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGMEM4RjJGNzhBRTMxMUU3OUFBNUM4Q0UxMEUyQjcyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGMEM4RjJGODhBRTMxMUU3OUFBNUM4Q0UxMEUyQjcyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuoPXTcAAAKBSURBVHjaxNdriExhHMfxnTHWCnlB2sWWSCleuOUWL9Z1X7JF61JkbXYNIpeEl2zJJSGRS5SVVqxXWnIp91vWC0oRW4uNeCGE3dX4/us3NU1nzp45c87OU59OM3Nmnv8853me//+JJBKJgny2SDwe9/O9fhiJEVKMb2jDW9xHh5cfimXZ8VRYxAtR6HLfd1zFMdwJIgDr+AjG6/Vn3MZ7+YKBKMEkzMFiuYKteOM3gLU4gJ54ikNoQLvLd/piGfZgvgJajkvpN0ZdfsQ6rMdhdGKF/t25Ljq39lPDPwbX0AcXsT2bAPZhCd5hGs76mKytKEc1fmA3qrwEsAjr9Wxn4EWOq+0kKmBr/iimuwUwDKfwD5X4FNCSv4njWj0n0CNTADabi7BZMz3ItgUtGJV8FE4BPENvHAxh47PJuVKPYqdthJnmQGeIu6+N6i2UYnJ6AP0xrhtSQKOuFakBzMYrPMfEkANo0nWKBdAL+3EdQ/TB0JADaNW1JKa9ujzthnqv2cxlDm3T+ndq7cqexdGCPLeYkkUdNtqy0PtLNTJhNduMBljtYCPwF5swFx91w4eQ/3iprm2p6fgGRmM4mkMOIDnnHkUdKpnmbnj0C3S9HA2oVMumlWGmluJjpwBsE/qNDSF0bpXSaU32XZYTnAL4ij8qSMoCDmCv0v1rpXzHbNiiVGn5+gIGB9T5LKzWJlSteiNjRdSg4nMQ7mJsjp2vsgmnoV+De15qQitIzmtZPlBV62e9N6kCssPMjuTQewmgQzviOq2KM3iicrvQw2SrwUvMwy8dZur8Hs38HEyKdG/OBxNrDzEh7WhW2cXRrDHIo1lqIKY2qMNpJN/H8/8CDAD60ZMWYPtfMAAAAABJRU5ErkJggg=="
 
 /***/ }),
 /* 119 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTMxQzMyNzk4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTMxQzMyN0E4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMzU1NzdCMjgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MzFDMzI3ODgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Psik7t4AAALESURBVHja7JdNaBNBFMdnNhvTRGuirUixCIKgNKCohap48OTNXvTguQfxkFtFvAgePFS0gtKDKFovgqAg1ls96EEqfqEWghVErUhSrEmTmjQx2Z3x/9ZZjdttPtqVImTglwnZmXn/efPe2wmXUrLlbLwp4L8SEIvFtlIHDoKNjsefwX0whDbhuQAY70F3B3SCl8pgZSNBu8AXcBginnomAMZXo3sCtoCjYARkHMMioBdcAe/AHoiYrbW2XqendoMucPFSb+cN9FeVsYhjXOba89TEm2QhSnPE6MCoduBk1YW1OgXsUP0zFQN9oF1toJL27R3BqGOOJwJaVV8EPdUG+n3cOccTAaYdM6Cl2kA5f44nAlzWXyCqvaoDiHwKsEGwDWxWAZdoC+krV/h42HU3sJ4rCZYtWpunLHkPxkE/MiLTaBZsUMEmwCcwRe6fKRgcrVjFA6ZP43OmkOTdnaAbXHBJ25oCbG/eBceU+7mgz9q1Q6r5l8GhaidTTx0owH3fkNMf8N1Xb3DR2OsvUmtfJwpLLkR2oG5q9EWja9zzLPC8LbsAfbETKRhR863vKL9M4//OA64h/8MQ7Pb4jLz5Kp3LFM1T9JPXAgzbSyhK8/ano+YHdE2UTDl1+kHyvDPPpfKSY62GBNCCk6oKht2KhJCSq2MkU6HK58WyYNN5y+7kQkWoloCsuoREFYm/yy5nkSCVBesGZKga8bslvxssOVuWao1swwJQfCjChtXb71y+JB46635fdxsZOIJLChWnwJ/4kOxePMMMYXloWK21uCsZzp/Otx+Mxfaui3a06uGQX2N4H9iRHzd/Geqag9u/5gw28jbLPqZL9GwQxo8vNQ3PKBefGBqb5muCvvT6Vf4ALh4tnEKBW8dD8SBSeROuL9sZeRYMeHkr3k/uBvtUTLi1OHgMbmHnj5r/jJoC6mk/BRgAwLwNOyd1s3MAAAAASUVORK5CYII="
 
 /***/ }),
 /* 120 */
 /***/ (function(module, exports) {
 
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTEwRjM0Rjk4QUU1MTFFNzlBQTVDOENFMTBFMkI3MjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTEwRjM0RkE4QUU1MTFFNzlBQTVDOENFMTBFMkI3MjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGRDQzQjQ4MDhBRTMxMUU3OUFBNUM4Q0UxMEUyQjcyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBMTBGMzRGODhBRTUxMUU3OUFBNUM4Q0UxMEUyQjcyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PubmQkgAAAF5SURBVHjaYvz//z8DMvj17HoakGoHYiEG8sFnIE5ik9JcQ0ghIxYHvANSl4D4AJmWKwBxPBD/AeJIQo5gwSImCLIcqLGBHNuBHnCAOuANEC8H8hnwOYKJgXYgFYhPQB0RMhAO+ALEnoQcQQsH/ITShkBsAsSdSNERQkwaoBScAuJrQNyHRW4+EK+hqQOACe4v0Ke6QKYBiIsklQLEyfQIAZAj/gGpc2i5w4PeiZAowEJEvgaViHPIKBlBBVoKMDTe4VM0+EMA6oMgWjlg8IcANB1oAil+Es3+CAy969RIhCrQ2pHULPsH5HCgI+5QmgbuAA2ygdaSpID3hCwnOgqABp0cuYkQGPygxDedzIIoExh6HymNAlYgFoBiUsA/qF6KCyJQXe414gsiJSDFh0P6CjCU/tAyEYIKout41IJaz420rIxABZEznlywh+ZRAHTEoWGbCEcdgC0NvAdiB2DCa6CyXQ5Qswk6oALaPbensgPeQc1GAQABBgBNC3p2iFs1GwAAAABJRU5ErkJggg=="
 
 /***/ }),
 /* 121 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = (__webpack_require__(1))(0);
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RkQ0M0I0N0U4QUUzMTFFNzlBQTVDOENFMTBFMkI3MjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RkQ0M0I0N0Y4QUUzMTFFNzlBQTVDOENFMTBFMkI3MjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGRDQzQjQ3QzhBRTMxMUU3OUFBNUM4Q0UxMEUyQjcyNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGRDQzQjQ3RDhBRTMxMUU3OUFBNUM4Q0UxMEUyQjcyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgD3TwsAAAF5SURBVHjaYvz//z8DMsjJyUkDUu1ALMRAPvgMxElTpkxZQ0ghIxYHvANSl4D4AJmWKwBxPBD/AeJIQo5gwSImCLIcqLGBHNuBHnCAOuANEC8H8hnwOYKJgXYgFYhPQB0RMhAO+ALEnoQcQQsH/ITShkBsAsSdSNERQkwaoBScAuJrQNyHRW4+EK+haQgAE9xfIKULxMZAbImE5wIxDz1CAOSIf0DqHFru8KB3IiQKsBCRr0El4hwySkZQgZYCDI13+BQN/hCA+iCIVg4Y/CEATQeaQIqfRLM/AkPvOjUSoQq0diQ1y/4BORzoiDuUpoE7QINsoLUkKeA9IcuJjgKgQSdHbiIEBj8o8U0nsyDKBIbeR0qjgBWIBaCYFPAPqpfigghUl3uN+IJICUjx4ZC+AgylP7RMhKCC6DoetaDWcyMtKyNQQeSMJxfsoXkUAB1xaNgmwlEHYEsD74HYAZjwGqhslwPUbIIOqIB2z+2p7IB3ULNRAECAAQAxjnhHemnx5AAAAABJRU5ErkJggg=="
 
 /***/ }),
 /* 122 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = (__webpack_require__(1))(1);
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTMxQzMyN0Q4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTMxQzMyN0U4MTcxMTFFN0E5QzNBQzdEMzgzNzlCNjIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MzFDMzI3QjgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MzFDMzI3QzgxNzExMUU3QTlDM0FDN0QzODM3OUI2MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkzVnrIAAALjSURBVHja7JdNaBNBFMdnN9l8mRCjwX6laNVUg6lfFKke6qX25BeiFC9FFKtiEL8iHjwoiPhd0YhYhaK3gqciFgQPRbAqUWttD/WDgklTa7OGinST1ib+H52DVBLdzZaCdOHHm515M+/tm5k3s0Imk2HT+Yhsmp8ZB4xaOgUCgQaIg6CYV8XAzVAo1KR2LEHNIoRhMvgAVIHb4Dlvovd9/H07HInpFoH04/O/v94DC4Hv+mZPL+R+sJYa3n1Rztx5KR8gHfTZ8Mdc157Mbw0cao3WQ9QQMJ6AJAduAaqvryi0ng6uL0hSO9fVfRHuBs0w3g35BJRPVih1SvNXFVsTXFc/B/BFdggvIOO7gD+b7gKXyWUyCCt4H10jYOZrpiKX0vjEmrboGgGE/QdED1gJfubS7R8eY06LYYj30TUCV8DOtt7vo9kUPsRT7FX/CFtWYGnRfRHii1ohHsKBU92Dyc7J7Z/kFLvxbIgtmmuWt/lnB6cqE26hrdf0It5Q7jbHvW6zmyojCHvXgMKwAwbexBTPVKbiEuCkwvt4yg0yAmVT3gjj7Tw9R3WfAmyrixCfQSHYwxekA8btvEx19PUR6F7QNQIY8C43cARr4RpkNVWDSrCYq30E4canX9/2JUZPoM8c6O7N+zDCAXQJ4jhYhwE7IBvB4Vx9wtGRlvuvv9WheBl9gprPAhj3cePHuPGOvxmnp9Jjq6v1OvqoLyLhy2cNnAPtMH6V54Gqf53bjT5n2Ty7McLHUO8Avp7y/VZ+/tOcH1V72agus5fSGIiCX0sElgIZdIEdWm5ORQ6J4WBKobhEiwNrQJy2N1iuxYESp8RsJjHNx1K9DYuAgvknuVqLAzZJZBajaJplyni1RABJjtENx8Ymko2mB1NgEAVB0hIBMu5pDss12FZM7f+TCP/TyDHDyXFmFLMf4bkcaAObOmPK2Z7BJA2g+h8OlxMDIjDmshoe6XItn/k1+y8d+CXAAIve5pk6s5hSAAAAAElFTkSuQmCC"
 
 /***/ }),
 /* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(1))(142);
+module.exports = (__webpack_require__(1))(0);
 
 /***/ }),
 /* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(1))(31);
+module.exports = (__webpack_require__(1))(1);
 
 /***/ }),
 /* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(11);
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(132);
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(142);
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(31);
+
+/***/ }),
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(1))(72);

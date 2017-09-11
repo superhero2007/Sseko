@@ -18,8 +18,8 @@ export const SideNav = (props: SideNavProps) =>
             </div>
             <div className='clearfix'></div>
             <div className='navbar-collapse collapse'>
-                {props.role === 'fellow' && <FellowLinkGroup />}
-                {props.role === 'admin' && <AdminLinkGroup />}
+                {this.props.role === 'fellow' && <FellowLinkGroup />}
+                {this.props.role === 'admin' || true && <AdminLinkGroup />}
             </div>
         </div>
     </div>;
