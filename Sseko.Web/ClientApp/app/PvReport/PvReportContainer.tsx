@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { PvReport } from './PvReport';
 import { sortGrid, typeFilterer, hostessFilterer, dateFilterer } from '../../utils/DatatableFilters';
 import { Formatters } from '../../utils/Formatters'
+import * as dtos from '../../dtos';
 
 type PvReportProps = MappedProps & typeof Report.actionCreators;
 
@@ -128,7 +129,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
 }
 
 interface MappedProps {
-    rows: Report.PvRow[],
+    rows: dtos.ReportForPersonalVolumeDto[],
     hostesses: any[],
     hostessFilter: string,
     typeFilter: string,

@@ -1,22 +1,10 @@
-﻿import axios from 'axios';
+﻿import * as dtos from '../../dtos';
+import * as api from '../../api';
 import { Action, Reducer, ActionCreator } from 'redux';
-import * as Cookies from 'universal-cookie';
-import * as Decoder from 'jwt-decode';
 import { AppThunkAction } from '../../store';
+import PvReportState from '../../store/PvReportState';
 
-export interface PvReportState {
-    rows: PvRow[],
-    saleTypeFilter: string[],
-    hostessFilter: string[],
-    sortColumn: string,
-    sortDirection: string,
-    startDate: Date,
-    endDate: Date,
-    errors: string,
-    loading: boolean
-}
-
-interface GetPvRows { type: 'GET_PV_ROWS', payload: PvRow[] }
+interface GetPvRows { type: 'GET_PV_ROWS', payload: dtos.ReportForPersonalVolumeDto[] }
 interface UpdateSort { type: 'UPDATE_PV_SORT', column: string, direction: string }
 interface UpdateSaleTypeFilter { type: 'UPDATE_SALE_FILTER', saleTypeFilter: string[] }
 interface UpdateHostessFilter { type: 'UPDATE_HOSTESS_FILTER', hostessFilter: string[] }
@@ -26,13 +14,11 @@ type KnownAction = GetPvRows | UpdateSort | UpdateSaleTypeFilter | UpdateHostess
 
 export const actionCreators = {
     getPvReport: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        var cookies = new Cookies();
-        axios.get('/api/reports/personalvolume', { headers: { Authorization: "Bearer " + cookies.get("token") } })
+        api.Reports.PersonalVolume()
             .then(response => {
-                dispatch({ type: 'GET_PV_ROWS', payload: response.data });
-            })
+            dispatch({ type: 'GET_PV_ROWS', payload: response.data });
+        })
             .catch((error) => {
-                console.log(error);
             });
     },
 
@@ -85,12 +71,3 @@ export const reducer: Reducer<PvReportState> = (state: PvReportState, action: Kn
     return state || unloadedState;
 }
 
-export interface PvRow {
-    date: string,
-    orderNumber: string,
-    customer: string,
-    hostess: string,
-    type: string,
-    commission: string,
-    sale: string
-}

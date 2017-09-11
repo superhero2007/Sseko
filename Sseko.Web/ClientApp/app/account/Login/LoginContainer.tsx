@@ -1,20 +1,17 @@
-﻿import * as Auth from './LoginStore';
+﻿import * as AuthStore from '../AuthStore';
+import * as dtos from '../../../dtos';
 import * as React from 'react';
-import { ApplicationState } from '../../store'
+import { ApplicationState } from '../../../store'
 import { connect } from 'react-redux';
 import { Login } from './Login';
-import { LogoutWithoutRedirect } from '../../utils/AuthService';
+import { LogoutWithoutRedirect } from '../../../utils/AuthService';
+import AuthState from '../../../store/AuthState';
 
-type LoginProps = Auth.AuthState & typeof Auth.actionCreators
+type LoginProps = AuthState & typeof AuthStore.actionCreators
 
 interface LoginState {
-    user: User,
-    errors: User
-}
-
-interface User {
-    username: string,
-    password: string,
+    user: dtos.UserForAuthDto,
+    errors: dtos.UserForAuthDto
 }
 
 class LoginContainer extends React.Component<LoginProps, LoginState> {
@@ -34,7 +31,7 @@ class LoginContainer extends React.Component<LoginProps, LoginState> {
     }
 
     onSubmit = () => {
-        this.props.loginUser(this.state.user.username, this.state.user.password);
+        this.props.loginUser(this.state.user);
     }
 
     onChange = (event) => {
@@ -57,5 +54,5 @@ class LoginContainer extends React.Component<LoginProps, LoginState> {
 }
 export default connect(
     (state: ApplicationState) => state.auth,
-    Auth.actionCreators
+    AuthStore.actionCreators
 )(LoginContainer) as typeof LoginContainer;

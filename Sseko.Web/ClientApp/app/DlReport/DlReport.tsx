@@ -33,7 +33,7 @@ interface DlReportProps {
     levelFilter: string;
     onGridSort: (column: string, dir: string) => any;
     onLevelChange: (event: any) => any;
-    rows: string[],
+    rows: any[],
     loading: boolean
 }
 

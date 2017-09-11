@@ -68,13 +68,13 @@ namespace Sseko.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("SendResetPasswordLink")]
-        public async Task<IActionResult> SendPasswordResetLink([FromBody] UserForPasswodResetDto model)
+        public async Task<IActionResult> SendPasswordResetLink([FromBody] string email)
         {
             try
             {
                 var userService = _serviceFactory.UserService();
 
-                var user = await userService.SetPasswordReset(model.Email);
+                var user = await userService.SetPasswordReset(email);
                 if (user == null) return StatusCode(204); //Don't reveal that this user does not exst
 
                 //TODO: Send email
@@ -89,11 +89,11 @@ namespace Sseko.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("VerifyResetLink")]
-        public async Task<IActionResult> VerifyResetLink([FromBody] UserForPasswodResetDto model)
+        public async Task<IActionResult> VerifyResetLink([FromBody] string code)
         {
             try
             {
-                var email = await _serviceFactory.UserService().VerifyResetLink(model.Code);
+                var email = await _serviceFactory.UserService().VerifyResetLink(code);
 
                 if (string.IsNullOrWhiteSpace(email))
                     return StatusCode(404);
@@ -179,7 +179,7 @@ namespace Sseko.Web.Controllers
 
         [HttpPost("AdminResetPassword")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> SendPasswordResetLink([FromBody] string userId)
+        public async Task<IActionResult> AdminResetPassword([FromBody] string userId)
         {
             try
             {

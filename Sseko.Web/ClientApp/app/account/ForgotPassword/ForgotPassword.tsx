@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Textbox } from '../../components/Textbox';
+import { Textbox } from '../../../components/Textbox';
 
 export const ForgotPassword = (props: ForgotPasswordProps) => {
     return (

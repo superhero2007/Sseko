@@ -4,6 +4,7 @@ import { ApplicationState } from '../../store'
 import { connect } from 'react-redux';
 import { DlReport } from './DlReport';
 import { levelFilterer, sortGrid } from '../../utils/DatatableFilters';
+import * as dtos from '../../dtos';
 
 type DlReportProps = MappedProps & typeof Report.actionCreators;
 
@@ -43,7 +44,7 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
 }
 
 interface MappedProps {
-    rows: string[],
+    rows: dtos.ReportForDownlineDto[],
     levelFilter: string,
     loading: boolean
 }

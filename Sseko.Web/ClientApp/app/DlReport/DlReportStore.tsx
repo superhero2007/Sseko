@@ -1,19 +1,10 @@
-﻿import * as Cookies from 'universal-cookie';
-import * as Decoder from 'jwt-decode';
+﻿import * as api from '../../api';
+import * as dtos from '../../dtos';
 import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from '../../store';
-import axios from 'axios';
+import DlReportState from '../../store/DlReportState';
 
-export interface DlReportState {
-    rows: DlRow[],
-    sortColumn: string,
-    sortDirection: string,
-    levelFilter: string[],
-    errors: string,
-    loading: boolean
-}
-
-interface GetDlRows { type: 'GET_DL_ROWS', payload: DlRow[] }
+interface GetDlRows { type: 'GET_DL_ROWS', payload: dtos.ReportForDownlineDto[] }
 interface UpdateLevelFilter { type: 'UPDATE_LEVEL_FILTER', payload: string[] }
 interface UpdateSort { type: 'UPDATE_DL_SORT', column: string, direction: string }
 
@@ -21,14 +12,10 @@ type KnownAction = GetDlRows | UpdateLevelFilter | UpdateSort;
 
 export const actionCreators = {
     getDlReport: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        var cookies = new Cookies();
-        axios.get('/api/reports/downline', { headers: { Authorization: "Bearer " + cookies.get("token") } })
+        api.Reports.Downline()
             .then(response => {
                 dispatch({ type: 'GET_DL_ROWS', payload: response.data });
             })
-            .catch((error) => {
-
-            });
     },
 
     updateLevelFilter: (levelFilter: string[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -64,11 +51,3 @@ export const reducer: Reducer<DlReportState> = (state: DlReportState, action: Kn
     return state || unloadedState;
 }
 
-export interface DlRow {
-    name: string,
-    parent: string,
-    grandparent: string,
-    level: string,
-    commissionableSales: string,
-    totalSales: string,
-}

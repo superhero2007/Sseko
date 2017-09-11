@@ -5,11 +5,11 @@ import { Authorization } from './Authorization'
 import { Layout } from '../components/Layout/Layout';
 import { PageNotFound } from '../components/PageNotFound';
 import DlReport from '../app/DlReport/DlReportContainer';
-import ForgotPassword from '../app/ForgotPassword/ForgotPasswordContainer';
-import Login from '../app/Login/LoginContainer';
+import ForgotPassword from '../app/account/ForgotPassword/ForgotPasswordContainer';
+import Login from '../app/account/Login/LoginContainer';
 import ManageUser from '../app/ManageUsers/ManageUsersContainer';
 import PvReport from '../app/PvReport/PvReportContainer';
-import ResetPassword from '../app/ResetPassword/ResetPasswordContainer';
+import ResetPassword from '../app/account/ResetPassword/ResetPasswordContainer';
 
 const Fellow = Authorization(['fellow', 'admin']);
 const Admin = Authorization(['admin'])

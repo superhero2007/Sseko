@@ -1,18 +1,17 @@
 ﻿import * as React from 'react';
-import * as ResetStore from './ResetPasswordStore'
-import { ApplicationState } from '../../store';
+import * as AuthStore from '../AuthStore'
+import { ApplicationState } from '../../../store';
 import { connect } from 'react-redux';
 import { ResetPassword } from './ResetPassword';
 import { match } from 'react-router-dom';
+import AuthState from '../../../store/AuthState';
+import * as dtos from '../../../dtos';
 
-type ResetPasswordProps = ResetStore.ResetPasswordState & typeof ResetStore.actionCreators & RouteProps;
+type ResetPasswordProps = AuthState & typeof AuthStore.actionCreators & RouteProps;
 
 interface ResetPasswordState {
-    auth: {
-        password: string,
-        passwordConfirmation: string
-    },
-    errors: any,
+    user: dtos.UserForPasswordResetDto & { passwordConfirmation: string },
+    errors: any
 }
 
 interface RouteProps {
@@ -27,7 +26,7 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
     constructor(props) {
         super(props);
 
-        this.state = { auth: { password: '', passwordConfirmation: '' }, errors: [] }
+        this.state = { user: null, errors: [] }
 
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -35,7 +34,7 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
 
     onSubmit() {
         if (!this.validate()) return;
-        this.props.submitRequest(this.props.email, this.state.auth.password);
+        this.props.resetPassword(this.state.user);
     }
 
     componentWillMount() {
@@ -43,11 +42,11 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
     }
 
     validate() {
-        const { auth } = this.state;
+        const { user } = this.state;
 
-        if (auth.password != auth.passwordConfirmation)
+        if (user.password != user.passwordConfirmation)
             this.setState({ errors: { passwordConfirmation: 'Passwords must match' } })
-        else if (auth.password.length > 8)
+        else if (user.password.length > 8)
             this.setState({ errors: { password: 'Password must be at least 8 characters' } })
         else
             return true;
@@ -55,25 +54,25 @@ class ResetPasswordContainer extends React.Component<ResetPasswordProps, ResetPa
     }
 
     onChange(event) {
-        var auth = this.state.auth;
-        auth[event.target.name] = event.target.value;
-        this.setState({ auth });
+        var user = this.state.user;
+        user[event.target.name] = event.target.value;
+        this.setState({ user });
     }
 
     render() {
         return <ResetPassword
-            auth={this.state.auth}
+            auth={this.state.user}
             errors={this.state.errors}
             onChange={this.onChange}
             onSubmit={this.onSubmit}
             submitError={this.props.error}
-            submitted={this.props.submitted}
+            submitted={this.props.passwordResetFormSent}
             email={this.props.email}
         />
     }
 }
 
 export default connect(
-    (state: ApplicationState) => state.resetPassword,
-    ResetStore.actionCreators
+    (state: ApplicationState) => state.auth,
+    AuthStore.actionCreators
 )(ResetPasswordContainer) as typeof ResetPasswordContainer;

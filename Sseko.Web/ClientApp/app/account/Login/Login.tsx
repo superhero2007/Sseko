@@ -1,9 +1,9 @@
 ﻿import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Textbox } from '../../components/Textbox'
-import loginLogo = require('../../img/logo-login.png');
-import userIcon = require('../../img/user-ico.png');
-import passwordIcon = require('../../img/password-ico.png');
+import { Textbox } from '../../../components/Textbox'
+import loginLogo = require('../../../img/logo-login.png');
+import userIcon = require('../../../img/user-ico.png');
+import passwordIcon = require('../../../img/password-ico.png');
 
 export const Login = (props: LoginProps) => {
     return (

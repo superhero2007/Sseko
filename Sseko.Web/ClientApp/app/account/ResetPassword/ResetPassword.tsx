@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { Link } from 'react-router-dom'
-import { Textbox } from '../../components/Textbox';
+import { Textbox } from '../../../components/Textbox';
 
 export const ResetPassword = (props: ResetPasswordProps) => {
     const { submitError, errors, auth, onChange, onSubmit, submitted, email } = props;
@@ -47,7 +47,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
 interface ResetPasswordProps {
     onChange: (event) => any;
     onSubmit: () => any;
-    auth: { password: string, passwordConfirmation: string };
+    auth: any;
     errors: any,
     submitError: string,
     submitted: boolean,

@@ -1,10 +1,11 @@
-﻿import * as React from 'react';
-import * as ResetStore from './ForgotPasswordStore'
-import { ApplicationState } from '../../store';
+﻿import * as AuthStore from '../AuthStore';
+import * as React from 'react';
+import { ApplicationState } from '../../../store';
 import { connect } from 'react-redux';
 import { ForgotPassword } from './ForgotPassword';
+import AuthState from '../../../store/AuthState';
 
-type ForgotPasswordProps = ResetStore.ForgotPasswordState & typeof ResetStore.actionCreators;
+type ForgotPasswordProps = AuthState & typeof AuthStore.actionCreators;
 
 interface ForgotPasswordState {
     email: string
@@ -21,7 +22,7 @@ class ForgotPasswordContainer extends React.Component<ForgotPasswordProps, Forgo
     }
 
     onSubmit() {
-        this.props.submitRequest(this.state.email);
+        this.props.sendResetLink(this.state.email);
     }
 
     onChange = (event) => {
@@ -31,7 +32,7 @@ class ForgotPasswordContainer extends React.Component<ForgotPasswordProps, Forgo
     render() {
         return <ForgotPassword
             onSubmit={this.onSubmit}
-            submitted={this.props.submitted}
+            submitted={this.props.passwordResetFormSent}
             email={this.state.email}
             onEmailChange={this.onChange}
         />
@@ -39,6 +40,6 @@ class ForgotPasswordContainer extends React.Component<ForgotPasswordProps, Forgo
 }
 
 export default connect(
-    (state: ApplicationState) => state.forgotPassword,
-    ResetStore.actionCreators
+    (state: ApplicationState) => state.auth,
+    AuthStore.actionCreators
 )(ForgotPasswordContainer) as typeof ForgotPasswordContainer;

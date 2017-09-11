@@ -1,18 +1,19 @@
-import * as Auth from '../app/Login/LoginStore';
+import AuthState from './AuthState';
+import PvReportState from './PvReportState';
+import DlReportState from './DlReportState';
+import ManageUserState from './ManageUsersState';
+
+import * as Auth from '../app/account/AuthStore';
 import * as PvReport from '../app/PvReport/PvReportStore';
 import * as DlReport from '../app/DlReport/DlReportStore';
-import * as ManageUser from '../app/ManageUsers/ManageUserStore';
-import * as ForgotPassword from '../app/ForgotPassword/ForgotPasswordStore';
-import * as ResetPassword from '../app/ResetPassword/ResetPasswordStore';
+import * as ManageUsers from '../app/ManageUsers/ManageUserStore';
 
 // The top-level state object
 export interface ApplicationState {
-    auth: Auth.AuthState,
-    pvReport: PvReport.PvReportState,
-    dlReport: DlReport.DlReportState,
-    users: ManageUser.ManageUserState,
-    forgotPassword: ForgotPassword.ForgotPasswordState,
-    resetPassword: ResetPassword.ResetPasswordState
+    auth: AuthState,
+    pvReport: PvReportState,
+    dlReport: DlReportState,
+    users: ManageUserState,
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -22,9 +23,7 @@ export const reducers = {
     auth: Auth.reducer,
     pvReport: PvReport.reducer,
     dlReport: DlReport.reducer,
-    users: ManageUser.reducer,
-    forgotPassword: ForgotPassword.reducer,
-    resetPassword: ResetPassword.reducer
+    users: ManageUsers.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

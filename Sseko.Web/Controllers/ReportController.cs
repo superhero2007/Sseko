@@ -15,16 +15,15 @@ namespace Sseko.Web.Controllers
     public class ReportsController : BaseController
     {
         [HttpGet("Downline")]
-        public async Task<IActionResult> Downline(int? id)
+        public async Task<IActionResult> Downline()
         {
             try
             {
-                if (id == null)
-                    id = GetMagentoId();
+                var id = GetMagentoId();
 
                 var serviceFactory = new ServiceFactory();
 
-                var request = await serviceFactory.MagentoService().GetDownlineReport(id.Value);
+                var request = await serviceFactory.MagentoService().GetDownlineReport(id);
 
                 if (!request.IsError)
                 {
@@ -40,16 +39,15 @@ namespace Sseko.Web.Controllers
         }
 
         [HttpGet("PersonalVolume")]
-        public async Task<IActionResult> PersonalVolume(int? id)
+        public async Task<IActionResult> PersonalVolume()
         {
             try
             {
-                if (id == null)
-                    id = GetMagentoId();
+                var id = GetMagentoId();
 
                 var serviceFactory = new ServiceFactory();
 
-                var request = await serviceFactory.MagentoService().GetPvSummaryReport(id.Value);
+                var request = await serviceFactory.MagentoService().GetPvSummaryReport(id);
 
                 if (!request.IsError)
                 {
