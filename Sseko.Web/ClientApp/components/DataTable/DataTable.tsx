@@ -60,8 +60,11 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                 padding = scaled.height() * ratio;
 
             scaled.css({
-                'transform': 'scale(' + ratio + ')',
-                'transform-origin': 'top left'
+                'position': 'relative',
+                'left': '50%',
+                'transform': 'scale(' + Math.min(ratio, 1.8) + ') translateX(-50%)',
+                'transform-origin': 'left top',
+                'margin': '0'
             });
 
             //parent.css('padding-top', padding); // keeps the parent height in ratio to child resize

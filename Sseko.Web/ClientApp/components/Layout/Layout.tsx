@@ -10,7 +10,7 @@ declare let $: any;
 export class Layout extends React.Component<{}, {}> {
     componentDidMount() {
         // Run correctHeight function on load and resize window event
-        $(window).bind("load resize", function() {
+        $(window).bind("load resize", () => {
             correctHeight();
             detectBody();
         });
@@ -26,10 +26,11 @@ export class Layout extends React.Component<{}, {}> {
     render() {
         return (
             <div id="wrapper">
-                <Navigation role={GetRole()}/>
                 <div id="page-wrapper" className="gray-bg">
-                    <TopHeader />
+                    <TopHeader role={GetRole()} />
+                    <div className="wrapper wrapper-content">
                         {this.props.children}
+                    </div>
                     <Footer />
                 </div>
             </div>

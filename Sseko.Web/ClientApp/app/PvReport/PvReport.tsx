@@ -34,7 +34,7 @@ export const PvReport = (props: PvReportProps) =>
             <Total titleLabel={"FILTERED COMMISSIONABLE SALES"} mainContent={props.totalSales} />
             <Total titleLabel={"FILTERED TRANSACTIONS"} mainContent={props.totalTransactions} />
         </TotalGroup>
-        <div className="row" id="filters">
+        <div className="row" id="pv-filters">
             <div className="col-lg-4">
                 <SelectList
                     htmlId={"pvreport-month"}

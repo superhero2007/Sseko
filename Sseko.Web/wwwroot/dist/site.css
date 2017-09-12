@@ -8586,18 +8586,31 @@ body.md-skin {
     margin-bottom: 0;
 }
 
-#filters {
+.nav li img {
+    margin-right: 10px;
+}
+
+.nav li:hover,
+.nav li:focus {
+    box-shadow: var(--btn-hover-box-shadow);
+}
+
+.grid-container {
+    margin: auto;
+}
+
+#pv-filters {
     display: flex;
     justify-content: center;
 }
 
-    #filters > div:nth-child(1),
-    #filters > div:nth-child(3) {
+    #pv-filters > div:nth-child(1),
+    #pv-filters > div:nth-child(3) {
         width: 200px;
     }
 
 @media (min-width: 768px) {
-    #filters > div:nth-child(2) {
+    #pv-filters > div:nth-child(2) {
         width: 600px;
         display: flex;
         justify-content: space-around;
@@ -8606,6 +8619,8 @@ body.md-skin {
 
 .btn-3d {
     display: inline-block;
+    position: relative;
+    z-index: 10;
     border-radius: 8px;
     padding: 0;
     margin: -4px 2px 0px 2px;
@@ -8615,7 +8630,6 @@ body.md-skin {
     box-shadow: 0 8px 0 var(--primary-shade), 0 15px 20px rgba(0, 0, 0, .35);
     transition: box-shadow .1s ease-in-out;
     font-size: 18px;
-    z-index: 1;
 }
 
     .btn-3d.selected {
@@ -8642,18 +8656,18 @@ body.md-skin {
             transform: translate(0, 6px);
         }
 
-    /* The "side" of the button */
     .btn-3d > span {
         display: inline-block;
+        position: relative;
+        z-index: 11;
         border-radius: 8px;
         padding: 8px 8px;
         background-color: var(--primary-shade);
         background-image: linear-gradient(to bottom, hsla(167.8, 74.6%, 47.8%, .8), hsla(167.9, 74.4%, 55.5%, .2));
-        box-shadow: inset 0 -1px 1px rgba(255, 255, 255, .15);
+        box-shadow: inset 0 -1px 1px rgba(255, 255, 255, .2);
         line-height: 1;
         text-shadow: 0 -1px 1px rgba(21, 145, 120, .7);
         transition: background-color .2s ease-in-out, transform .1s ease-in-out;
-        z-index: 1;
     }
 
     .btn-3d:hover > span {
@@ -8662,53 +8676,45 @@ body.md-skin {
         text-shadow: 0 -1px 1px rgba(21, 145, 120, .9), 0 0 5px rgba(255, 255, 255, .8);
     }
 
-    /* The text of the button */
-    .btn-3d:not(.selected) > span {
-        z-index: 2;
+    .btn-3d:not(.selected) {
+        z-index: 11;
     }
 
-    /* The text of the button */
-    .btn-3d:not(.selected) > span > span {
-        opacity: 0.5;
-        z-index: 2;
+        .btn-3d:not(.selected) > span {
+            z-index: 15;
+        }
+
+            /* The text of the button */
+            .btn-3d:not(.selected) > span > span {
+                opacity: 0.5;
+            }
+
+@media (min-width: 768px) {
+    /* Support button groups */
+    .btn-group .btn-3d + .btn-3d {
+        margin-left: -2px;
     }
 
-/* Support button groups */
-.btn-group > .btn-3d {
-    position: relative;
-    /*float: left;*/
-}
-
-    .btn-group > .btn-3d:hover > span,
-    .btn-group > .btn-3d:focus > span,
-    .btn-group > .btn-3d:active > span,
-    .btn-group > .btn-3d.active > span {
-        /*z-index: 1;*/
+    .btn-group > .btn-3d:not(:first-child):not(:last-child),
+    .btn-group > .btn-3d:not(:first-child):not(:last-child) > span {
+        border-radius: 0;
     }
 
-.btn-group .btn-3d + .btn-3d {
-    margin-left: -2px;
-}
-
-.btn-group > .btn-3d:not(:first-child):not(:last-child),
-.btn-group > .btn-3d:not(:first-child):not(:last-child) > span {
-    border-radius: 0;
-}
-
-.btn-group > .btn-3d:first-child {
-    margin-left: 0;
-}
-
-    .btn-group > .btn-3d:first-child:not(:last-child),
-    .btn-group > .btn-3d:first-child:not(:last-child) > span {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+    .btn-group > .btn-3d:first-child {
+        margin-left: 0;
     }
 
-.btn-group > .btn-3d:last-child:not(:first-child),
-.btn-group > .btn-3d:last-child:not(:first-child) > span {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+        .btn-group > .btn-3d:first-child:not(:last-child),
+        .btn-group > .btn-3d:first-child:not(:last-child) > span {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+    .btn-group > .btn-3d:last-child:not(:first-child),
+    .btn-group > .btn-3d:last-child:not(:first-child) > span {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }
 
 :root {

@@ -16,26 +16,20 @@ import logoutIconActive = require('../../img/logout-active-ico.png');
 
 export const FellowLinkGroup = () => {
         return ( // Refer to version control history when adding to navigation
-            <ul className='nav navbar-nav'>
+            <ul className='nav navbar-top-links navbar-right'>
                 <NavBarLinkSingle
-                    icon={reportsIcon}
-                    iconActive={reportsIconActive}
                     href='/Reports/PersonalVolume'
                     label='Personal Volume'
                     exact={false}
                 />
                 <NavBarLinkSingle
-                    icon={reportsIcon}
-                    iconActive={reportsIconActive}
                     href='/Reports/Downline'
                     label='Downline Summary'
                     exact={false}
                 />
                 <NavBarLinkSingle
-                    icon={logoutIcon}
-                    iconActive={logoutIconActive}
                     href='/Login'
-                    label='Logout'
+                    label='Log out'
                     exact={false}
                 />
             </ul>
