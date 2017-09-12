@@ -1,51 +1,58 @@
-﻿import axios from 'axios';
-import { Reducer, ActionCreator } from 'redux';
+﻿import * as api from '../../api';
 import * as Cookies from 'universal-cookie';
-import * as Decoder from 'jwt-decode';
+import * as dtos from '../../dtos';
 import { AppThunkAction } from '../../store';
+import { Reducer, ActionCreator } from 'redux';
+import { RowHelpers } from '../../components/DataTable/RowHelpers';
+import ManageUsersState from '../../store/ManageUsersState';
 
-export interface ManageUserState {
-    rows: User[],
-    loading: boolean,
-    sortColumn: string,
-    sortDirection: string,
-    error: string
-}
-
-interface UserManagerError { type: 'USER_MANAGER_ERROR', error: any }
-interface GetUserList { type: 'GET_USER_LIST', payload: User[] }
+interface GetUserList { type: 'GET_USER_LIST', payload: dtos.UserDto[] }
 interface UpdateSort { type: 'UPDATE_USER_SORT', column: string, direction: string }
 
-type KnownAction = GetUserList | UserManagerError | UpdateSort;
+type KnownAction = GetUserList | UpdateSort;
 
 export const actionCreators = {
-    errorHandler: (dispatch, error, type) => {
-        let errorMessage = '';
-
-        errorMessage = error;
-
-        if (error.status === 401) {
-            dispatch({
-                type: type,
-                error: 'Unauthorized!'
-            });
-        } else {
-            dispatch({
-                type: type,
-                error: 'Server error. Please try again'
-            });
-        }
-    },
 
     getUsers: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        var cookies = new Cookies();
-        axios.get('/api/users/', { headers: { Authorization: "Bearer " + cookies.get("token") } })
+        api.Users.Get()
             .then((response) => {
                 dispatch({ type: 'GET_USER_LIST', payload: response.data });
             })
             .catch((error) => {
-                this.actionCreators.errorHandler(dispatch({ type: 'USER_MANAGER_ERROR', error: error.resposne }));
             });
+    },
+
+    impersonate: (userToImpersonateId: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        api.Account.ImpersonateUser(userToImpersonateId)
+            .then(response => {
+                const cookies = new Cookies();
+                cookies.set('token', response.data.token, { path: '/' });
+
+                window.location.href = '/';
+            })
+            .catch(error => {
+
+            });
+    },
+
+    toggleEnable: (id: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        var rows = getState().users.rows;
+
+        var newRows = RowHelpers.toggleEnabled(rows, id);
+
+        dispatch({ type: 'GET_USER_LIST', payload: newRows });
+
+        api.Users.ToggleEnabled(id)
+            .then(response => {
+
+            })
+            .catch(error => {
+                dispatch({ type: 'GET_USER_LIST', payload: rows });
+            })
+    },
+
+    resetPassword: (id: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+
     },
 
     updateSort: (column: string, direction: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -53,20 +60,17 @@ export const actionCreators = {
     }
 }
 
-const unloadedState: ManageUserState = {
+const unloadedState: ManageUsersState = {
     rows: [],
-    error: '',
     sortColumn: 'username',
     sortDirection: 'ASC',
     loading: true
 }
 
-export const reducer: Reducer<ManageUserState> = (state: ManageUserState, action: KnownAction) => {
+export const reducer: Reducer<ManageUsersState> = (state: ManageUsersState, action: KnownAction) => {
     switch (action.type) {
         case 'GET_USER_LIST':
             return { ...state, error: '', rows: action.payload, loading: false };
-        case 'USER_MANAGER_ERROR':
-            return { ...state, error: action.error, loading: false }
         case 'UPDATE_USER_SORT':
             return { ...state, sortColumn: action.column, sortDirection: action.direction };
         default:
@@ -74,9 +78,4 @@ export const reducer: Reducer<ManageUserState> = (state: ManageUserState, action
     }
 
     return state || unloadedState;
-}
-
-interface User {
-    username: string,
-    role: string
 }

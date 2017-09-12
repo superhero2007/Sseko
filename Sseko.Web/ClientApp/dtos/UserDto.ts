@@ -3,4 +3,5 @@
     public email: string;
     public role: string;
     public emailConfirmed: string;
+    public enabled: boolean;
 }

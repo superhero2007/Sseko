@@ -9,6 +9,9 @@ namespace Sseko.Web.Models
 {
     public class UserDto
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -20,5 +23,8 @@ namespace Sseko.Web.Models
 
         [JsonProperty("active")]
         public string EmailConfirmed { get; set; }
+
+        [JsonProperty("enabled")]
+        public bool Enabled { get; set; }
     }
 }
