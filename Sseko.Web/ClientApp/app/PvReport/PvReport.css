@@ -1,0 +1,49 @@
+﻿#pv-totals {
+    display: flex;
+    justify-content: space-around;
+    color: var(--font-gray);
+}
+
+    #pv-totals .total-container {
+        position: relative;
+        min-width: 275px;
+        padding: 10px;
+        /*border: 1px solid var(--nav-gray);*/
+    }
+
+        #pv-totals .total-container img {
+            max-width: 70px;
+        }
+
+        #pv-totals .total-container .total-label {
+            font-size: 10px;
+            position: absolute;
+            left: 94px;
+            top: 20px;
+            white-space: nowrap;
+        }
+
+        #pv-totals .total-container .total-money {
+            font-size: 24px;
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+        }
+
+#pv-filters {
+    display: flex;
+    justify-content: center;
+}
+
+    #pv-filters > div:nth-child(1),
+    #pv-filters > div:nth-child(3) {
+        width: 200px;
+    }
+
+@media (min-width: 768px) {
+    #pv-filters > div:nth-child(2) {
+        width: 600px;
+        display: flex;
+        justify-content: space-around;
+    }
+}

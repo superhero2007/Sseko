@@ -1,15 +1,18 @@
 ﻿import * as React from 'react';
+import './PvReport.css';
+import '../../css/grid.css';
 import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
 import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
-import Total from '../../components/Totals/Total';
-import TotalGroup from '../../components/Totals/TotalGroup';
+//import Total from '../../components/Totals/Total';
+//import TotalGroup from '../../components/Totals/TotalGroup';
+import { Totals, Total } from './HelperTotals';
 import { Label } from "../../components/Label";
-import balanceIcon = require('../../img/balance.png');
-import personIcon = require('../../img/personal-volume.png');
-import salesIcon = require('../../img/commissionable-sales.png');
-import transactionsIcon = require('../../img/transaction.png');
+const balanceIcon = require('../../img/balance.png');
+const personIcon = require('../../img/personal-volume.png');
+const salesIcon = require('../../img/commissionable-sales.png');
+const transactionsIcon = require('../../img/transaction.png');
 
 interface PvReportProps {
     dateFilter: { start: any, end: any };
@@ -30,12 +33,12 @@ interface PvReportProps {
 
 export const PvReport = (props: PvReportProps) =>
     <Layout>
-        <TotalGroup>
-            <Total titleLabel={"FILTERED COMMISSIONABLE SALES"} mainContent={props.totalSales} />
-            <Total titleLabel={"FILTERED TRANSACTIONS"} mainContent={props.totalTransactions} />
-        </TotalGroup>
+        <Totals>
+            <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
+            <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} />
+        </Totals>
         <div className="row" id="pv-filters">
-            <div className="col-lg-4">
+            <div>
                 <SelectList
                     htmlId={"pvreport-month"}
                     name={""}
@@ -47,7 +50,7 @@ export const PvReport = (props: PvReportProps) =>
                     onChange={props.onMonthChange}
                 />
             </div>
-            <div className="col-lg-4">
+            <div>
                 <ButtonGroup
                     htmlId={"pvreport-transactiontype"}
                     name={"programs"}
@@ -59,7 +62,7 @@ export const PvReport = (props: PvReportProps) =>
                     multi
                 />
             </div>
-            <div className="col-lg-4">
+            <div>
                 <SelectList
                     htmlId={"hostess-select"}
                     name={"hostesses"}

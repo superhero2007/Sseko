@@ -10,7 +10,7 @@ export default class TotalGroup extends React.Component<{}, {}>{
             </div>);
         })
         return (
-            <div id="totals" className="row">
+            <div id="pv-totals" className="row">
                 {colChildren.map(child => {
                     return child;
                 })}

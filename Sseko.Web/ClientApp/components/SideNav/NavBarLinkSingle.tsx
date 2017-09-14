@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom';
 interface NavBarLinkProps {
     href: string;
     label: string;
-    icon: string;
+    icon?: string;
     exact: boolean;
 }
 
 export const NavBarLinkSingle = (props: NavBarLinkProps) =>
     <li>
         <NavLink exact={props.exact || true} to={props.href} activeClassName='active'>
-            {props.label}
+            <img src={this.props && this.props.icon} /> {props.label}
         </NavLink>
     </li>;

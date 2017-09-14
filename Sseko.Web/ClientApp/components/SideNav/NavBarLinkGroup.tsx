@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 interface NavBarLinkProps {
     href: string,
     label: string,
-    icon: string,
+    icon?: string,
     exact: boolean,
 }
 
@@ -20,7 +20,7 @@ export class NavBarLinkGroup extends React.Component<NavBarLinkProps, {}> {
     render() {
         return (
             <li className={"nav-group" + (this.state.collapsed ? " collapsed" : "")}>
-                <div onClick={this.handleClick}><img src={this.props.icon} /> {this.props.label} <i className={"glyphicon glyphicon-chevron-" + (this.state.collapsed ? "down" : "up")}></i></div>
+                <div onClick={this.handleClick}><img src={this.props && this.props.icon} /> {this.props.label} <i className={"glyphicon glyphicon-chevron-" + (this.state.collapsed ? "down" : "up")}></i></div>
                 {this.props.children}
             </li>
         );

@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 interface NavBarLinkProps {
     href: string,
     label: string,
-    icon: string,
     exact: boolean,
 }
 
