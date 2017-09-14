@@ -2,15 +2,15 @@
 import { NavBarLink } from './NavBarLink';
 import { NavBarLinkSingle } from './NavBarLinkSingle';
 import { NavBarLinkGroup } from './NavBarLinkGroup';
-const dashboardIcon = require('../../img/dashboard-ico.png');
-const reportsIcon = require('../../img/reports-ico.png');
-const storeCreditIcon = require('../../img/storecredit-ico.png');
-const logoutIcon = require('../../img/logout-ico.png');
+const dashboardIcon = require<string>('../../img/dashboard-ico.png');
+const reportsIcon = require<string>('../../img/reports-ico.png');
+const storeCreditIcon = require<string>('../../img/storecredit-ico.png');
+const logoutIcon = require<string>('../../img/logout-ico.png');
 // Active icons
-const dashboardIconActive = require('../../img/dashboard-active-ico.png');
-const reportsIconActive = require('../../img/reports-active-ico.png');
-const storeCreditIconActive = require('../../img/storecredit-active-ico.png');
-const logoutIconActive = require('../../img/logout-active-ico.png');
+const dashboardIconActive = require<string>('../../img/dashboard-active-ico.png');
+const reportsIconActive = require<string>('../../img/reports-active-ico.png');
+const storeCreditIconActive = require<string>('../../img/storecredit-active-ico.png');
+const logoutIconActive = require<string>('../../img/logout-active-ico.png');
 
 export const FellowLinkGroup = () => {
     return (
@@ -18,18 +18,19 @@ export const FellowLinkGroup = () => {
             <li className="nav-header-custom"></li>
             <NavBarLinkSingle
                 href='/Reports/PersonalVolume'
-                //icon={dashboardIcon}
+                imgSrc={reportsIcon}
                 label='Personal Volume'
                 exact={false}
             />
             <NavBarLinkSingle
                 href='/Reports/Downline'
-                //icon={reportsIcon}
+                imgSrc={reportsIcon}
                 label='Downline Summary'
                 exact={false}
             />
             <NavBarLinkSingle
                 href='/Login'
+                imgSrc={logoutIcon}
                 label='Log out'
                 exact={false}
             />

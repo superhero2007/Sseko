@@ -37,7 +37,7 @@ export const PvReport = (props: PvReportProps) =>
             <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
             <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} />
         </Totals>
-        <div className="row" id="pv-filters">
+        <div className="row grid-sibling-row" id="pv-filters">
             <div>
                 <SelectList
                     htmlId={"pvreport-month"}

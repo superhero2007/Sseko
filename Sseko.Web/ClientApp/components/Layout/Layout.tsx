@@ -2,7 +2,7 @@
 import Progress from '../Progress';
 import Navigation from '../SideNav/Navigation';
 import Footer from '../Footer';
-import TopHeader from '../TopHeader';
+import TopHeader from '../TopHeader/TopHeader';
 import { correctHeight, detectBody } from '../Helpers';
 import { GetRole } from '../../utils/AuthService';
 declare let $: any;

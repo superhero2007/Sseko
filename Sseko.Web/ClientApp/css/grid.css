@@ -1,4 +1,10 @@
-﻿.grid-label {
+﻿.grid-sibling-row {
+    margin-left: 17px;
+    margin-right: 17px;
+    margin-bottom: 20px;
+}
+
+.grid-label {
     width: calc(100% - 34px);
     margin: auto;
     padding: 10px 0 10px 15px;

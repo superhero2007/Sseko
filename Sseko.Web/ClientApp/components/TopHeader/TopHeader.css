@@ -1,0 +1,71 @@
+﻿.navbar {
+    margin-bottom: 0;
+    z-index: 10000;
+}
+
+    .navbar .navbar-header {
+        height: 60px;
+    }
+
+        .navbar .navbar-header button {
+            margin-right: 20px;
+        }
+
+        .navbar .navbar-header img {
+            height: 50px;
+            margin-top: 5px;
+            margin-right: 20px;
+        }
+
+        .navbar .navbar-header > span {
+            vertical-align: middle;
+        }
+
+        .navbar .navbar-header .hamburger {
+            display: inline-block;
+            cursor: pointer;
+            margin: 0 10px;
+            padding-left: 10px;
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+
+            .navbar .navbar-header .hamburger span {
+                backface-visibility: hidden;
+                position: absolute;
+                left: 10px;
+                border-top: 2px solid var(--font-gray);
+                width: 50%;
+                transition: 0.55s;
+            }
+
+                .navbar .navbar-header .hamburger span:nth-child(1) {
+                    top: 10px;
+                }
+
+                .navbar .navbar-header .hamburger span:nth-child(2) {
+                    top: 19px;
+                }
+
+                .navbar .navbar-header .hamburger span:nth-child(3) {
+                    top: 28px;
+                }
+
+            .navbar .navbar-header .hamburger.open span:nth-child(1) {
+                backface-visibility: hidden;
+                top: 20px;
+                transform: rotate(45deg);
+                transition: 0.55s 0.5s;
+            }
+
+            .navbar .navbar-header .hamburger.open span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .navbar .navbar-header .hamburger.open span:nth-child(3) {
+                backface-visibility: hidden;
+                top: 20px;
+                transform: rotate(-45deg);
+                transition: 0.55s 0.5s;
+            }
