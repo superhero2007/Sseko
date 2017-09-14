@@ -35,9 +35,13 @@
     justify-content: center;
 }
 
+    #pv-filters .Select-control {
+        border-radius: 8px;
+    }
+    
     #pv-filters > div:nth-child(1),
     #pv-filters > div:nth-child(3) {
-        width: 200px;
+        width: 150px;
     }
 
 @media (min-width: 768px) {

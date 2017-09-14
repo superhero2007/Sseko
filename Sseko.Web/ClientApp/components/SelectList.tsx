@@ -11,7 +11,8 @@ interface SelectListProps {
     onChange: (event: any) => any,
     error: string,
     initialValue?: any,
-    multi?: boolean
+    multi?: boolean,
+    clearable?: boolean
 }
 
 interface SelectListState {
@@ -58,6 +59,7 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
                     value={this.state.element}
                     className={(this.props.error ? "form-control-danger" : "")}
                     multi={this.props.multi}
+                    clearable={this.props.clearable || false}
                     delimiter={','}
                 />
                 {this.props.children}

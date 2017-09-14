@@ -13,25 +13,26 @@ const storeCreditIconActive = require('../../img/storecredit-active-ico.png');
 const logoutIconActive = require('../../img/logout-active-ico.png');
 
 export const FellowLinkGroup = () => {
-        return ( // Refer to version control history when adding to navigation
-            <ul className='nav navbar-top-links navbar-right'>
-                <NavBarLinkSingle
-                    href='/Reports/PersonalVolume'
-                    icon={{dashboardIcon}}
-                    label='Personal Volume'
-                    exact={false}
-                />
-                <NavBarLinkSingle
-                    href='/Reports/Downline'
-                    icon={{reportsIcon}}
-                    label='Downline Summary'
-                    exact={false}
-                />
-                <NavBarLinkSingle
-                    href='/Login'
-                    label='Log out'
-                    exact={false}
-                />
-            </ul>
-        );
+    return (
+        <ul className="nav" id="side-menu">
+            <li className="nav-header-custom"></li>
+            <NavBarLinkSingle
+                href='/Reports/PersonalVolume'
+                //icon={dashboardIcon}
+                label='Personal Volume'
+                exact={false}
+            />
+            <NavBarLinkSingle
+                href='/Reports/Downline'
+                //icon={reportsIcon}
+                label='Downline Summary'
+                exact={false}
+            />
+            <NavBarLinkSingle
+                href='/Login'
+                label='Log out'
+                exact={false}
+            />
+        </ul>
+    );
 }

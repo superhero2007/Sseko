@@ -9,10 +9,10 @@ import { ButtonGroup } from '../../components/ButtonGroup';
 //import TotalGroup from '../../components/Totals/TotalGroup';
 import { Totals, Total } from './HelperTotals';
 import { Label } from "../../components/Label";
-const balanceIcon = require('../../img/balance.png');
-const personIcon = require('../../img/personal-volume.png');
-const salesIcon = require('../../img/commissionable-sales.png');
-const transactionsIcon = require('../../img/transaction.png');
+const balanceIcon = require<string>('../../img/balance.png');
+const personIcon = require<string>('../../img/personal-volume.png');
+const salesIcon = require<string>('../../img/commissionable-sales.png');
+const transactionsIcon = require<string>('../../img/transaction.png');
 
 interface PvReportProps {
     dateFilter: { start: any, end: any };
@@ -47,6 +47,7 @@ export const PvReport = (props: PvReportProps) =>
                     //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
                     options={timeOptions}
                     initialValue={timeOptions[0]}
+                    clearable={false}
                     onChange={props.onMonthChange}
                 />
             </div>
