@@ -1,0 +1,108 @@
+﻿$btn-3d-color: #FDA868;
+$btn-3d-font-color: #FFF;
+$btn-3d-side-box-shadow: 0 8px 0 darken($btn-3d-color, 10%);
+$btn-3d-text-shadow: 0 -1px 1px transparentize($btn-3d-color, .3);
+
+/* Animated 3d buttons */
+.btn-3d {
+    display: inline-block;
+    position: relative;
+    z-index: 10;
+    border-radius: 8px;
+    padding: 0;
+    margin: -4px 2px 0px 2px;
+    border: none;
+    background: none !important;
+    outline: none !important;
+    box-shadow: $btn-3d-side-box-shadow, 0 15px 20px rgba(0, 0, 0, .3);
+    transition: box-shadow .1s ease-in-out;
+    font-size: 18px;
+    color: $btn-3d-font-color !important;
+}
+
+.btn-3d.selected {
+    box-shadow: $btn-3d-side-box-shadow, 0 12px 10px rgba(0, 0, 0, .3);
+}
+
+.btn-3d.selected > span {
+    transform: translate(0, 4px);
+}
+
+.btn-3d.selected:active {
+    box-shadow: $btn-3d-side-box-shadow, 0 10px 8px rgba(0, 0, 0, .3);
+}
+
+.btn-3d.selected:active > span {
+    transform: translate(0, 6px);
+}
+
+.btn-3d:active {
+    box-shadow: $btn-3d-side-box-shadow, 0 10px 8px rgba(0, 0, 0, .3);
+}
+
+.btn-3d:active > span {
+    transform: translate(0, 6px);
+}
+
+.btn-3d > span {
+    display: inline-block;
+    position: relative;
+    z-index: 11;
+    border-radius: 8px;
+    padding: 8px 8px;
+    background-color: darken($btn-3d-color, 10%);
+    background-image: linear-gradient(to bottom, transparentize(lighten($btn-3d-color, 15%), .2), transparentize(lighten($btn-3d-color, 25%), .8));
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, .2);
+    line-height: 1;
+    text-shadow: $btn-3d-text-shadow;
+    transition: background-color .2s ease-in-out, text-shadow .2s ease-in-out, transform .1s ease-in-out;
+}
+
+.btn-3d:hover > span {
+    background-color: $btn-3d-color;
+    $glow: 0 0 5px rgba(255, 255, 255, .8);
+    text-shadow: $btn-3d-text-shadow, $glow;
+}
+
+.btn-3d:not(.selected) {
+    z-index: 11;
+}
+
+.btn-3d:not(.selected) > span {
+    z-index: 15;
+}
+
+/* The text of the button */
+.btn-3d:not(.selected) > span > span {
+    opacity: 0.5;
+}
+/* */
+
+@media (min-width: 768px) {
+    /* Support button groups */
+    .btn-group .btn-3d + .btn-3d {
+        margin-left: -2px;
+    }
+
+    .btn-group > .btn-3d:not(:first-child):not(:last-child),
+    .btn-group > .btn-3d:not(:first-child):not(:last-child) > span {
+        border-radius: 0;
+    }
+
+    .btn-group > .btn-3d:first-child {
+        margin-left: 0;
+    }
+
+    .btn-group > .btn-3d:first-child:not(:last-child),
+    .btn-group > .btn-3d:first-child:not(:last-child) > span {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .btn-group > .btn-3d:last-child:not(:first-child),
+    .btn-group > .btn-3d:last-child:not(:first-child) > span {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    /* */
+}

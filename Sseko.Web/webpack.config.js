@@ -4,6 +4,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const merge = require('webpack-merge');
 
+const extractSass = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    //disable: process.env.NODE_ENV === "development"
+});
+
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
 
@@ -30,6 +35,12 @@ module.exports = (env) => {
             rules: [
                 { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
                 { test: /\.css$/, use: ExtractTextPlugin.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) },
+                { test: /\.scss$/, use: [
+                        { loader: "style-loader" }, // translates CSS into CommonJS
+                        { loader: "css-loader" },  // compiles Sass to CSS
+                        { loader: "sass-loader" } // compiles Sass to CSS
+                    ]
+                },
                 {
                     test: /\.(png|jpg|jpeg|gif|svg)$/,
                     use: {
@@ -52,6 +63,7 @@ module.exports = (env) => {
         },
         output: { path: path.join(__dirname, clientBundleOutputDir) },
         plugins: [
+            //extractSass,
             new ExtractTextPlugin('site.css'),
             new webpack.ProvidePlugin({
                 //$: "jquery",
