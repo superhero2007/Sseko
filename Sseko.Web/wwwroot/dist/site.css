@@ -11676,6 +11676,10 @@ body {
     #pv-filters .Select-control {
         border-radius: 8px;
     }
+
+    #pv-filters > div {
+        margin: 0 10px;
+    }
     
     #pv-filters > div:nth-child(1),
     #pv-filters > div:nth-child(3) {
@@ -11684,9 +11688,9 @@ body {
 
 @media (min-width: 768px) {
     #pv-filters > div:nth-child(2) {
-        width: 600px;
+        width: max-content;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
     }
 }
 

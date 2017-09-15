@@ -3522,8 +3522,9 @@ exports.PvReport = function (props) {
                     options: timeOptions, initialValue: timeOptions[0], clearable: false, onChange: props.onMonthChange })),
             React.createElement("div", null,
                 React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "pvreport-transactiontype", name: "programs", error: "", label: "Transaction Type", onChange: props.onSaleTypeChange, options: saleTypeOptions, initialValue: props.typeFilter, multi: true })),
-            React.createElement("div", null,
-                React.createElement(SelectList_1.SelectList, { htmlId: "hostess-select", name: "hostesses", error: "", label: "Hostess", onChange: props.onHostessChange, options: props.hostesses, multi: true }))),
+            props.hasHostesses &&
+                React.createElement("div", null,
+                    React.createElement(SelectList_1.SelectList, { htmlId: "hostess-select", name: "hostesses", error: "", label: "Hostess", onChange: props.onHostessChange, options: props.hostesses, multi: true }))),
         React.createElement(DataTable_1.DataTable, { label: "Personal Volume", rows: props.rows, columns: props.columns, onGridSort: props.onGridSort, isLoading: props.loading }));
 };
 var saleTypeOptions = [
@@ -3584,6 +3585,14 @@ var PvReportContainer = /** @class */ (function (_super) {
     __extends(PvReportContainer, _super);
     function PvReportContainer(props) {
         var _this = _super.call(this, props) || this;
+        _this.getHasHostesses = function () {
+            for (var i in _this.props.hostesses) {
+                if (_this.props.hostesses[i].label) {
+                    return true;
+                }
+            }
+            return false;
+        };
         _this.getColumns = function () {
             var columns = [
                 { key: 'date', name: 'DATE', sortable: true },
@@ -3672,7 +3681,7 @@ var PvReportContainer = /** @class */ (function (_super) {
         return this.props.rows[i];
     };
     PvReportContainer.prototype.render = function () {
-        return React.createElement(PvReport_1.PvReport, { dateFilter: this.props.dateFilter, hostesses: this.props.hostesses, hostessFilter: this.props.hostessFilter, onGridSort: this.onGridSort, onHostessChange: this.onHostessChange, onMonthChange: this.onMonthChange, onSaleTypeChange: this.onSaleTypeChange, rowGetter: this.rowGetter, rows: this.props.rows, typeFilter: this.props.typeFilter, loading: this.props.loading, totalSales: this.calculateTotalSales(), totalTransactions: this.props.rows.length, columns: this.getColumns() });
+        return React.createElement(PvReport_1.PvReport, { dateFilter: this.props.dateFilter, hasHostesses: this.getHasHostesses(), hostesses: this.props.hostesses, hostessFilter: this.props.hostessFilter, onGridSort: this.onGridSort, onHostessChange: this.onHostessChange, onMonthChange: this.onMonthChange, onSaleTypeChange: this.onSaleTypeChange, rowGetter: this.rowGetter, rows: this.props.rows, typeFilter: this.props.typeFilter, loading: this.props.loading, totalSales: this.calculateTotalSales(), totalTransactions: this.props.rows.length, columns: this.getColumns() });
     };
     return PvReportContainer;
 }(React.Component));

@@ -24,6 +24,15 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         this.calculateTotalSales = this.calculateTotalSales.bind(this);
     }
 
+    getHasHostesses = () => {
+        for (let i in this.props.hostesses) {
+            if (this.props.hostesses[i].label) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getColumns = () => {
         let columns = [
             { key: 'date', name: 'DATE', sortable: true },
@@ -111,6 +120,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     public render() {
         return <PvReport
             dateFilter={this.props.dateFilter}
+            hasHostesses={this.getHasHostesses()}
             hostesses={this.props.hostesses}
             hostessFilter={this.props.hostessFilter}
             onGridSort={this.onGridSort}

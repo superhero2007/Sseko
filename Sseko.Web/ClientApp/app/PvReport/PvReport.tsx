@@ -17,6 +17,7 @@ const transactionsIcon = require<string>('../../img/transaction.png');
 
 interface PvReportProps {
     dateFilter: { start: any, end: any };
+    hasHostesses: boolean;
     hostesses: string[];
     hostessFilter: string;
     onGridSort: (sortColumn: string, sortDir: string) => any;
@@ -64,17 +65,19 @@ export const PvReport = (props: PvReportProps) =>
                     multi
                 />
             </div>
-            <div>
-                <SelectList
-                    htmlId={"hostess-select"}
-                    name={"hostesses"}
-                    error={""}
-                    label={"Hostess"}
-                    onChange={props.onHostessChange}
-                    options={props.hostesses}
-                    multi
-                />
-            </div>
+            {props.hasHostesses &&
+                <div>
+                    <SelectList
+                        htmlId={"hostess-select"}
+                        name={"hostesses"}
+                        error={""}
+                        label={"Hostess"}
+                        onChange={props.onHostessChange}
+                        options={props.hostesses}
+                        multi
+                    />
+                </div>
+            }
         </div>
         <DataTable
             label="Personal Volume"
