@@ -26,7 +26,7 @@ namespace Sseko.BLL.Services
 
         public async Task<DataOperations.Result<Report>> GetPvSummaryReport(int fellowId)
         {
-            return  await _ds.CreateDownlineReport(fellowId);
+            return  await _ds.CreatePvReport(fellowId);
         }
 
         public async Task<DataOperations.ResultList<User>> GetNewFellows(DateTime? lastUpdated)

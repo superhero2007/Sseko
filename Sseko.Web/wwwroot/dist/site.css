@@ -11633,7 +11633,10 @@ body {
                 /*color: var(--gray);*/
             }
 #pv-totals {
+    max-width: 900px;
+    margin: auto;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     color: var(--font-gray);
 }
@@ -11666,6 +11669,7 @@ body {
 
 #pv-filters {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
