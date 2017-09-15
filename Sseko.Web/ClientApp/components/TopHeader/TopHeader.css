@@ -19,7 +19,7 @@
         .navbar .navbar-header img {
             height: 50px;
             margin-top: 5px;
-            margin-right: 20px;
+            margin-right: 25px;
         }
 
         .navbar .navbar-header > span {
@@ -29,7 +29,7 @@
         .navbar .navbar-header .hamburger {
             display: inline-block;
             cursor: pointer;
-            margin: 0 10px;
+            margin: 0 15px;
             padding-left: 10px;
             position: relative;
             width: 40px;
