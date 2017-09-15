@@ -1,4 +1,9 @@
-﻿.navbar {
+﻿/* Inspinia TopHeader container */
+#page-wrapper > div.row.border-bottom {
+    border-color: var(--nav-border-color);
+}
+
+.navbar {
     margin-bottom: 0;
     z-index: 10000;
 }
