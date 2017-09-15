@@ -10981,14 +10981,10 @@ body {
   overflow: visible;
   clip: auto;
 }
-/* Inspinia TopHeader container */
-#page-wrapper > div.row.border-bottom {
-    border-color: var(--nav-border-color);
-}
-
 .navbar {
     margin-bottom: 0;
-    z-index: 10000;
+    background: var(--nav-color) !important;
+    border-bottom: 1px solid var(--nav-border-gray) !important;
 }
 
     .navbar .navbar-header {
@@ -11105,11 +11101,13 @@ body {
     display: inline-flex !important;
     padding: 0 8px;
     border: none;
-    background: var(--orange);
+    background-color: #fc8b36;
+    background-image: linear-gradient(to bottom, rgba(254, 212, 180, 0.8), rgba(255, 241, 230, 0.2));
+    box-shadow: 0 8px #fd9445, inset 0 -1px 1px rgba(255, 255, 255, .2) !important;
     color: white;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 100;
-    text-shadow: 0.1px 1px .5px rgba(150, 150, 150, .5);
+    text-shadow: 0 -1px 1px rgba(253, 168, 104, 0.7);
 }
 
     .react-grid-HeaderCell:hover {
@@ -11144,12 +11142,12 @@ body {
 }
 
 .react-grid-Row--odd .react-grid-Cell {
-    background: #f9f9f9;
+    background: var(--nav-gray);
 }
 
 .react-grid-Cell {
     border: none;
-    --row-outline: 1px solid var(--nav-gray);
+    --row-outline: 1px solid var(--nav-border-gray);
     border-bottom: var(--row-outline);
 }
 

@@ -1,6 +1,5 @@
 ﻿$btn-3d-color: #FDA868;
-$btn-3d-font-color: #FFF;
-$btn-3d-side-box-shadow: 0 8px 0 darken($btn-3d-color, 7%);
+$btn-3d-side-box-shadow: 0 8px darken($btn-3d-color, 7%);
 $btn-3d-text-shadow: 0 -1px 1px transparentize($btn-3d-color, .3);
 
 /* Animated 3d buttons */
@@ -16,8 +15,6 @@ $btn-3d-text-shadow: 0 -1px 1px transparentize($btn-3d-color, .3);
     outline: none !important;
     box-shadow: $btn-3d-side-box-shadow, 0 15px 20px rgba(0, 0, 0, .3);
     transition: box-shadow .1s ease-in-out;
-    font-size: 18px;
-    color: $btn-3d-font-color !important;
 }
 
 .btn-3d.selected {
@@ -54,6 +51,9 @@ $btn-3d-text-shadow: 0 -1px 1px transparentize($btn-3d-color, .3);
     background-image: linear-gradient(to bottom, transparentize(lighten($btn-3d-color, 15%), .2), transparentize(lighten($btn-3d-color, 25%), .8));
     box-shadow: inset 0 -1px 1px rgba(255, 255, 255, .2);
     line-height: 1;
+    color: white !important;
+    font-size: 18px;
+    font-weight: 100;
     text-shadow: $btn-3d-text-shadow;
     transition: background-color .2s ease-in-out, text-shadow .2s ease-in-out, transform .1s ease-in-out;
 }

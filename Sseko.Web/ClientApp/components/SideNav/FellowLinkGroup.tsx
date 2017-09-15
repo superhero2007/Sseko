@@ -15,7 +15,6 @@ const logoutIconActive = require<string>('../../img/logout-active-ico.png');
 export const FellowLinkGroup = () => {
     return (
         <ul className="nav" id="side-menu">
-            <li className="nav-header-custom"></li>
             <NavBarLinkSingle
                 href='/Reports/PersonalVolume'
                 imgSrc={reportsIcon}

@@ -1,11 +1,7 @@
-﻿/* Inspinia TopHeader container */
-#page-wrapper > div.row.border-bottom {
-    border-color: var(--nav-border-color);
-}
-
-.navbar {
+﻿.navbar {
     margin-bottom: 0;
-    z-index: 10000;
+    background: var(--nav-color) !important;
+    border-bottom: 1px solid var(--nav-border-gray) !important;
 }
 
     .navbar .navbar-header {

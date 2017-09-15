@@ -626,9 +626,9 @@ var Layout = /** @class */ (function (_super) {
     };
     Layout.prototype.render = function () {
         return (React.createElement("div", { id: "wrapper" },
+            React.createElement(TopHeader_1.default, { role: AuthService_1.GetRole() }),
             React.createElement(Navigation_1.default, { role: AuthService_1.GetRole() }),
             React.createElement("div", { id: "page-wrapper" },
-                React.createElement(TopHeader_1.default, { role: AuthService_1.GetRole() }),
                 React.createElement("div", { className: "wrapper wrapper-content" }, this.props.children),
                 React.createElement(Footer_1.default, null))));
     };
@@ -1986,57 +1986,16 @@ var dataTableRowHeaderHeight = 35;
 var horizontalScrollbarHeight = 17;
 var DataTable = /** @class */ (function (_super) {
     __extends(DataTable, _super);
-    function DataTable(props) {
-        var _this = _super.call(this, props) || this;
-        // resize datatable
-        _this.scale = function () {
-            $('.grid-container').each(function () {
-                var scaled = $(this), parent = scaled.parent(), ratio = parent.width() / scaled.width(), padding = scaled.height() * ratio;
-                scaled.css({
-                    'position': 'relative',
-                    'left': '50%',
-                    'transform': 'scale(' + Math.min(ratio, 1.8) + ') translateX(-50%)',
-                    'transform-origin': 'left top',
-                    'margin': '0'
-                });
-                //parent.css('padding-top', padding); // keeps the parent height in ratio to child resize
-            });
-        };
+    function DataTable() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.rowGetter = function (i) {
             return _this.props.rows[i];
         };
         _this.getTableWidth = function () {
             return _this.props.columns.reduce(function (tableWidth, column) { return tableWidth + column["width"]; }, 0) + 34;
         };
-        //$(window).on("resize", () => {
-        //    this.scale();
-        //});
-        // throttle resize events
-        var running = false;
-        window.addEventListener("resize", function () {
-            if (running) {
-                return;
-            }
-            running = true;
-            requestAnimationFrame(function () {
-                window.dispatchEvent(new CustomEvent("optimizedResize"));
-                running = false;
-            });
-        });
-        var scale = _this.scale;
-        window.addEventListener("optimizedResize", function () {
-            scale();
-        });
         return _this;
     }
-    DataTable.prototype.componentDidUpdate = function (nextProps) {
-        if (this.props.rows !== nextProps.rows) {
-            this.scale();
-        }
-    };
-    DataTable.prototype.componentDidMount = function () {
-        this.scale();
-    };
     DataTable.prototype.render = function () {
         var tableWidth = this.getTableWidth();
         return (React.createElement("div", { className: "grid-container", style: { width: tableWidth } },
@@ -4402,8 +4361,6 @@ var React = __webpack_require__(0);
 var NavBarLink_1 = __webpack_require__(81);
 exports.AdminLinkGroup = function () {
     return (React.createElement("ul", { className: "nav", id: "side-menu" },
-        React.createElement("li", { className: "nav-header" },
-            React.createElement("div", { className: "logo-element" }, "IN+")),
         React.createElement(NavBarLink_1.NavBarLink, { href: '/', label: 'Home', exact: true }),
         React.createElement(NavBarLink_1.NavBarLink, { href: '/Manage/Users', label: 'Manage Users', exact: false })));
 };
@@ -4429,7 +4386,6 @@ var storeCreditIconActive = __webpack_require__(123);
 var logoutIconActive = __webpack_require__(117);
 exports.FellowLinkGroup = function () {
     return (React.createElement("ul", { className: "nav", id: "side-menu" },
-        React.createElement("li", { className: "nav-header-custom" }),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Reports/PersonalVolume', imgSrc: reportsIcon, label: 'Personal Volume', exact: false }),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Reports/Downline', imgSrc: reportsIcon, label: 'Downline Summary', exact: false }),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Login', imgSrc: logoutIcon, label: 'Log out', exact: false })));
@@ -4539,6 +4495,7 @@ var TopHeader = /** @class */ (function (_super) {
     __extends(TopHeader, _super);
     function TopHeader(props) {
         var _this = _super.call(this, props) || this;
+        // From Inspinia Template
         _this.toggleNavigation = function (e) {
             e.preventDefault();
             $("body").toggleClass("mini-navbar");
@@ -4550,18 +4507,17 @@ var TopHeader = /** @class */ (function (_super) {
         return _this;
     }
     TopHeader.prototype.render = function () {
-        return (React.createElement("div", { className: "row border-bottom" },
-            React.createElement("nav", { className: "navbar navbar-static-top white-bg", role: "navigation", style: { marginLeft: !this.state.sideNavCollapsed && "-220px" || "-70px" /* Make TopHeader as wide as window */ } },
-                React.createElement("div", { className: "navbar-header" },
-                    React.createElement("span", { className: "hamburger" + (this.state.sideNavCollapsed ? "" : " open"), onClick: this.toggleNavigation },
-                        React.createElement("span", { className: "hamburger-top" }),
-                        React.createElement("span", { className: "hamburger-middle" }),
-                        React.createElement("span", { className: "hamburger-bottom" })),
-                    React.createElement("img", { src: loginLogo }),
-                    React.createElement("span", null, "FELLOW INFORMATION")),
-                React.createElement("ul", { className: "nav navbar-top-links navbar-right" },
-                    React.createElement("li", null,
-                        React.createElement(react_router_dom_1.NavLink, { to: "/Login" }, "Log Out"))))));
+        return (React.createElement("nav", { className: "navbar navbar-static-top", role: "navigation" },
+            React.createElement("div", { className: "navbar-header" },
+                React.createElement("span", { className: "hamburger" + (this.state.sideNavCollapsed ? "" : " open"), onClick: this.toggleNavigation },
+                    React.createElement("span", { className: "hamburger-top" }),
+                    React.createElement("span", { className: "hamburger-middle" }),
+                    React.createElement("span", { className: "hamburger-bottom" })),
+                React.createElement("img", { src: loginLogo }),
+                React.createElement("span", null, "FELLOW INFORMATION")),
+            React.createElement("ul", { className: "nav navbar-top-links navbar-right" },
+                React.createElement("li", null,
+                    React.createElement(react_router_dom_1.NavLink, { to: "/Login" }, "Log Out")))));
     };
     return TopHeader;
 }(React.Component));
@@ -6633,7 +6589,7 @@ exports = module.exports = __webpack_require__(109)(undefined);
 
 
 // module
-exports.push([module.i, "/* Animated 3d buttons */\n.btn-3d {\n  display: inline-block;\n  position: relative;\n  z-index: 10;\n  border-radius: 8px;\n  padding: 0;\n  margin: -4px 2px 0px 2px;\n  border: none;\n  background: none !important;\n  outline: none !important;\n  box-shadow: 0 8px 0 #fd9445, 0 15px 20px rgba(0, 0, 0, 0.3);\n  transition: box-shadow .1s ease-in-out;\n  font-size: 18px;\n  color: #FFF !important; }\n\n.btn-3d.selected {\n  box-shadow: 0 8px 0 #fd9445, 0 12px 10px rgba(0, 0, 0, 0.3); }\n\n.btn-3d.selected > span {\n  transform: translate(0, 4px); }\n\n.btn-3d.selected:active {\n  box-shadow: 0 8px 0 #fd9445, 0 10px 8px rgba(0, 0, 0, 0.3); }\n\n.btn-3d.selected:active > span {\n  transform: translate(0, 6px); }\n\n.btn-3d:active {\n  box-shadow: 0 8px 0 #fd9445, 0 10px 8px rgba(0, 0, 0, 0.3); }\n\n.btn-3d:active > span {\n  transform: translate(0, 6px); }\n\n.btn-3d > span {\n  display: inline-block;\n  position: relative;\n  z-index: 11;\n  border-radius: 8px;\n  padding: 8px 8px;\n  background-color: #fc8b36;\n  background-image: linear-gradient(to bottom, rgba(254, 212, 180, 0.8), rgba(255, 241, 230, 0.2));\n  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.2);\n  line-height: 1;\n  text-shadow: 0 -1px 1px rgba(253, 168, 104, 0.7);\n  transition: background-color .2s ease-in-out, text-shadow .2s ease-in-out, transform .1s ease-in-out; }\n\n.btn-3d:hover > span {\n  background-color: #FDA868;\n  text-shadow: 0 -1px 1px rgba(253, 168, 104, 0.7), 0 0 5px rgba(255, 255, 255, 0.8); }\n\n.btn-3d:not(.selected) {\n  z-index: 11; }\n\n.btn-3d:not(.selected) > span {\n  z-index: 15; }\n\n/* The text of the button */\n.btn-3d:not(.selected) > span > span {\n  opacity: 0.5; }\n\n/* */\n@media (min-width: 768px) {\n  /* Support button groups */\n  .btn-group .btn-3d + .btn-3d {\n    margin-left: -2px; }\n  .btn-group > .btn-3d:not(:first-child):not(:last-child),\n  .btn-group > .btn-3d:not(:first-child):not(:last-child) > span {\n    border-radius: 0; }\n  .btn-group > .btn-3d:first-child {\n    margin-left: 0; }\n  .btn-group > .btn-3d:first-child:not(:last-child),\n  .btn-group > .btn-3d:first-child:not(:last-child) > span {\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0; }\n  .btn-group > .btn-3d:last-child:not(:first-child),\n  .btn-group > .btn-3d:last-child:not(:first-child) > span {\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0; }\n  /* */ }\n", ""]);
+exports.push([module.i, "/* Animated 3d buttons */\n.btn-3d {\n  display: inline-block;\n  position: relative;\n  z-index: 10;\n  border-radius: 8px;\n  padding: 0;\n  margin: -4px 2px 0px 2px;\n  border: none;\n  background: none !important;\n  outline: none !important;\n  box-shadow: 0 8px #fd9445, 0 15px 20px rgba(0, 0, 0, 0.3);\n  transition: box-shadow .1s ease-in-out; }\n\n.btn-3d.selected {\n  box-shadow: 0 8px #fd9445, 0 12px 10px rgba(0, 0, 0, 0.3); }\n\n.btn-3d.selected > span {\n  transform: translate(0, 4px); }\n\n.btn-3d.selected:active {\n  box-shadow: 0 8px #fd9445, 0 10px 8px rgba(0, 0, 0, 0.3); }\n\n.btn-3d.selected:active > span {\n  transform: translate(0, 6px); }\n\n.btn-3d:active {\n  box-shadow: 0 8px #fd9445, 0 10px 8px rgba(0, 0, 0, 0.3); }\n\n.btn-3d:active > span {\n  transform: translate(0, 6px); }\n\n.btn-3d > span {\n  display: inline-block;\n  position: relative;\n  z-index: 11;\n  border-radius: 8px;\n  padding: 8px 8px;\n  background-color: #fc8b36;\n  background-image: linear-gradient(to bottom, rgba(254, 212, 180, 0.8), rgba(255, 241, 230, 0.2));\n  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.2);\n  line-height: 1;\n  color: white !important;\n  font-size: 18px;\n  font-weight: 100;\n  text-shadow: 0 -1px 1px rgba(253, 168, 104, 0.7);\n  transition: background-color .2s ease-in-out, text-shadow .2s ease-in-out, transform .1s ease-in-out; }\n\n.btn-3d:hover > span {\n  background-color: #FDA868;\n  text-shadow: 0 -1px 1px rgba(253, 168, 104, 0.7), 0 0 5px rgba(255, 255, 255, 0.8); }\n\n.btn-3d:not(.selected) {\n  z-index: 11; }\n\n.btn-3d:not(.selected) > span {\n  z-index: 15; }\n\n/* The text of the button */\n.btn-3d:not(.selected) > span > span {\n  opacity: 0.5; }\n\n/* */\n@media (min-width: 768px) {\n  /* Support button groups */\n  .btn-group .btn-3d + .btn-3d {\n    margin-left: -2px; }\n  .btn-group > .btn-3d:not(:first-child):not(:last-child),\n  .btn-group > .btn-3d:not(:first-child):not(:last-child) > span {\n    border-radius: 0; }\n  .btn-group > .btn-3d:first-child {\n    margin-left: 0; }\n  .btn-group > .btn-3d:first-child:not(:last-child),\n  .btn-group > .btn-3d:first-child:not(:last-child) > span {\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0; }\n  .btn-group > .btn-3d:last-child:not(:first-child),\n  .btn-group > .btn-3d:last-child:not(:first-child) > span {\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0; }\n  /* */ }\n", ""]);
 
 // exports
 

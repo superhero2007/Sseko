@@ -26,9 +26,9 @@ export class Layout extends React.Component<{}, {}> {
     render() {
         return (
             <div id="wrapper">
+                <TopHeader role={GetRole()} />
                 <Navigation role={GetRole()} />
                 <div id="page-wrapper">
-                    <TopHeader role={GetRole()} />
                     <div className="wrapper wrapper-content">
                         {this.props.children}
                     </div>

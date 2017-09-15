@@ -17,60 +17,6 @@ const dataTableRowHeaderHeight = 35;
 const horizontalScrollbarHeight = 17;
 
 export class DataTable extends React.Component<DataTableProps, {}> {
-    constructor(props) {
-        super(props);
-
-        //$(window).on("resize", () => {
-        //    this.scale();
-        //});
-
-        // throttle resize events
-        var running = false;
-        window.addEventListener("resize", () => {
-            if (running) { return; }
-            running = true;
-            requestAnimationFrame(function () {
-                window.dispatchEvent(new CustomEvent("optimizedResize"));
-                running = false;
-            });
-        });
-
-        const scale = this.scale;
-        window.addEventListener("optimizedResize", function () {
-            scale();
-        });
-    }
-
-    componentDidUpdate(nextProps) {
-        if (this.props.rows !== nextProps.rows) {
-            this.scale();
-        }
-    }
-
-    componentDidMount() {
-        this.scale();
-    }
-
-    // resize datatable
-    scale = () => {
-        $('.grid-container').each(function () { // TODO remove jquery
-            var scaled = $(this),
-                parent = scaled.parent(),
-                ratio = parent.width() / scaled.width(),
-                padding = scaled.height() * ratio;
-
-            scaled.css({
-                'position': 'relative',
-                'left': '50%',
-                'transform': 'scale(' + Math.min(ratio, 1.8) + ') translateX(-50%)',
-                'transform-origin': 'left top',
-                'margin': '0'
-            });
-
-            //parent.css('padding-top', padding); // keeps the parent height in ratio to child resize
-        })
-    }
-
     rowGetter = (i) => {
         return this.props.rows[i];
     }
