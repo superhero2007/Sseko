@@ -29,7 +29,6 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         let tableWidth = this.getTableWidth()
         return (
             <div className="grid-container" style={{ width: tableWidth }}>
-                <div className="grid-label">{this.props.label}</div>
                 <ReactDataGrid
                     onGridSort={this.props.onGridSort}
                     columns={this.props.columns}

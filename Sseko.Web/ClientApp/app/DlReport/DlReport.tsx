@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import '../../css/grid.css';
+import '../../css/grid.scss';
 import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
 import { ButtonGroup } from '../../components/ButtonGroup';
