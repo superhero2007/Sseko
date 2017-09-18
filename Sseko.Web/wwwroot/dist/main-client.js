@@ -2272,56 +2272,9 @@ module.exports = (__webpack_require__(1))(141);
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var api = __webpack_require__(8);
-exports.actionCreators = {
-    getDlReport: function () { return function (dispatch, getState) {
-        api.Reports.Downline()
-            .then(function (response) {
-            dispatch({ type: 'GET_DL_ROWS', payload: response.data });
-        });
-    }; },
-    updateLevelFilter: function (levelFilter) { return function (dispatch, getState) {
-        dispatch({ type: 'UPDATE_LEVEL_FILTER', payload: levelFilter });
-    }; },
-    updateSort: function (column, direction) { return function (dispatch, getState) {
-        dispatch({ type: 'UPDATE_DL_SORT', column: column, direction: direction });
-    }; }
-};
-var unloadedState = {
-    rows: [],
-    errors: '',
-    levelFilter: ["1", "2", "3"],
-    sortColumn: 'fellow',
-    sortDirection: 'ASC',
-    loading: true
-};
-exports.reducer = function (state, action) {
-    switch (action.type) {
-        case 'GET_DL_ROWS':
-            return __assign({}, state, { errors: '', rows: action.payload, loading: false });
-        case 'UPDATE_LEVEL_FILTER':
-            return __assign({}, state, { levelFilter: action.payload });
-        case 'UPDATE_DL_SORT':
-            return __assign({}, state, { sortColumn: action.column, sortDirection: action.direction });
-        default:
-            var exhaustiveCheck = action;
-    }
-    return state || unloadedState;
-};
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\AWTom\\Documents\\ssekofellows\\Sseko.Web\\ClientApp\\app\\DlReport\\DlReportStore.tsx'\n    at Error (native)");
 
 /***/ }),
 /* 25 */
