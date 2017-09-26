@@ -6077,8 +6077,8 @@ var Progress = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Progress.prototype.componentDidMount = function () {
-        var pace = window.pace;
-        window.Pace.start();
+        var pace = window.Pace;
+        pace.start();
     };
     Progress.prototype.render = function () {
         return (null);

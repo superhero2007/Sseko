@@ -4,8 +4,8 @@ import '../vendor/pace/pace.js';
 
 class Progress extends React.Component<{}, {}> {
     componentDidMount() {
-        const pace = (window as any).pace;
-        window.Pace.start();
+        const pace = (window as any).Pace;
+        pace.start();
     }
 
     render() {
