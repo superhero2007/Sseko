@@ -1,72 +1,117 @@
-﻿.navbar {
+﻿.navbar-margin-bottom {
+    background: white;
     margin-bottom: 0;
-    background: var(--nav-color) !important;
-    border-bottom: 1px solid var(--nav-border-gray) !important;
 }
-
-    .navbar .navbar-header {
-        height: 60px;
+    .navbar .navbar-header img {
+        height: 50px;
+        margin-top: 5px;
+        margin-right: 25px;
     }
 
-        .navbar .navbar-header button {
+    .navbar .navbar-header > span {
+        vertical-align: middle;
+    }
+
+        .body-small .navbar .navbar-header > span {
             margin-right: 20px;
         }
 
-        .navbar .navbar-header img {
-            height: 50px;
-            margin-top: 5px;
-            margin-right: 25px;
+    .navbar .navbar-header .hamburger {
+        display: inline-block;
+        cursor: pointer;
+        margin: 0 15px;
+        padding-left: 10px;
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+
+        .navbar .navbar-header .hamburger span {
+            backface-visibility: hidden;
+            position: absolute;
+            left: 10px;
+            border-top: 2px solid var(--font-gray);
+            width: 50%;
+            transition: 0.55s;
         }
 
-        .navbar .navbar-header > span {
-            vertical-align: middle;
+            .navbar .navbar-header .hamburger span:nth-child(1) {
+                top: 10px;
+            }
+
+            .navbar .navbar-header .hamburger span:nth-child(2) {
+                top: 19px;
+            }
+
+            .navbar .navbar-header .hamburger span:nth-child(3) {
+                top: 28px;
+            }
+
+        .navbar .navbar-header .hamburger.open span:nth-child(1) {
+            backface-visibility: hidden;
+            top: 20px;
+            transform: rotate(45deg);
+            transition: 0.55s 0.5s;
         }
 
-        .navbar .navbar-header .hamburger {
-            display: inline-block;
-            cursor: pointer;
-            margin: 0 15px;
-            padding-left: 10px;
-            position: relative;
-            width: 40px;
-            height: 40px;
+        .navbar .navbar-header .hamburger.open span:nth-child(2) {
+            opacity: 0;
         }
 
-            .navbar .navbar-header .hamburger span {
-                backface-visibility: hidden;
-                position: absolute;
-                left: 10px;
-                border-top: 2px solid var(--font-gray);
-                width: 50%;
-                transition: 0.55s;
-            }
+        .navbar .navbar-header .hamburger.open span:nth-child(3) {
+            backface-visibility: hidden;
+            top: 20px;
+            transform: rotate(-45deg);
+            transition: 0.55s 0.5s;
+        }
 
-                .navbar .navbar-header .hamburger span:nth-child(1) {
-                    top: 10px;
-                }
+.body-small .navbar .navbar-right .search-box {
+    display: none;
+}
 
-                .navbar .navbar-header .hamburger span:nth-child(2) {
-                    top: 19px;
-                }
+.navbar .navbar-right .search-box {
+    border: 1px solid lightgrey;
+    background: white;
+    border-radius: 5px;
+    margin: 0 28px;
+}
 
-                .navbar .navbar-header .hamburger span:nth-child(3) {
-                    top: 28px;
-                }
+    .navbar .navbar-right .search-box input {
+        border: 0;
+        margin: 5px 10px;
+        background: white;
+    }
 
-            .navbar .navbar-header .hamburger.open span:nth-child(1) {
-                backface-visibility: hidden;
-                top: 20px;
-                transform: rotate(45deg);
-                transition: 0.55s 0.5s;
-            }
+        .navbar .navbar-right .search-box input:focus {
+            border: 0;
+            outline: 0;
+        }
 
-            .navbar .navbar-header .hamburger.open span:nth-child(2) {
-                opacity: 0;
-            }
+    .navbar .navbar-right .search-box i {
+        margin-right: 10px;
+        float: right;
+        margin-top: 10px;
+        background: white;
+        color: lightgrey;
+    }
 
-            .navbar .navbar-header .hamburger.open span:nth-child(3) {
-                backface-visibility: hidden;
-                top: 20px;
-                transform: rotate(-45deg);
-                transition: 0.55s 0.5s;
-            }
+    .navbar .navbar-right .notification-box {
+        margin: 20px 12px;
+        position: relative;
+    }
+        .navbar .navbar-right .notification-box .label {
+            line-height: 12px;
+            padding: 2px 5px;
+            position: absolute;
+            right: 13px;
+            top: -6px;
+            border-radius: 50%;
+        }
+
+        .navbar .navbar-right .notification-box i {
+            font-size: 20px;
+        }
+
+    .navbar .navbar-right .profile-box {
+        margin: 6px 20px;
+    }

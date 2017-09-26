@@ -5,7 +5,8 @@ import { AdminLinkGroup } from './AdminLinkGroup';
 declare let $: any;
 
 interface NavigationProps {
-    role: string
+    role: string,
+    location: any
 }
 
 class Navigation extends React.Component<NavigationProps, {}> {
@@ -15,11 +16,11 @@ class Navigation extends React.Component<NavigationProps, {}> {
     }
 
     activeRoute(routeName) {
-        return -1 > -1 ? "active" : "";
+        return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
     }
 
     secondLevelActive(routeName) {
-        return -1 > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
+        return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
     }
 
     render() {

@@ -24,12 +24,14 @@ export class Layout extends React.Component<{}, {}> {
     }
 
     render() {
+        const wrapperClass = "gray-bg " + window.location.pathname;
         return (
             <div id="wrapper">
-                <TopHeader role={GetRole()} />
-                <Navigation role={GetRole()} />
-                <div id="page-wrapper">
-                    <div className="wrapper wrapper-content">
+                <Navigation role={GetRole()} location={window.location} />
+                <div id="page-wrapper" className={wrapperClass}>
+                    <TopHeader role={GetRole()} />
+                    <Progress />
+                    <div className="wrapper wrapper-content animated fadeInRight">
                         {this.props.children}
                     </div>
                     <Footer />

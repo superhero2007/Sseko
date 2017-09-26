@@ -7,6 +7,7 @@ import { AdminLinkGroup } from '../SideNav/AdminLinkGroup';
 import { smoothlyMenu } from '../Helpers';
 const loginLogo = require<string>('../../img/logo-login.png');
 declare let $: any;
+const balanceIcon = require<string>('../../img/profile_small.jpg');
 
 interface TopHeaderProps {
     role: string
@@ -33,7 +34,7 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
 
     render() {
         return (
-            <nav className="navbar navbar-static-top" role="navigation">
+            <nav className="navbar navbar-fixed-top navbar-margin-bottom" role="navigation">
                 <div className="navbar-header">
                     <span className={"hamburger" + (this.state.sideNavCollapsed ? "" : " open")} onClick={this.toggleNavigation}>
                         <span className="hamburger-top"></span>
@@ -45,12 +46,30 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
                 </div>
                 <ul className="nav navbar-top-links navbar-right">
                     <li>
-                        <NavLink to="/Login">
-                            Log Out
-                        </NavLink>
+                        <div className="search-box">
+                            <input type="text" placeholder="Search" />
+                            <i className="fa fa-search" aria-hidden="true"></i>
+                        </div>
                     </li>
-                </ul>
-            </nav>
+                    <li>
+                        <div className="notification-box">
+                            <i className="fa fa-bell-o"></i>
+                            <span className="label label-danger">4</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="notification-box">
+                            <i className="fa fa-envelope-open-o"></i>
+                            <span className="label label-danger">1</span>
+                         </div>
+                    </li>
+                    <li>
+                        <div className="profile-box">
+                            <img alt="image" className="img-circle" src={balanceIcon} />
+                        </div>
+                    </li>
+		        </ul>
+	        </nav>
         )
     }
 }

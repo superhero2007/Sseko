@@ -21,7 +21,7 @@ export function correctHeight() {
         if (navbarHeight > wrapperHeight) {
             pageWrapper.css("min-height", navbarHeight + "px");
         } else {
-            pageWrapper.css("min-height", $(window).height() - 60 + "px");
+            pageWrapper.css("min-height", $(window).height() - 64 + "px");
         }
     }
 }

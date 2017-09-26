@@ -19,6 +19,8 @@ module.exports = (env) => {
             vendor: [
                 'bootstrap',
                 'bootstrap/dist/css/bootstrap.css',
+                'font-awesome/css/font-awesome.css',
+                'animate.css/animate.min.css',
                 'domain-task',
                 'event-source-polyfill',
                 'history',
