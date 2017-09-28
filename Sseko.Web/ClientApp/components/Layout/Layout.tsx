@@ -27,7 +27,7 @@ export class Layout extends React.Component<{}, {}> {
         const wrapperClass = "gray-bg " + window.location.pathname;
         return (
             <div id="wrapper">
-                <Navigation role={GetRole()} location={window.location} />
+                <Navigation role={GetRole()} />
                 <div id="page-wrapper" className={wrapperClass}>
                     <TopHeader role={GetRole()} />
                     <Progress />

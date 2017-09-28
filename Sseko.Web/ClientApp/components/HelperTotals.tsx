@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Label } from "../../components/Label";
+import { Label } from "./Label";
 
 const moneyFormat = (amount) =>
     "$" + amount.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1,");

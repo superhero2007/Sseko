@@ -5,22 +5,13 @@ import { AdminLinkGroup } from './AdminLinkGroup';
 declare let $: any;
 
 interface NavigationProps {
-    role: string,
-    location: any
+    role: string
 }
 
 class Navigation extends React.Component<NavigationProps, {}> {
     componentDidMount() {
         const { menu } = this.refs;
         $(menu).metisMenu();
-    }
-
-    activeRoute(routeName) {
-        return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-    }
-
-    secondLevelActive(routeName) {
-        return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
     }
 
     render() {

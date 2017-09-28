@@ -32,6 +32,9 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
         this.props.updateLevelFilter(levels);
     }
 
+    onMonthChange(value) {
+    }
+
     public render() {
         return <DlReport
             rows={this.props.rows}
@@ -39,6 +42,11 @@ class DlReportContainer extends React.Component<DlReportProps, {}> {
             onGridSort={this.onGridSort}
             levelFilter={this.props.levelFilter}
             loading={this.props.loading}
+            totalSales={"$0"}
+            totalTransactions={0}
+            totalPersonalVolume={"$2,466"}
+            balance={"$749.82"}
+            onMonthChange={this.onMonthChange}
         />
     }
 }

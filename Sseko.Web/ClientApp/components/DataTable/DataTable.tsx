@@ -21,14 +21,9 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         return this.props.rows[i];
     }
 
-    getTableWidth = () => {
-        return this.props.columns.reduce((tableWidth, column) => tableWidth + column["width"], 0) + 34;
-    }
-
     render() {
-        let tableWidth = this.getTableWidth()
         return (
-            <div className="grid-container" style={{ width: tableWidth }}>
+            <div className="grid-container">
                 <ReactDataGrid
                     onGridSort={this.props.onGridSort}
                     columns={this.props.columns}
@@ -36,7 +31,6 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                     rowsCount={this.props.rows.length}
                     rowHeight={32}
                     headerRowHeight={32}
-                    minWidth={tableWidth}
                     minHeight={Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight)}
                     emptyRowsView={this.props.isLoading ? LoadingView : EmptyRowsView}
                 />

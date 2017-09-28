@@ -8,8 +8,10 @@ import { SelectList } from '../../components/SelectList';
 import { ButtonGroup } from '../../components/ButtonGroup';
 //import Total from '../../components/Totals/Total';
 //import TotalGroup from '../../components/Totals/TotalGroup';
-import { Totals, Total } from './HelperTotals';
+import { Totals, Total } from '../../components/HelperTotals';
 import { Label } from "../../components/Label";
+import { Header } from "../../components/Header";
+import { Option } from "../../components/Option";
 const balanceIcon = require<string>('../../img/balance.png');
 const personIcon = require<string>('../../img/personal-volume.png');
 const salesIcon = require<string>('../../img/commissionable-sales.png');
@@ -30,55 +32,21 @@ interface PvReportProps {
     loading: boolean;
     totalSales: string;
     totalTransactions: number;
+    totalPersonalVolume: string;
+    balance: string;
     columns: any;
 }
 
 export const PvReport = (props: PvReportProps) =>
     <Layout>
+        <Header />
         <Totals>
-            <Total iconSrc={salesIcon} label={"FILTERED COMMISSIONABLE SALES"} amount={props.totalSales} />
-            <Total iconSrc={transactionsIcon} label={"FILTERED TRANSACTIONS"} amount={props.totalTransactions} />
+            <Total iconSrc={balanceIcon} label={"BALANCE"} amount={props.balance} />
+            <Total iconSrc={personIcon} label={"TOTAL PERSONAL VOLUME"} amount={props.totalPersonalVolume} />
+            <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
+            <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} />
         </Totals>
-        <div className="row grid-sibling-row" id="pv-filters">
-            <div>
-                <SelectList
-                    htmlId={"pvreport-month"}
-                    name={""}
-                    error={""}
-                    label={"Time"}
-                    //options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((v, i) => ({ value: i, label: v }))}
-                    options={timeOptions}
-                    initialValue={timeOptions[0]}
-                    clearable={false}
-                    onChange={props.onMonthChange}
-                />
-            </div>
-            <div>
-                <ButtonGroup
-                    htmlId={"pvreport-transactiontype"}
-                    name={"programs"}
-                    error={""}
-                    label={"Transaction Type"}
-                    onChange={props.onSaleTypeChange}
-                    options={saleTypeOptions}
-                    initialValue={props.typeFilter}
-                    multi
-                />
-            </div>
-            {props.hasHostesses &&
-                <div>
-                    <SelectList
-                        htmlId={"hostess-select"}
-                        name={"hostesses"}
-                        error={""}
-                        label={"Hostess"}
-                        onChange={props.onHostessChange}
-                        options={props.hostesses}
-                        multi
-                    />
-                </div>
-            }
-        </div>
+        <Option title="Personal Volume" onMonthChange={props.onMonthChange} />
         <DataTable
             label="Personal Volume"
             rows={props.rows}
@@ -87,34 +55,3 @@ export const PvReport = (props: PvReportProps) =>
             isLoading={props.loading}
         />
     </Layout>
-
-const saleTypeOptions = [
-    { value: 'Personal Purchase', label: 'Personal Purchase' },
-    { value: 'Hostess Program', label: 'Hostess Program' },
-    { value: 'Affiliate Sale', label: 'Affiliate Sale' },
-    { value: 'Other', label: 'Other' }
-];
-
-const now = new Date();
-const timeOptions = [
-    {
-        value: [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "This month"
-    },
-    {
-        value: [new Date(now.getFullYear(), now.getMonth() - 3, 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "Last 3 months"
-    },
-    {
-        value: [new Date(now.getFullYear(), now.getMonth() - 6, 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "Last 6 months"
-    },
-    {
-        value: [new Date(now.getFullYear(), 0, 0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "This year"
-    },
-    {
-        value: [new Date(0), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-        label: "All time"
-    }
-]

@@ -17,10 +17,15 @@ const Admin = Authorization(['admin'])
 export const routes =
     <div>
         <Switch>
-            <Route exact path='/' component={Fellow(PvReport)} />
+            <Route path='/Dashboard' component={Fellow(PvReport)} />
             <Route path='/Login' component={Login} />
+
+            <Route exact path='/Reports/' component={Fellow(PvReport)} />
             <Route path='/Reports/PersonalVolume/' component={Fellow(PvReport)} />
             <Route path='/Reports/DownLine/' component={Fellow(DlReport)} />
+
+            <Route path='/Banners/' component={Fellow(DlReport)} />
+
             <Route path='/Manage/Users/' component={Admin(ManageUser)} />
 
             <Route path="/ForgotPassword" component={ForgotPassword} />
