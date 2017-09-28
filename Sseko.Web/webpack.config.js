@@ -66,9 +66,10 @@ module.exports = (env) => {
             //extractSass,
             new ExtractTextPlugin('site.css'),
             new webpack.ProvidePlugin({
-                //$: "jquery",
-                //jQuery: "jquery",
-                //Popper: "popper.js"
+                '$': "jquery",
+                'jQuery': "jquery",
+                'window.jQuery': "jquery",
+                'window.$': 'jquery'
             }),
             new webpack.DllReferencePlugin({
                 context: __dirname,

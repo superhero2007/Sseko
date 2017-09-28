@@ -14,14 +14,6 @@ class Navigation extends React.Component<NavigationProps, {}> {
         $(menu).metisMenu();
     }
 
-    activeRoute(routeName) {
-        return -1 > -1 ? "active" : "";
-    }
-
-    secondLevelActive(routeName) {
-        return -1 > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
-    }
-
     render() {
         return (
             <nav className="navbar-default navbar-static-side" role="navigation">

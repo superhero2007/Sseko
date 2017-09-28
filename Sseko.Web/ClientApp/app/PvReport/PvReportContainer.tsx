@@ -97,9 +97,9 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     }
 
     onMonthChange(value) {
-        const startDate = value.value.value[0]; // me code good
+        const startDate = value.value.value[0]; // my code good
         const endDate = value.value.value[1];
-        this.props.updateDateFilter(startDate, endDate);
+        // this.props.updateDateFilter(startDate, endDate);
     }
 
     calculateTotalSales() {
@@ -133,6 +133,8 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             loading={this.props.loading}
             totalSales={this.calculateTotalSales()}
             totalTransactions={this.props.rows.length}
+            totalPersonalVolume={"$2,466"}
+            balance={"$749.82"}
             columns={this.getColumns()}
         />
     }
@@ -156,7 +158,7 @@ function mapStateToProps(state) {
     var filteredRows = typeFilterer(rows, saleTypeFilter);
     filteredRows = sortGrid(filteredRows, sortColumn, sortDirection);
     filteredRows = hostessFilterer(filteredRows, hostessFilter);
-    filteredRows = dateFilterer(filteredRows, startDate, endDate);
+    // filteredRows = dateFilterer(filteredRows, startDate, endDate);
     var hostesses = rows.map((row) => {
         return row.hostess;
     });

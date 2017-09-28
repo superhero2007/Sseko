@@ -1,37 +1,52 @@
 ﻿import * as React from 'react';
-import { NavBarLink } from './NavBarLink';
 import { NavBarLinkSingle } from './NavBarLinkSingle';
-import { NavBarLinkGroup } from './NavBarLinkGroup';
 const dashboardIcon = require<string>('../../img/dashboard-ico.png');
 const reportsIcon = require<string>('../../img/reports-ico.png');
-const storeCreditIcon = require<string>('../../img/storecredit-ico.png');
+const linkIcon = require<string>('../../img/link-ico.png');
 const logoutIcon = require<string>('../../img/logout-ico.png');
 // Active icons
 const dashboardIconActive = require<string>('../../img/dashboard-active-ico.png');
 const reportsIconActive = require<string>('../../img/reports-active-ico.png');
-const storeCreditIconActive = require<string>('../../img/storecredit-active-ico.png');
+const linkIconActive = require<string>('../../img/link-active-ico.png');
 const logoutIconActive = require<string>('../../img/logout-active-ico.png');
 
 export const FellowLinkGroup = () => {
     return (
         <ul className="nav" id="side-menu">
             <NavBarLinkSingle
-                href='/Reports/PersonalVolume'
-                imgSrc={reportsIcon}
-                label='Personal Volume'
-                exact={false}
+                href='/Dashboard'
+                imgSrc={dashboardIcon}
+                imgActiveSrc={dashboardIconActive}
+                label='Dashboard'
             />
             <NavBarLinkSingle
-                href='/Reports/Downline'
+                href='/Reports'
                 imgSrc={reportsIcon}
-                label='Downline Summary'
-                exact={false}
+                imgActiveSrc={reportsIconActive}
+                label='Reports'
+            >
+                <ul className={ window.location.pathname.indexOf('/Reports') > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse" } >
+                    <NavBarLinkSingle
+                        href='/Reports/PersonalVolume'
+                        label='Personal Volume'
+                    />
+                    <NavBarLinkSingle
+                        href='/Reports/Downline'
+                        label='Downline Summary'
+                    />
+                </ul>
+            </NavBarLinkSingle>
+            <NavBarLinkSingle
+                href='/Banners'
+                imgSrc={linkIcon}
+                imgActiveSrc={linkIconActive}
+                label='Banners & Links'
             />
             <NavBarLinkSingle
                 href='/Login'
                 imgSrc={logoutIcon}
+                imgActiveSrc={logoutIconActive}
                 label='Log out'
-                exact={false}
             />
         </ul>
     );

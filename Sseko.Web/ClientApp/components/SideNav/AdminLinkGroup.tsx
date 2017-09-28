@@ -1,19 +1,17 @@
 ﻿import * as React from 'react';
-import { NavBarLink } from './NavBarLink';
+import { NavBarLinkSingle } from './NavBarLinkSingle';
 
 
 export const AdminLinkGroup = () => {
     return (
         <ul className="nav" id="side-menu">
-            <NavBarLink
-                href='/'
-                label='Home'
-                exact
+            <NavBarLinkSingle
+                href='/Dashboard'
+                label='Dashboard'
             />
-            <NavBarLink
+            <NavBarLinkSingle
                 href='/Manage/Users'
                 label='Manage Users'
-                exact={false}
             />
         </ul>
     );
