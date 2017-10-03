@@ -86,49 +86,115 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
             color: #fca869;
         }
 
-            .nav > li > a > img {
-                margin-right: 10px;
+            .nav > li > a {
+                padding: 10px 20px;
             }
 
-            .nav > li > a > span {
-                vertical-align: middle;
-            }
+                .nav > li > a > img {
+                    margin-right: 10px;
+                    width: 25px;
+                }
+
+                .nav > li > a > span {
+                    vertical-align: middle;
+                }
 
 
     ul.nav-second-level {
         background: white;
     }
 
-        ul.nav-second-level > li {
-            padding: 13px 0;
+        .nav-second-level li a {
+            padding: 13px;
+            padding-left: 40px;
         }
 
-
-.optionHeader {
-    margin: 20px 0;
+.option {
+    margin-bottom: 20px;
 }
 
-.optionBody .showLevel {
-    width: 180px;
+    .option .optionHeader {
+        margin: 20px 0;
+    }
+
+    .option .optionBody .showLevel {
+        width: 180px;
+    }
+
+    .option .optionBody row {
+        margin: 0;
+    }
+
+    .option .optionBody .h4 {
+        font-size: 14px;
+    }
+
+
+    .option .applyButton button {
+        background: black;
+        color: #e1ab82;
+        width: 100px;
+        border-radius: 3px;
+        outline: 0;
+        border: 0;
+        padding: 10px;
+        margin-top: 35px;
+        margin-left: 20px;
+    }
+
+.dataTable {
+    display: inline-block;
 }
 
-.optionBody row {
-    margin: 0;
+
+
+.table {
+    width: auto;
+    margin-bottom: 20px;
+    border: 1px solid #dedede;
+    cursor: default;
 }
 
-.optionBody .h4 {
-    font-size: 14px;
-}
-
-
-.applyButton button {
-    background: black;
+th {
     color: #e1ab82;
-    width: 100px;
-    border-radius: 3px;
-    outline: 0;
-    border: 0;
-    padding: 10px;
-    margin-top: 35px;
-    margin-left: 20px;
+    background: black;
+}
+
+    th i {
+        margin: 10px;
+    }
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    height: 50px;
+    vertical-align: middle;
+}
+
+tr:nth-child(even) {
+    background: #fbfbfb;
+}
+
+.paginationOption {
+    height: 50px;
+}
+
+#page-numbers {
+    list-style: none;
+    float: right;
+    display: flex;
+    padding: 0;
+}
+
+    #page-numbers li {
+        padding: 0 5px;
+        margin: 5px;
+        cursor: default;
+    }
+
+    #page-numbers .active {
+        background: black;
+        color: #e1ab82;
+    }
+
+.page-label {
+    margin: 5px
 }

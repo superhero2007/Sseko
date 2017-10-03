@@ -47,7 +47,7 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
 
     render() {
         return (
-            <div className={"form-group section" + (this.props.error ? " has-danger" : "")}>
+            <div className={"section" + (this.props.error ? " has-danger" : "")}>
                 <Label
                     htmlId={this.props.htmlId + "-label"}
                     label={this.props.label}

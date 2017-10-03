@@ -3,6 +3,7 @@ import * as api from '../../api';
 import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from '../../store';
 import PvReportState from '../../store/PvReportState';
+import * as moment from 'moment';
 
 interface GetPvRows { type: 'GET_PV_ROWS', payload: dtos.ReportForPersonalVolumeDto[] }
 interface UpdateSort { type: 'UPDATE_PV_SORT', column: string, direction: string }
@@ -43,10 +44,10 @@ const today = new Date();
 const unloadedState: PvReportState = {
     rows: [],
     errors: '',
-    saleTypeFilter: ["Affiliate Sale", "Personal Purchase", "Hostess Program", "Other"],
+    saleTypeFilter: [],
     hostessFilter: [],
-    startDate: new Date(today.getFullYear(), today.getMonth(), 1),
-    endDate: new Date(today.getFullYear(), today.getMonth() + 1, 0),
+    startDate: moment().add(-1, 'year'),
+    endDate: moment(),
     sortColumn: 'date',
     sortDirection: 'DESC',
     loading: true

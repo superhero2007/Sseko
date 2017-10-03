@@ -7,7 +7,7 @@ export const Reports = {
         return axios.get('/api/reports/personalvolume/', { headers: Utilities.GetHeaders() });
     },
 
-    Downline(): AxiosPromise {
-        return axios.get('/api/reports/downline/', { headers: Utilities.GetHeaders() });
+    Downline(startDate, endDate): AxiosPromise {
+        return axios.get('/api/reports/downline/?startDate=' + startDate + '&endDate=' + endDate, { headers: Utilities.GetHeaders() });
     }
 }

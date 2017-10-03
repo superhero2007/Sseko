@@ -10,21 +10,19 @@ interface ButtonGroupProps {
     label: string;
     onChange: (event: any) => any;
     error: string;
-    initialValue?: string;
+    initialValue?: string[];
     multi?: boolean;
 }
 
 interface ButtonGroupState {
-    values: number[];
+    values: string[];
 }
 
 // Drop-in replacement for SelectList
 export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupState>  {
     // TODO maybe redeclare state
     componentWillMount() {
-        let initialValue: Array<any> = this.props.initialValue.split(",");
-        initialValue.pop();
-        this.setState({ values: initialValue });
+        this.setState({ values: this.props.initialValue });
     }
 
     onValueChange = (value) => () => {

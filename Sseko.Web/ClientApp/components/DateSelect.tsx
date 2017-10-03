@@ -1,5 +1,4 @@
 ﻿import * as React from 'react';
-import * as moment from 'moment';
 import ReactDatePicker from 'react-datepicker';
 import { Label } from './Label'
 
@@ -9,7 +8,10 @@ import '../css/datepicker.css';
 interface DateSelectProps {
     htmlId: string,
     label: string,
-    error: string
+    error: string,
+    onMonthChange: any,
+    startDate: any,
+    endDate: any
 }
 
 interface DateSelectState {
@@ -22,8 +24,8 @@ export class DateSelect extends React.Component<DateSelectProps, DateSelectState
     constructor(props) {
         super(props)
         this.state = {
-            startDate: moment(),
-            endDate: moment().add(3, 'day')
+            startDate: this.props.startDate,
+            endDate: this.props.endDate
         };
     }
 
@@ -36,12 +38,14 @@ export class DateSelect extends React.Component<DateSelectProps, DateSelectState
         this.setState({
             startDate: date
         });
+        this.props.onMonthChange(date, this.state.endDate);
     }
 
     handleChangeEnd = (date) => {
         this.setState({
             endDate: date
         });
+        this.props.onMonthChange(this.state.startDate, date);
     }
 
     render() {

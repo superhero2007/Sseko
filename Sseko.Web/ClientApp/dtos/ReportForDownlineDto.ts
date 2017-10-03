@@ -1,8 +1,8 @@
 ﻿export class ReportForDownlineDto {
-    name: string;
+    fellow: string;
     parent: string;
     grandparent: string;
     level: string;
     commissionableSales: string;
-    totalSales: string;
+    pv: string;
 }

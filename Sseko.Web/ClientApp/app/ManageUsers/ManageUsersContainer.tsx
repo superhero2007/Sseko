@@ -5,10 +5,15 @@ import { connect } from 'react-redux';
 import { ManageUsers } from './ManageUsers';
 import { sortGrid } from '../../utils/DatatableFilters';
 import { RowButtonFormatter } from '../../components/DataTable/Formatters/RowButtonFormatter';
+import { UserManagerButtonFormatter } from '../../components/DataTable/Formatters/UserManagerButtonFormatter';
 
 type ManageUserProps = MappedProps & typeof ManageUserStore.actionCreators;
 
-class ManageUsersContainer extends React.Component<ManageUserProps, {}> {
+interface ManageUserState {
+    columns: any;
+}
+
+class ManageUsersContainer extends React.Component<ManageUserProps, ManageUserState> {
     constructor(props) {
         super(props);
 
@@ -18,10 +23,35 @@ class ManageUsersContainer extends React.Component<ManageUserProps, {}> {
         this.toggleEnable = this.toggleEnable.bind(this);
         this.onImpersonate = this.onImpersonate.bind(this);
         this.onResetPassword = this.onResetPassword.bind(this);
+        this.state = {
+            columns : [
+                { key: 'username', name: 'Fellow', width: 250, sortable: 0 },
+                { key: 'role', name: 'Role', width: 100, sortable: 0 },
+                { key: 'actions', name: 'Actions', sortable: -1, formatter: UserManagerButtonFormatter }
+            ]
+        }
+    }
+
+    state = {
+        columns: null
     }
 
     onGridSort(sortColumn, sortDirection) {
-        this.props.updateSort(sortColumn, sortDirection);
+        if (sortDirection >= 0) {
+            var stateCopy = Object.assign({}, this.state);
+            for (let index in stateCopy.columns) {
+                if (stateCopy.columns[index].key == sortColumn)
+                    stateCopy.columns[index].sortable = (sortDirection + 1) % 3;
+            }
+
+            this.setState(stateCopy);
+            if (sortDirection == 0)
+                this.props.updateSort(sortColumn, 'ASC');
+            else if (sortDirection == 1)
+                this.props.updateSort(sortColumn, 'DESC');
+            else
+                this.props.updateSort(sortColumn, 'NONE');
+        }
     }
 
     formatRows() {
@@ -48,6 +78,7 @@ class ManageUsersContainer extends React.Component<ManageUserProps, {}> {
     render() {
         return (
             <ManageUsers
+                columns={this.state.columns}
                 users={this.formatRows()}
                 onGridSort={this.onGridSort}
                 loading={this.props.loading}

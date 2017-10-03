@@ -5133,7 +5133,7 @@ var Layout = /** @class */ (function (_super) {
             React.createElement("div", { id: "page-wrapper", className: wrapperClass },
                 React.createElement(TopHeader_1.default, { role: AuthService_1.GetRole() }),
                 React.createElement(Progress_1.default, null),
-                React.createElement("div", { className: "wrapper wrapper-content animated fadeInRight" }, this.props.children),
+                React.createElement("div", { className: "wrapper wrapper-content" }, this.props.children),
                 React.createElement(Footer_1.default, null))));
     };
     return Layout;
@@ -6489,24 +6489,114 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
+<<<<<<< HEAD
+=======
 var ReactDataGrid = __webpack_require__(307);
+>>>>>>> master
 var EmptyRowsView_1 = __webpack_require__(193);
 var LoadingView_1 = __webpack_require__(200);
-var dataTableRowHeight = 35;
-var dataTableRowHeaderHeight = 35;
-var horizontalScrollbarHeight = 17;
 var DataTable = /** @class */ (function (_super) {
     __extends(DataTable, _super);
-    function DataTable() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.rowGetter = function (i) {
-            return _this.props.rows[i];
+    function DataTable(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            currentPage: 1,
+            todosPerPage: 10
         };
+        _this.getTableWidth = function () {
+            return _this.props.columns.reduce(function (tableWidth, column) { return tableWidth + column["width"]; }, 0) + 34;
+        };
+        _this.state = {
+            currentPage: 1,
+            todosPerPage: 10
+        };
+        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
+    DataTable.prototype.onGridSort = function (sortColumn, sortDir) {
+        this.props.onGridSort(sortColumn, sortDir);
+    };
+    DataTable.prototype.handleClick = function (event) {
+        this.setState({
+            currentPage: Number(event.target.id)
+        });
+    };
     DataTable.prototype.render = function () {
-        return (React.createElement("div", { className: "grid-container" },
-            React.createElement(ReactDataGrid, { onGridSort: this.props.onGridSort, columns: this.props.columns, rowGetter: this.rowGetter, rowsCount: this.props.rows.length, rowHeight: 32, headerRowHeight: 32, minHeight: Math.min(this.props.rows.length * dataTableRowHeight + dataTableRowHeaderHeight + horizontalScrollbarHeight), emptyRowsView: this.props.isLoading ? LoadingView_1.LoadingView : EmptyRowsView_1.EmptyRowsView })));
+        var _this = this;
+        var _a = this.state, currentPage = _a.currentPage, todosPerPage = _a.todosPerPage;
+        // Logic for displaying headers for current rows
+        var indexOfLastTodo = currentPage * todosPerPage;
+        var indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+        var dataColumns = this.props.columns;
+        var dataRows = this.props.rows.slice(indexOfFirstTodo, indexOfLastTodo);
+        var tableHeaders = (React.createElement("thead", null,
+            React.createElement("tr", null, dataColumns.map(function (column, index) {
+                var widthStyle = {
+                    width: column.width
+                };
+                var icon = null;
+                if (column.sortable == 0)
+                    icon = React.createElement("i", { className: "fa fa-sort", "aria-hidden": "true" });
+                else if (column.sortable == 1)
+                    icon = React.createElement("i", { className: "fa fa-sort-asc", "aria-hidden": "true" });
+                else if (column.sortable == 2)
+                    icon = React.createElement("i", { className: "fa fa-sort-desc", "aria-hidden": "true" });
+                return React.createElement("th", { key: index, style: widthStyle, onClick: this.onGridSort.bind(this, column.key, column.sortable) },
+                    React.createElement("span", null, column.name),
+                    icon);
+            }.bind(this)))));
+        // Logic for displaying bodys for current rows
+        var tableBody = null;
+        if (this.props.rows.length != 0) {
+            tableBody = (React.createElement("tbody", null, dataRows.map(function (row, index) {
+                return (React.createElement("tr", { key: index }, dataColumns.map(function (column, index) {
+                    var element = null;
+                    if (column.key == "orderNumber") {
+                        element = React.createElement("a", null,
+                            " ",
+                            row[column.key],
+                            " ");
+                    }
+                    else {
+                        element = row[column.key] ? row[column.key] : "";
+                    }
+                    return React.createElement("td", { key: index }, element);
+                })));
+            })));
+        }
+        // Logic for displaying page numbers
+        var pageNumbers = [];
+        for (var i = 1; i <= Math.ceil(this.props.rows.length / todosPerPage); i++) {
+            pageNumbers.push(i);
+        }
+        var renderPageNumbers = pageNumbers.map(function (number) {
+            return (React.createElement("li", { key: number, id: number, onClick: _this.handleClick, className: currentPage == number ? "active" : "" }, number));
+        });
+        var paginationOption = null;
+        if (this.props.rows.length != 0) {
+            paginationOption = (React.createElement("div", { className: "paginationOption" },
+                React.createElement("span", { className: "pull-left" },
+                    "Showing ",
+                    indexOfFirstTodo + 1,
+                    "-",
+                    indexOfLastTodo < this.props.rows.length ? indexOfLastTodo : this.props.rows.length,
+                    " of ",
+                    this.props.rows.length),
+                React.createElement("ul", { id: "page-numbers" }, renderPageNumbers),
+                React.createElement("span", { className: "pull-right page-label" }, " Page: ")));
+        }
+        else if (this.props.isLoading) {
+            paginationOption = LoadingView_1.LoadingView();
+        }
+        else {
+            paginationOption = EmptyRowsView_1.EmptyRowsView();
+        }
+        var tableWidth = this.getTableWidth();
+        return (React.createElement("div", { className: "dataTable" },
+            React.createElement("table", { className: "table", style: { width: tableWidth } },
+                tableHeaders,
+                tableBody),
+            paginationOption));
     };
     return DataTable;
 }(React.Component));
@@ -6761,9 +6851,13 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var api = __webpack_require__(9);
+<<<<<<< HEAD
+var moment = __webpack_require__(0);
+=======
+>>>>>>> master
 exports.actionCreators = {
-    getDlReport: function () { return function (dispatch, getState) {
-        api.Reports.Downline()
+    getDlReport: function (startDate, endDate) { return function (dispatch, getState) {
+        api.Reports.Downline(startDate, endDate)
             .then(function (response) {
             dispatch({ type: 'GET_DL_ROWS', payload: response.data });
         });
@@ -6772,7 +6866,18 @@ exports.actionCreators = {
         dispatch({ type: 'UPDATE_LEVEL_FILTER', payload: levelFilter });
     }; },
     updateSort: function (column, direction) { return function (dispatch, getState) {
-        dispatch({ type: 'UPDATE_DL_SORT', column: column, direction: direction });
+        dispatch({ type: 'UPDATE_PV_SORT', column: column, direction: direction });
+    }; },
+    updateHostessFilter: function (hostessFilter) { return function (dispatch, getState) {
+        dispatch({ type: 'UPDATE_HOSTESS_FILTER', hostessFilter: hostessFilter });
+    }; },
+    updateDateFilter: function (startDate, endDate) { return function (dispatch, getState) {
+        dispatch({ type: 'UPDATE_DATE_FILTER', startDate: startDate, endDate: endDate });
+        dispatch({ type: 'GET_DL_ROWS_INIT' });
+        api.Reports.Downline(startDate, endDate)
+            .then(function (response) {
+            dispatch({ type: 'GET_DL_ROWS', payload: response.data });
+        });
     }; }
 };
 var unloadedState = {
@@ -6781,16 +6886,26 @@ var unloadedState = {
     levelFilter: ["1", "2", "3"],
     sortColumn: 'fellow',
     sortDirection: 'ASC',
-    loading: true
+    startDate: moment().add(-1, 'year'),
+    endDate: moment(),
+    loading: true,
+    hostessFilter: []
 };
-exports.reducer = function (state, action) {
+exports.reducer = function (state, incomingAction) {
+    var action = incomingAction;
     switch (action.type) {
+        case 'GET_DL_ROWS_INIT':
+            return __assign({}, state, { errors: '', rows: [], loading: true });
         case 'GET_DL_ROWS':
-            return __assign({}, state, { errors: '', rows: action.payload, loading: false });
+            return __assign({}, state, { errors: '', loading: false, rows: action.payload });
         case 'UPDATE_LEVEL_FILTER':
             return __assign({}, state, { levelFilter: action.payload });
-        case 'UPDATE_DL_SORT':
+        case 'UPDATE_PV_SORT':
             return __assign({}, state, { sortColumn: action.column, sortDirection: action.direction });
+        case 'UPDATE_HOSTESS_FILTER':
+            return __assign({}, state, { hostessFilter: action.hostessFilter });
+        case 'UPDATE_DATE_FILTER':
+            return __assign({}, state, { startDate: action.startDate, endDate: action.endDate });
         default:
             var exhaustiveCheck = action;
     }
@@ -6887,6 +7002,10 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var api = __webpack_require__(9);
+<<<<<<< HEAD
+var moment = __webpack_require__(0);
+=======
+>>>>>>> master
 exports.actionCreators = {
     getPvReport: function () { return function (dispatch, getState) {
         api.Reports.PersonalVolume()
@@ -6913,10 +7032,10 @@ var today = new Date();
 var unloadedState = {
     rows: [],
     errors: '',
-    saleTypeFilter: ["Affiliate Sale", "Personal Purchase", "Hostess Program", "Other"],
+    saleTypeFilter: [],
     hostessFilter: [],
-    startDate: new Date(today.getFullYear(), today.getMonth(), 1),
-    endDate: new Date(today.getFullYear(), today.getMonth() + 1, 0),
+    startDate: moment().add(-1, 'year'),
+    endDate: moment(),
     sortColumn: 'date',
     sortDirection: 'DESC',
     loading: true
@@ -7089,27 +7208,73 @@ exports.smoothlyMenu = smoothlyMenu;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
 var SelectList_1 = __webpack_require__(206);
 var DateSelect_1 = __webpack_require__(202);
-exports.Option = function (props) {
-    return React.createElement("div", { className: "option" },
-        React.createElement("div", { className: "optionHeader" },
-            React.createElement("h3", null, props.title)),
-        React.createElement("div", { className: "optionBody" },
-            React.createElement("div", { className: "showLevel pull-left" },
-                React.createElement(SelectList_1.SelectList, { htmlId: "showLevel", name: "", error: "", label: "Show Levels", options: timeOptions, initialValue: timeOptions[0], clearable: false, onChange: props.onMonthChange })),
-            React.createElement("div", { className: "date pull-left" },
-                React.createElement(DateSelect_1.DateSelect, { htmlId: "dateRange", error: "", label: "Date" })),
-            React.createElement("div", { className: "applyButton" },
-                React.createElement("button", null, "Apply"))));
-};
-var timeOptions = [
-    {
-        value: [0, 0],
-        label: "All"
+var ButtonGroup_1 = __webpack_require__(192);
+var Option = /** @class */ (function (_super) {
+    __extends(Option, _super);
+    function Option(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            startDate: null,
+            endDate: null,
+            selected: null
+        };
+        _this.onSelectChange = function (value) {
+            console.log(value.value);
+            _this.setState({ selected: value.value });
+        };
+        _this.onMonthChange = function (value1, value2) {
+            _this.setState({ startDate: value1, endDate: value2 });
+        };
+        _this.applyChange = function () {
+            _this.props.onMonthChange(_this.state.startDate, _this.state.endDate);
+            if (_this.props.title == "Personal Volume")
+                _this.props.onChange(_this.state.selected);
+        };
+        _this.state = {
+            startDate: _this.props.startDate,
+            endDate: _this.props.endDate,
+            selected: {
+                value: "AllValue",
+                label: "All"
+            }
+        };
+        return _this;
     }
+    Option.prototype.render = function () {
+        var left = React.createElement(ButtonGroup_1.ButtonGroup, { htmlId: "level-select", name: "levels", error: "", label: "Levels", onChange: this.props.onChange, options: levelOptions, multi: true, initialValue: this.props.init });
+        if (this.props.title == "Personal Volume")
+            left = React.createElement(SelectList_1.SelectList, { htmlId: "showLevel", name: "", error: "", label: "Show Levels", options: this.props.hostesses, initialValue: this.props.init, clearable: false, onChange: this.onSelectChange });
+        return (React.createElement("div", { className: "option" },
+            React.createElement("div", { className: "optionHeader" },
+                React.createElement("h3", null, this.props.title)),
+            React.createElement("div", { className: "optionBody" },
+                React.createElement("div", { className: "showLevel pull-left" }, left),
+                React.createElement("div", { className: "date pull-left" },
+                    React.createElement(DateSelect_1.DateSelect, { htmlId: "dateRange", error: "", label: "Date", onMonthChange: this.onMonthChange, startDate: this.state.startDate, endDate: this.state.endDate })),
+                React.createElement("div", { className: "applyButton" },
+                    React.createElement("button", { onClick: this.applyChange }, "Apply")))));
+    };
+    return Option;
+}(React.Component));
+exports.Option = Option;
+var levelOptions = [
+    { value: '1', label: '1' },
+    { value: '2', label: '2' },
+    { value: '3', label: '3' }
 ];
 
 
@@ -18751,6 +18916,128 @@ module.exports = function stripDiacritics(str) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(2))(132);
+<<<<<<< HEAD
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(2))(3);
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var redux_1 = __webpack_require__(281);
+var redux_thunk_1 = __webpack_require__(279);
+var react_router_redux_1 = __webpack_require__(25);
+var store_1 = __webpack_require__(213);
+function configureStore(history, initialState) {
+    // Build middleware. These are functions that can process the actions before they reach the store.
+    var windowIfDefined = typeof window === 'undefined' ? null : window;
+    // If devTools is installed, connect to it
+    var devToolsExtension = windowIfDefined && windowIfDefined.devToolsExtension;
+    var createStoreWithMiddleware = redux_1.compose(redux_1.applyMiddleware(redux_thunk_1.default, react_router_redux_1.routerMiddleware(history)), devToolsExtension ? devToolsExtension() : function (next) { return next; })(redux_1.createStore);
+    // Combine all reducers and instantiate the app-wide store instance
+    var allReducers = buildRootReducer(store_1.reducers);
+    var store = createStoreWithMiddleware(allReducers, initialState);
+    // Enable Webpack hot module replacement for reducers
+    if (false) {
+        module.hot.accept('../store', function () {
+            var nextRootReducer = require('../store');
+            store.replaceReducer(buildRootReducer(nextRootReducer.reducers));
+        });
+    }
+    return store;
+}
+exports.default = configureStore;
+function buildRootReducer(allReducers) {
+    return redux_1.combineReducers(Object.assign({}, allReducers, { routing: react_router_redux_1.routerReducer }));
+}
+
+
+/***/ }),
+/* 169 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(1);
+var react_router_dom_1 = __webpack_require__(16);
+var Authorization_1 = __webpack_require__(211);
+var PageNotFound_1 = __webpack_require__(204);
+var DlReportContainer_1 = __webpack_require__(181);
+var ForgotPasswordContainer_1 = __webpack_require__(187);
+var LoginContainer_1 = __webpack_require__(189);
+var ManageUsersContainer_1 = __webpack_require__(183);
+var PvReportContainer_1 = __webpack_require__(185);
+var ResetPasswordContainer_1 = __webpack_require__(191);
+var Fellow = Authorization_1.Authorization(['fellow', 'admin']);
+var Admin = Authorization_1.Authorization(['admin']);
+exports.routes = React.createElement("div", null,
+    React.createElement(react_router_dom_1.Switch, null,
+        React.createElement(react_router_dom_1.Route, { path: '/Dashboard', component: Fellow(PvReportContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: '/Login', component: LoginContainer_1.default }),
+        React.createElement(react_router_dom_1.Route, { exact: true, path: '/Reports/', component: Fellow(PvReportContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: '/Reports/PersonalVolume/', component: Fellow(PvReportContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: '/Reports/DownLine/', component: Fellow(DlReportContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: '/Banners/', component: Fellow(DlReportContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: '/Manage/Users/', component: Admin(ManageUsersContainer_1.default) }),
+        React.createElement(react_router_dom_1.Route, { path: "/ForgotPassword", component: ForgotPasswordContainer_1.default }),
+        React.createElement(react_router_dom_1.Route, { path: "/ResetPassword/:code", component: ResetPasswordContainer_1.default }),
+        React.createElement(react_router_dom_1.Route, { path: '*', component: Fellow(PageNotFound_1.PageNotFound) })));
+
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(jQuery) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * metismenu - v2.7.0
+ * A jQuery menu plugin
+ * https://github.com/onokumus/metismenu#readme
+ *
+ * Made by Osman Nuri Okumus <onokumus@gmail.com> (https://github.com/onokumus)
+ * Under MIT License
+ */
+
+(function (global, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (typeof exports !== "undefined") {
+    factory(require('jquery'));
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(global.jquery);
+    global.metisMenu = mod.exports;
+  }
+})(this, function (_jquery) {
+  'use strict';
+
+  var _jquery2 = _interopRequireDefault(_jquery);
+
+=======
 
 /***/ }),
 /* 167 */
@@ -18871,6 +19158,7 @@ exports.routes = React.createElement("div", null,
 
   var _jquery2 = _interopRequireDefault(_jquery);
 
+>>>>>>> master
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
       default: obj
@@ -20232,8 +20520,8 @@ exports.Reports = {
     PersonalVolume: function () {
         return axios_1.default.get('/api/reports/personalvolume/', { headers: Utilities.GetHeaders() });
     },
-    Downline: function () {
-        return axios_1.default.get('/api/reports/downline/', { headers: Utilities.GetHeaders() });
+    Downline: function (startDate, endDate) {
+        return axios_1.default.get('/api/reports/downline/?startDate=' + startDate + '&endDate=' + endDate, { headers: Utilities.GetHeaders() });
     }
 };
 
@@ -20265,7 +20553,10 @@ exports.Users = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
+<<<<<<< HEAD
+=======
 __webpack_require__(304);
+>>>>>>> master
 var DataTable_1 = __webpack_require__(19);
 var Layout_1 = __webpack_require__(13);
 var HelperTotals_1 = __webpack_require__(30);
@@ -20275,25 +20566,20 @@ var balanceIcon = __webpack_require__(42);
 var personIcon = __webpack_require__(45);
 var salesIcon = __webpack_require__(43);
 var transactionsIcon = __webpack_require__(46);
+<<<<<<< HEAD
+__webpack_require__(273);
+=======
+>>>>>>> master
 exports.DlReport = function (props) {
     return (React.createElement(Layout_1.Layout, null,
         React.createElement(Header_1.Header, null),
         React.createElement(HelperTotals_1.Totals, null,
-            React.createElement(HelperTotals_1.Total, { iconSrc: balanceIcon, label: "BALANCE", amount: props.balance }),
             React.createElement(HelperTotals_1.Total, { iconSrc: personIcon, label: "TOTAL PERSONAL VOLUME", amount: props.totalPersonalVolume }),
             React.createElement(HelperTotals_1.Total, { iconSrc: salesIcon, label: "TOTAL COMMISSIONABLE SALES", amount: props.totalSales }),
             React.createElement(HelperTotals_1.Total, { iconSrc: transactionsIcon, label: "TOTAL TRANSACTIONS", amount: props.totalTransactions })),
-        React.createElement(Option_1.Option, { title: "Downline Summary", onMonthChange: props.onMonthChange }),
-        React.createElement(DataTable_1.DataTable, { label: "Downline Summary", rows: props.rows, onGridSort: props.onGridSort, columns: columns, isLoading: props.loading })));
+        React.createElement(Option_1.Option, { title: "Downline Summary", hostesses: [], onChange: props.onLevelChange, onMonthChange: props.onMonthChange, startDate: props.startDate, endDate: props.endDate, init: props.levelFilter }),
+        React.createElement(DataTable_1.DataTable, { label: "Downline Summary", rows: props.rows, onGridSort: props.onGridSort, columns: props.columns, isLoading: props.loading })));
 };
-var columns = [
-    { key: 'fellow', name: 'Fellow', width: 150, sortable: true },
-    { key: 'parent', name: 'Parent', width: 100, sortable: true },
-    { key: 'grandparent', name: 'Grandparent', width: 125, sortable: true },
-    { key: 'level', name: 'Level', width: 100, sortable: true },
-    { key: 'commissionableSales', name: 'Commissionable Sales', width: 200, sortable: true },
-    { key: 'pv', name: 'Total Sales', width: 125, sortable: true }
-];
 
 
 /***/ }),
@@ -20318,18 +20604,47 @@ var Report = __webpack_require__(26);
 var react_redux_1 = __webpack_require__(4);
 var DlReport_1 = __webpack_require__(180);
 var DatatableFilters_1 = __webpack_require__(21);
+var Formatters_1 = __webpack_require__(35);
 var DlReportContainer = /** @class */ (function (_super) {
     __extends(DlReportContainer, _super);
     function DlReportContainer(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = {
+            columns: []
+        };
         if (_this.props.rows.length == 0)
-            _this.props.getDlReport();
+            _this.props.getDlReport(props.startDate, props.endDate);
         _this.onGridSort = _this.onGridSort.bind(_this);
         _this.onLevelChange = _this.onLevelChange.bind(_this);
+        _this.onMonthChange = _this.onMonthChange.bind(_this);
+        _this.onHostessChange = _this.onHostessChange.bind(_this);
+        _this.state = {
+            columns: [
+                { key: 'fellow', name: 'FELLOW NAME', width: 150, sortable: -1 },
+                { key: 'parent', name: 'UPLINE', width: 100, sortable: -1 },
+                { key: 'grandparent', name: 'UPLINE LEVEL 2', width: 125, sortable: -1 },
+                { key: 'level', name: 'LEVEL', width: 100, sortable: 0 },
+                { key: 'commissionableSales', name: 'TOTAL COMMISSIONABLE SALES', width: 200, sortable: 0 },
+                { key: 'pv', name: 'TOTAL PV', width: 125, sortable: -1 }
+            ]
+        };
         return _this;
     }
     DlReportContainer.prototype.onGridSort = function (sortColumn, sortDirection) {
-        this.props.updateSort(sortColumn, sortDirection);
+        if (sortDirection >= 0) {
+            var stateCopy = Object.assign({}, this.state);
+            for (var index in stateCopy.columns) {
+                if (stateCopy.columns[index].key == sortColumn)
+                    stateCopy.columns[index].sortable = (sortDirection + 1) % 3;
+            }
+            this.setState(stateCopy);
+            if (sortDirection == 0)
+                this.props.updateSort(sortColumn, 'ASC');
+            else if (sortDirection == 1)
+                this.props.updateSort(sortColumn, 'DESC');
+            else
+                this.props.updateSort(sortColumn, 'NONE');
+        }
     };
     DlReportContainer.prototype.onLevelChange = function (event) {
         var values = event.value;
@@ -20339,21 +20654,52 @@ var DlReportContainer = /** @class */ (function (_super) {
         }
         this.props.updateLevelFilter(levels);
     };
-    DlReportContainer.prototype.onMonthChange = function (value) {
+    DlReportContainer.prototype.onMonthChange = function (value1, value2) {
+        var startDate = value1; // my code good
+        var endDate = value2;
+        this.props.updateDateFilter(startDate, endDate);
+    };
+    DlReportContainer.prototype.onHostessChange = function (event) {
+        var values = event.value;
+        var hostess = [];
+        /*for (var x in values) {
+            hostess.push(values[x].value);
+        }*/
+        if (values != "AllValue") {
+            hostess.push(values);
+        }
+        this.props.updateHostessFilter(hostess);
+    };
+    DlReportContainer.prototype.calculateTotalSales = function () {
+        var total = 0;
+        var rows = this.props.rows;
+        for (var r in rows) {
+            if (rows.hasOwnProperty(r)) {
+                total += Number(rows[r].commissionableSales.substr(1));
+            }
+        }
+        return Formatters_1.Formatters.moneyRounded(total);
+    };
+    DlReportContainer.prototype.calculateTotalPersonalVolume = function () {
+        var total = 0;
+        var rows = this.props.rows;
+        for (var r in rows) {
+            if (rows.hasOwnProperty(r)) {
+                total += Number(rows[r].pv.substr(1));
+            }
+        }
+        return Formatters_1.Formatters.moneyRounded(total);
     };
     DlReportContainer.prototype.render = function () {
-        return React.createElement(DlReport_1.DlReport, { rows: this.props.rows, onLevelChange: this.onLevelChange, onGridSort: this.onGridSort, levelFilter: this.props.levelFilter, loading: this.props.loading, totalSales: "$0", totalTransactions: 0, totalPersonalVolume: "$2,466", balance: "$749.82", onMonthChange: this.onMonthChange });
+        return React.createElement(DlReport_1.DlReport, { columns: this.state.columns, rows: this.props.rows, onLevelChange: this.onLevelChange, onGridSort: this.onGridSort, levelFilter: this.props.levelFilter, loading: this.props.loading, totalSales: this.calculateTotalSales(), totalTransactions: this.props.rows.length, totalPersonalVolume: this.calculateTotalPersonalVolume(), onHostessChange: this.onHostessChange, onMonthChange: this.onMonthChange, startDate: this.props.startDate, endDate: this.props.endDate });
     };
     return DlReportContainer;
 }(React.Component));
 function mapStateToProps(state) {
-    var _a = state.dlReport, rows = _a.rows, levelFilter = _a.levelFilter, sortColumn = _a.sortColumn, sortDirection = _a.sortDirection, loading = _a.loading;
+    var _a = state.dlReport, rows = _a.rows, levelFilter = _a.levelFilter, sortColumn = _a.sortColumn, sortDirection = _a.sortDirection, startDate = _a.startDate, endDate = _a.endDate, loading = _a.loading;
     var filteredItems = DatatableFilters_1.levelFilterer(rows, levelFilter);
     filteredItems = DatatableFilters_1.sortGrid(filteredItems, sortColumn, sortDirection);
-    var levelFilterMapping = '';
-    for (var x in levelFilter)
-        levelFilterMapping = levelFilterMapping.concat(levelFilter[x]).concat(',');
-    return { rows: filteredItems, levelFilter: levelFilterMapping, loading: loading };
+    return { rows: filteredItems, levelFilter: levelFilter, startDate: startDate, endDate: endDate, loading: loading };
 }
 exports.default = react_redux_1.connect(function (state) { return mapStateToProps(state); }, Report.actionCreators)(DlReportContainer);
 
@@ -20368,16 +20714,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
 var DataTable_1 = __webpack_require__(19);
 var Layout_1 = __webpack_require__(13);
-var UserManagerButtonFormatter_1 = __webpack_require__(199);
 exports.ManageUsers = function (props) {
     return (React.createElement(Layout_1.Layout, null,
-        React.createElement(DataTable_1.DataTable, { columns: columns, rows: props.users, onGridSort: props.onGridSort, isLoading: props.loading })));
+        React.createElement(DataTable_1.DataTable, { columns: props.columns, rows: props.users, onGridSort: props.onGridSort, isLoading: props.loading })));
 };
-var columns = [
-    { key: 'username', name: 'Fellow', width: 250, sortable: true },
-    { key: 'role', name: 'Role', width: 100, sortable: true },
-    { key: 'actions', name: 'Actions', formatter: UserManagerButtonFormatter_1.UserManagerButtonFormatter }
-];
 
 
 /***/ }),
@@ -20403,20 +20743,44 @@ var react_redux_1 = __webpack_require__(4);
 var ManageUsers_1 = __webpack_require__(182);
 var DatatableFilters_1 = __webpack_require__(21);
 var RowButtonFormatter_1 = __webpack_require__(198);
+var UserManagerButtonFormatter_1 = __webpack_require__(199);
 var ManageUsersContainer = /** @class */ (function (_super) {
     __extends(ManageUsersContainer, _super);
     function ManageUsersContainer(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = {
+            columns: null
+        };
         if (_this.props.loading) {
             _this.props.getUsers();
         }
         _this.toggleEnable = _this.toggleEnable.bind(_this);
         _this.onImpersonate = _this.onImpersonate.bind(_this);
         _this.onResetPassword = _this.onResetPassword.bind(_this);
+        _this.state = {
+            columns: [
+                { key: 'username', name: 'Fellow', width: 250, sortable: 0 },
+                { key: 'role', name: 'Role', width: 100, sortable: 0 },
+                { key: 'actions', name: 'Actions', sortable: -1, formatter: UserManagerButtonFormatter_1.UserManagerButtonFormatter }
+            ]
+        };
         return _this;
     }
     ManageUsersContainer.prototype.onGridSort = function (sortColumn, sortDirection) {
-        this.props.updateSort(sortColumn, sortDirection);
+        if (sortDirection >= 0) {
+            var stateCopy = Object.assign({}, this.state);
+            for (var index in stateCopy.columns) {
+                if (stateCopy.columns[index].key == sortColumn)
+                    stateCopy.columns[index].sortable = (sortDirection + 1) % 3;
+            }
+            this.setState(stateCopy);
+            if (sortDirection == 0)
+                this.props.updateSort(sortColumn, 'ASC');
+            else if (sortDirection == 1)
+                this.props.updateSort(sortColumn, 'DESC');
+            else
+                this.props.updateSort(sortColumn, 'NONE');
+        }
     };
     ManageUsersContainer.prototype.formatRows = function () {
         return RowButtonFormatter_1.RowButtonFormatter(this.props.rows, {
@@ -20438,7 +20802,7 @@ var ManageUsersContainer = /** @class */ (function (_super) {
         return function () { return _this.props.resetPassword(id); };
     };
     ManageUsersContainer.prototype.render = function () {
-        return (React.createElement(ManageUsers_1.ManageUsers, { users: this.formatRows(), onGridSort: this.onGridSort, loading: this.props.loading }));
+        return (React.createElement(ManageUsers_1.ManageUsers, { columns: this.state.columns, users: this.formatRows(), onGridSort: this.onGridSort, loading: this.props.loading }));
     };
     return ManageUsersContainer;
 }(React.Component));
@@ -20460,12 +20824,13 @@ exports.default = react_redux_1.connect(function (state) { return mapStateToProp
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
 __webpack_require__(235);
+<<<<<<< HEAD
+=======
 __webpack_require__(304);
 __webpack_require__(273);
+>>>>>>> master
 var DataTable_1 = __webpack_require__(19);
 var Layout_1 = __webpack_require__(13);
-//import Total from '../../components/Totals/Total';
-//import TotalGroup from '../../components/Totals/TotalGroup';
 var HelperTotals_1 = __webpack_require__(30);
 var Header_1 = __webpack_require__(29);
 var Option_1 = __webpack_require__(32);
@@ -20477,11 +20842,10 @@ exports.PvReport = function (props) {
     return React.createElement(Layout_1.Layout, null,
         React.createElement(Header_1.Header, null),
         React.createElement(HelperTotals_1.Totals, null,
-            React.createElement(HelperTotals_1.Total, { iconSrc: balanceIcon, label: "BALANCE", amount: props.balance }),
             React.createElement(HelperTotals_1.Total, { iconSrc: personIcon, label: "TOTAL PERSONAL VOLUME", amount: props.totalPersonalVolume }),
             React.createElement(HelperTotals_1.Total, { iconSrc: salesIcon, label: "TOTAL COMMISSIONABLE SALES", amount: props.totalSales }),
             React.createElement(HelperTotals_1.Total, { iconSrc: transactionsIcon, label: "TOTAL TRANSACTIONS", amount: props.totalTransactions })),
-        React.createElement(Option_1.Option, { title: "Personal Volume", onMonthChange: props.onMonthChange }),
+        React.createElement(Option_1.Option, { title: "Personal Volume", hostesses: props.hostesses, onChange: props.onHostessChange, onMonthChange: props.onMonthChange, startDate: props.dateFilter.startDate, endDate: props.dateFilter.endDate, init: props.hostesses[0] }),
         React.createElement(DataTable_1.DataTable, { label: "Personal Volume", rows: props.rows, columns: props.columns, onGridSort: props.onGridSort, isLoading: props.loading }));
 };
 
@@ -20513,6 +20877,9 @@ var PvReportContainer = /** @class */ (function (_super) {
     __extends(PvReportContainer, _super);
     function PvReportContainer(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = {
+            columns: []
+        };
         _this.getHasHostesses = function () {
             for (var i in _this.props.hostesses) {
                 if (_this.props.hostesses[i].label) {
@@ -20522,15 +20889,7 @@ var PvReportContainer = /** @class */ (function (_super) {
             return false;
         };
         _this.getColumns = function () {
-            var columns = [
-                { key: 'date', name: 'DATE', sortable: true },
-                { key: 'orderNumber', name: 'ORDER #', sortable: true },
-                { key: 'customer', name: 'CUSTOMER', sortable: true },
-                { key: 'hostess', name: 'HOSTESS', sortable: true },
-                { key: 'type', name: 'TYPE', sortable: true },
-                { key: 'commission', name: 'CS', sortable: true },
-                { key: 'sale', name: 'TOTAL', sortable: true }
-            ];
+            var columns = _this.state.columns;
             var _loop_1 = function (c) {
                 // Magic numbers
                 var headerCharacterWidth = 13;
@@ -20539,11 +20898,11 @@ var PvReportContainer = /** @class */ (function (_super) {
                 var rowPadding = 15;
                 var sortable = 18;
                 //
-                var headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"] ? sortable : 0);
+                var headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"] >= 0 ? sortable : 0);
                 // Find the widest row item
                 var maxRowWidth = headerWidth;
                 _this.props.rows.map(function (row) {
-                    maxRowWidth = Math.max(maxRowWidth, row[columns[c].key].length * rowItemCharacterWidth + rowPadding);
+                    maxRowWidth = Math.max(maxRowWidth, row[columns[c].key] ? row[columns[c].key].length * rowItemCharacterWidth + rowPadding : 0);
                 });
                 columns[c]["width"] = maxRowWidth;
             };
@@ -20569,10 +20928,37 @@ var PvReportContainer = /** @class */ (function (_super) {
         _this.onHostessChange = _this.onHostessChange.bind(_this);
         _this.onMonthChange = _this.onMonthChange.bind(_this);
         _this.calculateTotalSales = _this.calculateTotalSales.bind(_this);
+        _this.state = {
+            columns: [
+                { key: 'date', name: 'DATE', sortable: 0 },
+                { key: 'orderNumber', name: 'ORDER #', sortable: 0 },
+                { key: 'customer', name: 'CUSTOMER', sortable: 0 },
+                { key: 'hostess', name: 'HOSTESS', sortable: -1 },
+                { key: 'type', name: 'TRANSACTION TYPE', sortable: -1 },
+                { key: 'commission', name: 'COMMISSIONABLE SALE', sortable: 0 },
+                { key: 'return', name: 'RETURNS', sortable: 0 },
+                { key: 'sale', name: 'TOTAL SALE', sortable: 0 }
+            ]
+        };
         return _this;
     }
     PvReportContainer.prototype.onGridSort = function (sortColumn, sortDirection) {
-        this.props.updateSort(sortColumn, sortDirection);
+        if (sortDirection >= 0) {
+            var stateCopy = Object.assign({}, this.state);
+            for (var index in stateCopy.columns) {
+                if (stateCopy.columns[index].key == sortColumn)
+                    stateCopy.columns[index].sortable = (sortDirection + 1) % 3;
+                else if (stateCopy.columns[index].sortable > 0)
+                    stateCopy.columns[index].sortable = 0;
+            }
+            this.setState(stateCopy);
+            if (sortDirection == 0)
+                this.props.updateSort(sortColumn, 'ASC');
+            else if (sortDirection == 1)
+                this.props.updateSort(sortColumn, 'DESC');
+            else
+                this.props.updateSort(sortColumn, 'NONE');
+        }
     };
     PvReportContainer.prototype.onSaleTypeChange = function (event) {
         var values = event.value;
@@ -20585,15 +20971,18 @@ var PvReportContainer = /** @class */ (function (_super) {
     PvReportContainer.prototype.onHostessChange = function (event) {
         var values = event.value;
         var hostess = [];
-        for (var x in values) {
+        /*for (var x in values) {
             hostess.push(values[x].value);
+        }*/
+        if (values != "AllValue") {
+            hostess.push(values);
         }
         this.props.updateHostessFilter(hostess);
     };
-    PvReportContainer.prototype.onMonthChange = function (value) {
-        var startDate = value.value.value[0]; // my code good
-        var endDate = value.value.value[1];
-        // this.props.updateDateFilter(startDate, endDate);
+    PvReportContainer.prototype.onMonthChange = function (value1, value2) {
+        var startDate = value1; // my code good
+        var endDate = value2;
+        this.props.updateDateFilter(startDate, endDate);
     };
     PvReportContainer.prototype.calculateTotalSales = function () {
         var total = 0;
@@ -20605,11 +20994,21 @@ var PvReportContainer = /** @class */ (function (_super) {
         }
         return Formatters_1.Formatters.moneyRounded(total);
     };
+    PvReportContainer.prototype.calculateTotalPersonalVolume = function () {
+        var total = 0;
+        var rows = this.props.rows;
+        for (var r in rows) {
+            if (rows.hasOwnProperty(r)) {
+                total += Number(rows[r].sale.substr(1));
+            }
+        }
+        return Formatters_1.Formatters.moneyRounded(total);
+    };
     PvReportContainer.prototype.rowGetter = function (i) {
         return this.props.rows[i];
     };
     PvReportContainer.prototype.render = function () {
-        return React.createElement(PvReport_1.PvReport, { dateFilter: this.props.dateFilter, hasHostesses: this.getHasHostesses(), hostesses: this.props.hostesses, hostessFilter: this.props.hostessFilter, onGridSort: this.onGridSort, onHostessChange: this.onHostessChange, onMonthChange: this.onMonthChange, onSaleTypeChange: this.onSaleTypeChange, rowGetter: this.rowGetter, rows: this.props.rows, typeFilter: this.props.typeFilter, loading: this.props.loading, totalSales: this.calculateTotalSales(), totalTransactions: this.props.rows.length, totalPersonalVolume: "$2,466", balance: "$749.82", columns: this.getColumns() });
+        return React.createElement(PvReport_1.PvReport, { dateFilter: this.props.dateFilter, hasHostesses: this.getHasHostesses(), hostesses: this.props.hostesses, hostessFilter: this.props.hostessFilter, onGridSort: this.onGridSort, onHostessChange: this.onHostessChange, onMonthChange: this.onMonthChange, onSaleTypeChange: this.onSaleTypeChange, rowGetter: this.rowGetter, rows: this.props.rows, typeFilter: this.props.typeFilter, loading: this.props.loading, totalSales: this.calculateTotalSales(), totalTransactions: this.props.rows.length, totalPersonalVolume: this.calculateTotalPersonalVolume(), columns: this.getColumns() });
     };
     return PvReportContainer;
 }(React.Component));
@@ -20618,13 +21017,22 @@ function mapStateToProps(state) {
     var filteredRows = DatatableFilters_1.typeFilterer(rows, saleTypeFilter);
     filteredRows = DatatableFilters_1.sortGrid(filteredRows, sortColumn, sortDirection);
     filteredRows = DatatableFilters_1.hostessFilterer(filteredRows, hostessFilter);
-    // filteredRows = dateFilterer(filteredRows, startDate, endDate);
+    filteredRows = DatatableFilters_1.dateFilterer(filteredRows, startDate, endDate);
+    for (var x in filteredRows)
+        filteredRows[x].return = Formatters_1.Formatters.moneyDecimal(Number(filteredRows[x].sale.substr(1)) - Number(filteredRows[x].commission.substr(1)));
     var hostesses = rows.map(function (row) {
         return row.hostess;
     });
     hostesses = hostesses.filter(function (x, i, a) { return a.indexOf(x) == i; });
     hostesses = hostesses.map(function (hostess) {
-        return { value: hostess, label: hostess };
+        var label = hostess;
+        if (hostess == "")
+            label = "Other";
+        return { value: hostess, label: label };
+    });
+    hostesses.unshift({
+        value: "AllValue",
+        label: "All"
     });
     var currentHostessFilter = '';
     for (var x in hostessFilter)
@@ -20633,8 +21041,8 @@ function mapStateToProps(state) {
     for (var x in saleTypeFilter)
         currentTypeFilter = currentTypeFilter.concat(saleTypeFilter[x]).concat(',');
     var currentDateFilter = {
-        start: { month: startDate.getMonth(), year: startDate.getFullYear() },
-        end: { month: endDate.getMonth(), year: endDate.getFullYear() }
+        startDate: startDate,
+        endDate: endDate
     };
     return {
         rows: filteredRows,
@@ -20897,7 +21305,80 @@ exports.default = react_redux_1.connect(function (state) { return state.auth; },
 
 
 /***/ }),
+<<<<<<< HEAD
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(41);
+var React = __webpack_require__(1);
+var Label_1 = __webpack_require__(12);
+// Drop-in replacement for SelectList
+var ButtonGroup = /** @class */ (function (_super) {
+    __extends(ButtonGroup, _super);
+    function ButtonGroup() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.onValueChange = function (value) { return function () {
+            var values = _this.state.values;
+            if (values.includes(value)) {
+                values.splice(values.indexOf(value), 1);
+            }
+            else {
+                values.push(value);
+            }
+            _this.setState({ values: values });
+            var onChangeValues = [];
+            for (var v in values) {
+                onChangeValues.push({ value: values[v] });
+            }
+            if (_this.props.onChange != null)
+                _this.props.onChange({ value: onChangeValues });
+        }; };
+        _this.buttons = function () {
+            var buttons = [];
+            for (var button in _this.props.options) {
+                var b = _this.props.options[button];
+                buttons.push(React.createElement("button", { className: "btn-3d btn-primary" + (_this.state.values.includes(b.value) ? " selected" : ""), onClick: _this.onValueChange(b.value), key: b.label },
+                    React.createElement("span", null,
+                        React.createElement("span", null, b.label))));
+            }
+            return buttons;
+        };
+        return _this;
+    }
+    // TODO maybe redeclare state
+    ButtonGroup.prototype.componentWillMount = function () {
+        this.setState({ values: this.props.initialValue });
+    };
+    ButtonGroup.prototype.render = function () {
+        return (React.createElement("div", { className: "form-group section" + (this.props.error ? " has-danger" : "") },
+            React.createElement(Label_1.Label, { htmlId: this.props.htmlId + "-label", label: this.props.label }),
+            React.createElement("br", null),
+            React.createElement("div", { className: "btn-group", "data-toggle": "buttons-checkbox" }, this.buttons()),
+            this.props.children,
+            this.props.error && React.createElement("div", { className: "form-control-feedback" }, this.props.error)));
+    };
+    return ButtonGroup;
+}(React.Component));
+exports.ButtonGroup = ButtonGroup;
+
+
+/***/ }),
+=======
 /* 192 */,
+>>>>>>> master
 /* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21202,7 +21683,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
+<<<<<<< HEAD
+=======
 var moment = __webpack_require__(0);
+>>>>>>> master
 var react_datepicker_1 = __webpack_require__(256);
 var Label_1 = __webpack_require__(12);
 __webpack_require__(239);
@@ -21219,15 +21703,17 @@ var DateSelect = /** @class */ (function (_super) {
             _this.setState({
                 startDate: date
             });
+            _this.props.onMonthChange(date, _this.state.endDate);
         };
         _this.handleChangeEnd = function (date) {
             _this.setState({
                 endDate: date
             });
+            _this.props.onMonthChange(_this.state.startDate, date);
         };
         _this.state = {
-            startDate: moment(),
-            endDate: moment().add(3, 'day')
+            startDate: _this.props.startDate,
+            endDate: _this.props.endDate
         };
         return _this;
     }
@@ -21379,7 +21865,7 @@ var SelectList = /** @class */ (function (_super) {
         return _this;
     }
     SelectList.prototype.render = function () {
-        return (React.createElement("div", { className: "form-group section" + (this.props.error ? " has-danger" : "") },
+        return (React.createElement("div", { className: "section" + (this.props.error ? " has-danger" : "") },
             React.createElement(Label_1.Label, { htmlId: this.props.htmlId + "-label", label: this.props.label }),
             React.createElement(Select, { name: this.props.name, options: this.state.options ? this.state.options : this.props.options, onChange: this.onValueChange, value: this.state.element, className: (this.props.error ? "form-control-danger" : ""), multi: this.props.multi, clearable: this.props.clearable || false, delimiter: ',' }),
             this.props.children,
@@ -21529,12 +22015,10 @@ var TopHeader = /** @class */ (function (_super) {
                         React.createElement("i", { className: "fa fa-search", "aria-hidden": "true" }))),
                 React.createElement("li", null,
                     React.createElement("div", { className: "notification-box" },
-                        React.createElement("i", { className: "fa fa-bell-o" }),
-                        React.createElement("span", { className: "label label-danger" }, "4"))),
+                        React.createElement("i", { className: "fa fa-bell-o" }))),
                 React.createElement("li", null,
                     React.createElement("div", { className: "notification-box" },
-                        React.createElement("i", { className: "fa fa-envelope-open-o" }),
-                        React.createElement("span", { className: "label label-danger" }, "1"))),
+                        React.createElement("i", { className: "fa fa-envelope-open-o" }))),
                 React.createElement("li", null,
                     React.createElement("div", { className: "profile-box" },
                         React.createElement("img", { alt: "image", className: "img-circle", src: balanceIcon }))))));
@@ -41234,6 +41718,8 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = 255;
+<<<<<<< HEAD
+=======
 
 /***/ }),
 /* 256 */
@@ -41282,11 +41768,61 @@ element:this._arrowNode}),this._popper=new m.default(this._getTargetNode(),this.
 	 * Licensed under the MIT License.
 	 */
 "use strict";e.exports=function(e){return null==e||"function"!=typeof e&&"object"!=typeof e}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}Object.defineProperty(t,"__esModule",{value:!0});var a=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},i=n(4),s=(r(i),n(5)),p=r(s),c=function(e,t){var n=e.component,r=void 0===n?"span":n,s=e.innerRef,p=e.children,c=o(e,["component","innerRef","children"]),u=t.popper,l=function(e){u.setArrowNode(e),"function"==typeof s&&s(e)},f=u.getArrowStyle();if("function"==typeof p){var d={ref:l,style:f};return p({arrowProps:d,restProps:c})}var h=a({},c,{style:a({},f,c.style)});return"string"==typeof r?h.ref=l:h.innerRef=l,(0,i.createElement)(r,h,p)};c.contextTypes={popper:p.default.object.isRequired},c.propTypes={component:p.default.oneOfType([p.default.node,p.default.func]),innerRef:p.default.func,children:p.default.oneOfType([p.default.node,p.default.func])},t.default=c}])});
+>>>>>>> master
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+<<<<<<< HEAD
+!function(e,t){ true?module.exports=t(__webpack_require__(0),__webpack_require__(1),__webpack_require__(263)):"function"==typeof define&&define.amd?define(["moment","react","react-onclickoutside"],t):"object"==typeof exports?exports.DatePicker=t(require("moment"),require("react"),require("react-onclickoutside")):e.DatePicker=t(e.moment,e.React,e.onClickOutside)}(this,function(e,t,n){return function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return e[r].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function s(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),c=n(1),u=r(c),l=n(4),f=r(l),d=n(5),h=(r(d),n(21)),m=r(h),y=n(11),v=r(y),b=n(18),g=n(2),w=r(g),_=n(12),D=r(_),k="react-datepicker-ignore-onclickoutside",O=(0,D.default)(u.default),E=function(e){function t(e){a(this,t);var n=i(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.getPreSelection=function(){return n.props.openToDate?(0,w.default)(n.props.openToDate):n.props.selectsEnd&&n.props.startDate?(0,w.default)(n.props.startDate):n.props.selectsStart&&n.props.endDate?(0,w.default)(n.props.endDate):"undefined"!=typeof n.props.utcOffset?w.default.utc().utcOffset(n.props.utcOffset):(0,w.default)()},n.calcInitialState=function(){var e=n.getPreSelection(),t=(0,b.getEffectiveMinDate)(n.props),r=(0,b.getEffectiveMaxDate)(n.props),o=t&&e.isBefore(t)?t:r&&e.isAfter(r)?r:e;return{open:!1,preventFocus:!1,preSelection:n.props.selected?(0,w.default)(n.props.selected):o}},n.clearPreventFocusTimeout=function(){n.preventFocusTimeout&&clearTimeout(n.preventFocusTimeout)},n.setFocus=function(){n.input.focus()},n.setOpen=function(e){n.setState({open:e,preSelection:e&&n.state.open?n.state.preSelection:n.calcInitialState().preSelection})},n.handleFocus=function(e){n.state.preventFocus||(n.props.onFocus(e),n.setOpen(!0))},n.cancelFocusInput=function(){clearTimeout(n.inputFocusTimeout),n.inputFocusTimeout=null},n.deferFocusInput=function(){n.cancelFocusInput(),n.inputFocusTimeout=setTimeout(function(){return n.setFocus()},1)},n.handleDropdownFocus=function(){n.cancelFocusInput()},n.handleBlur=function(e){n.state.open?n.deferFocusInput():n.props.onBlur(e)},n.handleCalendarClickOutside=function(e){n.props.inline||n.setOpen(!1),n.props.onClickOutside(e),n.props.withPortal&&e.preventDefault()},n.handleChange=function(e){if(!n.props.onChangeRaw||(n.props.onChangeRaw(e),!e.isDefaultPrevented())){n.setState({inputValue:e.target.value});var t=(0,b.parseDate)(e.target.value,n.props);!t&&e.target.value||n.setSelected(t,e,!0)}},n.handleSelect=function(e,t){n.setState({preventFocus:!0},function(){return n.preventFocusTimeout=setTimeout(function(){return n.setState({preventFocus:!1})},50),n.preventFocusTimeout}),n.setSelected(e,t),n.props.shouldCloseOnSelect?n.props.inline||n.setOpen(!1):n.setPreSelection(e)},n.setSelected=function(e,t,r){var o=e;null!==o&&(0,b.isDayDisabled)(o,n.props)||((0,b.isSameDay)(n.props.selected,o)&&!n.props.allowSameDay||(null!==o&&(n.props.selected&&(o=(0,w.default)(o).set({hour:n.props.selected.hour(),minute:n.props.selected.minute(),second:n.props.selected.second()})),n.setState({preSelection:o})),n.props.onChange(o,t)),n.props.onSelect(o,t),r||n.setState({inputValue:null}))},n.setPreSelection=function(e){var t="undefined"!=typeof n.props.minDate&&"undefined"!=typeof n.props.maxDate,r=!t||!e||(0,b.isDayInRange)(e,n.props.minDate,n.props.maxDate);r&&n.setState({preSelection:e})},n.handleTimeChange=function(e){var t=n.props.selected?n.props.selected:n.getPreSelection(),r=t.clone().set({hour:e.get("hours"),minute:e.get("minutes")});n.setState({preSelection:r}),n.props.onChange(r)},n.onInputClick=function(){n.props.disabled||n.setOpen(!0)},n.onInputKeyDown=function(e){n.props.onKeyDown(e);var t=e.key;if(!n.state.open&&!n.props.inline)return void("Enter"!==t&&"Escape"!==t&&"Tab"!==t&&n.onInputClick());var r=(0,w.default)(n.state.preSelection);if("Enter"===t)e.preventDefault(),w.default.isMoment(n.state.preSelection)||w.default.isDate(n.state.preSelection)?(n.handleSelect(r,e),!n.props.shouldCloseOnSelect&&n.setPreSelection(r)):n.setOpen(!1);else if("Escape"===t)e.preventDefault(),n.setOpen(!1);else if("Tab"===t)n.setOpen(!1);else if(!n.props.disabledKeyboardNavigation){var o=void 0;switch(t){case"ArrowLeft":e.preventDefault(),o=r.subtract(1,"days");break;case"ArrowRight":e.preventDefault(),o=r.add(1,"days");break;case"ArrowUp":e.preventDefault(),o=r.subtract(1,"weeks");break;case"ArrowDown":e.preventDefault(),o=r.add(1,"weeks");break;case"PageUp":e.preventDefault(),o=r.subtract(1,"months");break;case"PageDown":e.preventDefault(),o=r.add(1,"months");break;case"Home":e.preventDefault(),o=r.subtract(1,"years");break;case"End":e.preventDefault(),o=r.add(1,"years")}n.setPreSelection(o)}},n.onClearClick=function(e){e.preventDefault(),n.props.onChange(null,e)},n.renderCalendar=function(){return n.props.inline||n.state.open&&!n.props.disabled?f.default.createElement(O,{ref:function(e){n.calendar=e},locale:n.props.locale,dateFormat:n.props.dateFormatCalendar,useWeekdaysShort:n.props.useWeekdaysShort,dropdownMode:n.props.dropdownMode,selected:n.props.selected,preSelection:n.state.preSelection,onSelect:n.handleSelect,onWeekSelect:n.props.onWeekSelect,openToDate:n.props.openToDate,minDate:n.props.minDate,maxDate:n.props.maxDate,selectsStart:n.props.selectsStart,selectsEnd:n.props.selectsEnd,startDate:n.props.startDate,endDate:n.props.endDate,excludeDates:n.props.excludeDates,filterDate:n.props.filterDate,onClickOutside:n.handleCalendarClickOutside,formatWeekNumber:n.props.formatWeekNumber,highlightDates:n.props.highlightDates,includeDates:n.props.includeDates,inline:n.props.inline,peekNextMonth:n.props.peekNextMonth,showMonthDropdown:n.props.showMonthDropdown,showWeekNumbers:n.props.showWeekNumbers,showYearDropdown:n.props.showYearDropdown,withPortal:n.props.withPortal,forceShowMonthNavigation:n.props.forceShowMonthNavigation,scrollableYearDropdown:n.props.scrollableYearDropdown,todayButton:n.props.todayButton,weekLabel:n.props.weekLabel,utcOffset:n.props.utcOffset,outsideClickIgnoreClass:k,fixedHeight:n.props.fixedHeight,monthsShown:n.props.monthsShown,onDropdownFocus:n.handleDropdownFocus,onMonthChange:n.props.onMonthChange,dayClassName:n.props.dayClassName,showTimeSelect:n.props.showTimeSelect,onTimeChange:n.handleTimeChange,timeIntervals:n.props.timeIntervals,minTime:n.props.minTime,maxTime:n.props.maxTime,excludeTimes:n.props.excludeTimes,className:n.props.calendarClassName,yearDropdownItemNumber:n.props.yearDropdownItemNumber},n.props.children):null},n.renderDateInput=function(){var e=(0,v.default)(n.props.className,o({},k,n.state.open)),t=n.props.customInput||f.default.createElement("input",{type:"text"}),r="string"==typeof n.props.value?n.props.value:"string"==typeof n.state.inputValue?n.state.inputValue:(0,b.safeDateFormat)(n.props.selected,n.props);return f.default.cloneElement(t,{ref:function(e){n.input=e},value:r,onBlur:n.handleBlur,onChange:n.handleChange,onClick:n.onInputClick,onFocus:n.handleFocus,onKeyDown:n.onInputKeyDown,id:n.props.id,name:n.props.name,autoFocus:n.props.autoFocus,placeholder:n.props.placeholderText,disabled:n.props.disabled,autoComplete:n.props.autoComplete,className:e,title:n.props.title,readOnly:n.props.readOnly,required:n.props.required,tabIndex:n.props.tabIndex})},n.renderClearButton=function(){return n.props.isClearable&&null!=n.props.selected?f.default.createElement("a",{className:"react-datepicker__close-icon",href:"#",onClick:n.onClearClick}):null},n.state=n.calcInitialState(),n}return s(t,e),p(t,null,[{key:"defaultProps",get:function(){return{allowSameDay:!1,dateFormat:"L",dateFormatCalendar:"MMMM YYYY",onChange:function(){},disabled:!1,disabledKeyboardNavigation:!1,dropdownMode:"scroll",onFocus:function(){},onBlur:function(){},onKeyDown:function(){},onSelect:function(){},onClickOutside:function(){},onMonthChange:function(){},utcOffset:(0,w.default)().utcOffset(),monthsShown:1,withPortal:!1,shouldCloseOnSelect:!0,showTimeSelect:!1,timeIntervals:30}}}]),p(t,[{key:"componentWillReceiveProps",value:function(e){var t=this.props.selected&&this.props.selected.month(),n=e.selected&&e.selected.month();this.props.inline&&t!==n&&this.setPreSelection(e.selected)}},{key:"componentWillUnmount",value:function(){this.clearPreventFocusTimeout()}},{key:"render",value:function(){var e=this.renderCalendar();return this.props.inline&&!this.props.withPortal?e:this.props.withPortal?f.default.createElement("div",null,this.props.inline?null:f.default.createElement("div",{className:"react-datepicker__input-container"},this.renderDateInput(),this.renderClearButton()),this.state.open||this.props.inline?f.default.createElement("div",{className:"react-datepicker__portal"},e):null):f.default.createElement(m.default,{className:this.props.popperClassName,hidePopper:!this.state.open||this.props.disabled,popperModifiers:this.props.popperModifiers,targetComponent:f.default.createElement("div",{className:"react-datepicker__input-container"},this.renderDateInput(),this.renderClearButton()),popperComponent:e,popperPlacement:this.props.popperPlacement})}}]),t}(f.default.Component);t.default=E},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(2),c=r(p),u=n(3),l=r(u),f=n(13),d=r(f),h=n(15),m=r(h),y=n(20),v=r(y),b=n(4),g=r(b),w=n(5),_=(r(w),n(11)),D=r(_),k=n(18),O=["react-datepicker__year-select","react-datepicker__month-select"],E=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=(e.className||"").split(/\s+/);return O.some(function(e){return t.indexOf(e)>=0})},C=function(e){function t(e){o(this,t);var n=a(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.handleClickOutside=function(e){n.props.onClickOutside(e)},n.handleDropdownFocus=function(e){E(e.target)&&n.props.onDropdownFocus()},n.getDateInView=function(){var e=n.props,t=e.preSelection,r=e.selected,o=e.openToDate,a=e.utcOffset,i=(0,k.getEffectiveMinDate)(n.props),s=(0,k.getEffectiveMaxDate)(n.props),p=c.default.utc().utcOffset(a),u=o||r||t;return u?u:i&&p.isBefore(i)?i:s&&p.isAfter(s)?s:p},n.localizeMoment=function(e){return e.clone().locale(n.props.locale||c.default.locale())},n.increaseMonth=function(){n.setState({date:n.state.date.clone().add(1,"month")},function(){return n.handleMonthChange(n.state.date)})},n.decreaseMonth=function(){n.setState({date:n.state.date.clone().subtract(1,"month")},function(){return n.handleMonthChange(n.state.date)})},n.handleDayClick=function(e,t){return n.props.onSelect(e,t)},n.handleDayMouseEnter=function(e){return n.setState({selectingDate:e})},n.handleMonthMouseLeave=function(){return n.setState({selectingDate:null})},n.handleMonthChange=function(e){n.props.onMonthChange&&n.props.onMonthChange(e)},n.changeYear=function(e){n.setState({date:n.state.date.clone().set("year",e)})},n.changeMonth=function(e){n.setState({date:n.state.date.clone().set("month",e)},function(){return n.handleMonthChange(n.state.date)})},n.header=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:n.state.date,t=e.clone().startOf("week"),r=[];return n.props.showWeekNumbers&&r.push(g.default.createElement("div",{key:"W",className:"react-datepicker__day-name"},n.props.weekLabel||"#")),r.concat([0,1,2,3,4,5,6].map(function(e){var r=t.clone().add(e,"days"),o=n.props.useWeekdaysShort?r.localeData().weekdaysShort(r):r.localeData().weekdaysMin(r);return g.default.createElement("div",{key:e,className:"react-datepicker__day-name"},o)}))},n.renderPreviousMonthButton=function(){if(n.props.forceShowMonthNavigation||!(0,k.allDaysDisabledBefore)(n.state.date,"month",n.props))return g.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--previous",onClick:n.decreaseMonth})},n.renderNextMonthButton=function(){if(n.props.forceShowMonthNavigation||!(0,k.allDaysDisabledAfter)(n.state.date,"month",n.props)){var e=["react-datepicker__navigation","react-datepicker__navigation--next"];return n.props.showTimeSelect&&e.push("react-datepicker__navigation--next--with-time"),n.props.todayButton&&e.push("react-datepicker__navigation--next--with-today-button"),g.default.createElement("a",{className:e.join(" "),onClick:n.increaseMonth})}},n.renderCurrentMonth=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:n.state.date,t=["react-datepicker__current-month"];return n.props.showYearDropdown&&t.push("react-datepicker__current-month--hasYearDropdown"),n.props.showMonthDropdown&&t.push("react-datepicker__current-month--hasMonthDropdown"),g.default.createElement("div",{className:t.join(" ")},e.format(n.props.dateFormat))},n.renderYearDropdown=function(){var e=arguments.length>0&&void 0!==arguments[0]&&arguments[0];if(n.props.showYearDropdown&&!e)return g.default.createElement(l.default,{dropdownMode:n.props.dropdownMode,onChange:n.changeYear,minDate:n.props.minDate,maxDate:n.props.maxDate,year:n.state.date.year(),scrollableYearDropdown:n.props.scrollableYearDropdown,yearDropdownItemNumber:n.props.yearDropdownItemNumber})},n.renderMonthDropdown=function(){arguments.length>0&&void 0!==arguments[0]&&arguments[0];if(n.props.showMonthDropdown)return g.default.createElement(d.default,{dropdownMode:n.props.dropdownMode,locale:n.props.locale,dateFormat:n.props.dateFormat,onChange:n.changeMonth,month:n.state.date.month()})},n.renderTodayButton=function(){if(n.props.todayButton)return g.default.createElement("div",{className:"react-datepicker__today-button",onClick:function(e){return n.props.onSelect(c.default.utc().utcOffset(n.props.utcOffset).startOf("date"),e)}},n.props.todayButton)},n.renderMonths=function(){for(var e=[],t=0;t<n.props.monthsShown;++t){var r=n.state.date.clone().add(t,"M"),o="month-"+t;e.push(g.default.createElement("div",{key:o,ref:function(e){n.monthContainer=e},className:"react-datepicker__month-container"},g.default.createElement("div",{className:"react-datepicker__header"},n.renderCurrentMonth(r),g.default.createElement("div",{className:"react-datepicker__header__dropdown react-datepicker__header__dropdown--"+n.props.dropdownMode,onFocus:n.handleDropdownFocus},n.renderMonthDropdown(0!==t),n.renderYearDropdown(0!==t)),g.default.createElement("div",{className:"react-datepicker__day-names"},n.header(r))),g.default.createElement(m.default,{day:r,dayClassName:n.props.dayClassName,onDayClick:n.handleDayClick,onDayMouseEnter:n.handleDayMouseEnter,onMouseLeave:n.handleMonthMouseLeave,onWeekSelect:n.props.onWeekSelect,formatWeekNumber:n.props.formatWeekNumber,minDate:n.props.minDate,maxDate:n.props.maxDate,excludeDates:n.props.excludeDates,highlightDates:n.props.highlightDates,selectingDate:n.state.selectingDate,includeDates:n.props.includeDates,inline:n.props.inline,fixedHeight:n.props.fixedHeight,filterDate:n.props.filterDate,preSelection:n.props.preSelection,selected:n.props.selected,selectsStart:n.props.selectsStart,selectsEnd:n.props.selectsEnd,showWeekNumbers:n.props.showWeekNumbers,startDate:n.props.startDate,endDate:n.props.endDate,peekNextMonth:n.props.peekNextMonth,utcOffset:n.props.utcOffset})))}return e},n.renderTimeSection=function(){return n.props.showTimeSelect?g.default.createElement(v.default,{selected:n.props.selected,onChange:n.props.onTimeChange,intervals:n.props.timeIntervals,minTime:n.props.minTime,maxTime:n.props.maxTime,excludeTimes:n.props.excludeTimes,todayButton:n.props.todayButton,showMonthDropdown:n.props.showMonthDropdown,showYearDropdown:n.props.showYearDropdown,withPortal:n.props.withPortal,monthRef:n.state.monthContainer}):void 0},n.state={date:n.localizeMoment(n.getDateInView()),selectingDate:null,monthContainer:n.monthContainer},n}return i(t,e),s(t,null,[{key:"defaultProps",get:function(){return{onDropdownFocus:function(){},utcOffset:c.default.utc().utcOffset(),monthsShown:1,forceShowMonthNavigation:!1}}}]),s(t,[{key:"componentDidMount",value:function(){var e=this;this.props.showTimeSelect&&(this.assignMonthContainer=function(){e.setState({monthContainer:e.monthContainer})}())}},{key:"componentWillReceiveProps",value:function(e){e.preSelection&&!(0,k.isSameDay)(e.preSelection,this.props.preSelection)?this.setState({date:this.localizeMoment(e.preSelection)}):e.openToDate&&!(0,k.isSameDay)(e.openToDate,this.props.openToDate)&&this.setState({date:this.localizeMoment(e.openToDate)})}},{key:"render",value:function(){return g.default.createElement("div",{className:(0,D.default)("react-datepicker",this.props.className)},g.default.createElement("div",{className:"react-datepicker__triangle"}),this.renderPreviousMonthButton(),this.renderNextMonthButton(),this.renderMonths(),this.renderTodayButton(),this.renderTimeSection(),this.props.children)}}]),t}(g.default.Component);t.default=C},function(t,n){t.exports=e},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(10)),f=r(l),d=n(12),h=r(d),m=(0,h.default)(f.default),y=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.state={dropdownVisible:!1},r.renderSelectOptions=function(){for(var e=r.props.minDate?r.props.minDate.year():1900,t=r.props.maxDate?r.props.maxDate.year():2100,n=[],o=e;o<=t;o++)n.push(c.default.createElement("option",{key:o,value:o},o));return n},r.onSelectChange=function(e){r.onChange(e.target.value)},r.renderSelectMode=function(){return c.default.createElement("select",{value:r.props.year,className:"react-datepicker__year-select",onChange:r.onSelectChange},r.renderSelectOptions())},r.renderReadView=function(e){return c.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__year-read-view",onClick:r.toggleDropdown},c.default.createElement("span",{className:"react-datepicker__year-read-view--down-arrow"}),c.default.createElement("span",{className:"react-datepicker__year-read-view--selected-year"},r.props.year))},r.renderDropdown=function(){return c.default.createElement(m,{key:"dropdown",ref:"options",year:r.props.year,onChange:r.onChange,onCancel:r.toggleDropdown,scrollableYearDropdown:r.props.scrollableYearDropdown,yearDropdownItemNumber:r.props.yearDropdownItemNumber})},r.renderScrollMode=function(){var e=r.state.dropdownVisible,t=[r.renderReadView(!e)];return e&&t.unshift(r.renderDropdown()),t},r.onChange=function(e){r.toggleDropdown(),e!==r.props.year&&r.props.onChange(e)},r.toggleDropdown=function(){r.setState({dropdownVisible:!r.state.dropdownVisible})},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){var e=void 0;switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode();break;case"select":e=this.renderSelectMode()}return c.default.createElement("div",{className:"react-datepicker__year-dropdown-container react-datepicker__year-dropdown-container--"+this.props.dropdownMode},e)}}]),t}(c.default.Component);t.default=y},function(e,n){e.exports=t},function(e,t,n){e.exports=n(6)()},function(e,t,n){"use strict";var r=n(7),o=n(8),a=n(9);e.exports=function(){function e(e,t,n,r,i,s){s!==a&&o(!1,"Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types")}function t(){return e}e.isRequired=e;var n={array:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:t,element:e,instanceOf:t,node:e,objectOf:t,oneOf:t,oneOfType:t,shape:t};return n.checkPropTypes=r,n.PropTypes=n,n}},function(e,t){"use strict";function n(e){return function(){return e}}var r=function(){};r.thatReturns=n,r.thatReturnsFalse=n(!1),r.thatReturnsTrue=n(!0),r.thatReturnsNull=n(null),r.thatReturnsThis=function(){return this},r.thatReturnsArgument=function(e){return e},e.exports=r},function(e,t,n){"use strict";function r(e,t,n,r,a,i,s,p){if(o(t),!e){var c;if(void 0===t)c=new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");else{var u=[n,r,a,i,s,p],l=0;c=new Error(t.replace(/%s/g,function(){return u[l++]})),c.name="Invariant Violation"}throw c.framesToPop=1,c}}var o=function(e){};e.exports=r},function(e,t){"use strict";var n="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";e.exports=n},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function s(e,t){for(var n=[],r=0;r<2*t+1;r++)n.push(e+t-r);return n}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),c=n(4),u=r(c),l=n(5),f=(r(l),n(11)),d=r(f),h=function(e){function t(e){o(this,t);var n=a(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));n.renderOptions=function(){var e=n.props.year,t=n.state.yearsList.map(function(t){return u.default.createElement("div",{className:"react-datepicker__year-option",key:t,ref:t,onClick:n.onChange.bind(n,t)},e===t?u.default.createElement("span",{className:"react-datepicker__year-option--selected"},"✓"):"",t)});return t.unshift(u.default.createElement("div",{className:"react-datepicker__year-option",ref:"upcoming",key:"upcoming",onClick:n.incrementYears},u.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-upcoming"}))),t.push(u.default.createElement("div",{className:"react-datepicker__year-option",ref:"previous",key:"previous",onClick:n.decrementYears},u.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-previous"}))),t},n.onChange=function(e){n.props.onChange(e)},n.handleClickOutside=function(){n.props.onCancel()},n.shiftYears=function(e){var t=n.state.yearsList.map(function(t){return t+e});n.setState({yearsList:t})},n.incrementYears=function(){return n.shiftYears(1)},n.decrementYears=function(){return n.shiftYears(-1)};var r=e.yearDropdownItemNumber,i=e.scrollableYearDropdown,p=r||(i?10:5);return n.state={yearsList:s(n.props.year,p)},n}return i(t,e),p(t,[{key:"render",value:function(){var e=(0,d.default)({"react-datepicker__year-dropdown":!0,"react-datepicker__year-dropdown--scrollable":this.props.scrollableYearDropdown});return u.default.createElement("div",{className:e},this.renderOptions())}}]),t}(u.default.Component);t.default=h},function(e,t,n){var r,o;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+!function(){"use strict";function n(){for(var e=[],t=0;t<arguments.length;t++){var r=arguments[t];if(r){var o=typeof r;if("string"===o||"number"===o)e.push(r);else if(Array.isArray(r))e.push(n.apply(null,r));else if("object"===o)for(var i in r)a.call(r,i)&&r[i]&&e.push(i)}}return e.join(" ")}var a={}.hasOwnProperty;"undefined"!=typeof e&&e.exports?e.exports=n:(r=[],o=function(){return n}.apply(t,r),!(void 0!==o&&(e.exports=o)))}()},function(e,t){e.exports=n},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(14)),f=r(l),d=n(12),h=r(d),m=n(2),y=r(m),v=(0,h.default)(f.default),b=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.state={dropdownVisible:!1},r.renderSelectOptions=function(e){return e.map(function(e,t){return c.default.createElement("option",{key:t,value:t},e)})},r.renderSelectMode=function(e){return c.default.createElement("select",{value:r.props.month,className:"react-datepicker__month-select",onChange:function(e){return r.onChange(e.target.value)}},r.renderSelectOptions(e))},r.renderReadView=function(e,t){return c.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__month-read-view",onClick:r.toggleDropdown},c.default.createElement("span",{className:"react-datepicker__month-read-view--selected-month"},t[r.props.month]),c.default.createElement("span",{className:"react-datepicker__month-read-view--down-arrow"}))},r.renderDropdown=function(e){return c.default.createElement(v,{key:"dropdown",ref:"options",month:r.props.month,monthNames:e,onChange:r.onChange,onCancel:r.toggleDropdown})},r.renderScrollMode=function(e){var t=r.state.dropdownVisible,n=[r.renderReadView(!t,e)];return t&&n.unshift(r.renderDropdown(e)),n},r.onChange=function(e){r.toggleDropdown(),e!==r.props.month&&r.props.onChange(e)},r.toggleDropdown=function(){return r.setState({dropdownVisible:!r.state.dropdownVisible})},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){var e=this,t=y.default.localeData(this.props.locale),n=[0,1,2,3,4,5,6,7,8,9,10,11].map(function(n){return t.months((0,y.default)({M:n}),e.props.dateFormat)}),r=void 0;switch(this.props.dropdownMode){case"scroll":r=this.renderScrollMode(n);break;case"select":r=this.renderSelectMode(n)}return c.default.createElement("div",{className:"react-datepicker__month-dropdown-container react-datepicker__month-dropdown-container--"+this.props.dropdownMode},r)}}]),t}(c.default.Component);t.default=b},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.renderOptions=function(){return r.props.monthNames.map(function(e,t){return c.default.createElement("div",{className:"react-datepicker__month-option",key:e,ref:e,onClick:r.onChange.bind(r,t)},r.props.month===t?c.default.createElement("span",{className:"react-datepicker__month-option--selected"},"✓"):"",e)})},r.onChange=function(e){return r.props.onChange(e)},r.handleClickOutside=function(){return r.props.onCancel()},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){return c.default.createElement("div",{className:"react-datepicker__month-dropdown"},this.renderOptions())}}]),t}(c.default.Component));t.default=l},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(11)),f=r(l),d=n(16),h=r(d),m=6,y=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.handleDayClick=function(e,t){r.props.onDayClick&&r.props.onDayClick(e,t)},r.handleDayMouseEnter=function(e){r.props.onDayMouseEnter&&r.props.onDayMouseEnter(e)},r.handleMouseLeave=function(){r.props.onMouseLeave&&r.props.onMouseLeave()},r.isWeekInMonth=function(e){var t=r.props.day,n=e.clone().add(6,"days");return e.isSame(t,"month")||n.isSame(t,"month")},r.renderWeeks=function(){for(var e=[],t=r.props.fixedHeight,n=r.props.day.clone().startOf("month").startOf("week"),o=0,a=!1;;){if(e.push(c.default.createElement(h.default,{key:o,day:n,month:r.props.day.month(),onDayClick:r.handleDayClick,onDayMouseEnter:r.handleDayMouseEnter,onWeekSelect:r.props.onWeekSelect,formatWeekNumber:r.props.formatWeekNumber,minDate:r.props.minDate,maxDate:r.props.maxDate,excludeDates:r.props.excludeDates,includeDates:r.props.includeDates,inline:r.props.inline,highlightDates:r.props.highlightDates,selectingDate:r.props.selectingDate,filterDate:r.props.filterDate,preSelection:r.props.preSelection,selected:r.props.selected,selectsStart:r.props.selectsStart,selectsEnd:r.props.selectsEnd,showWeekNumber:r.props.showWeekNumbers,startDate:r.props.startDate,endDate:r.props.endDate,dayClassName:r.props.dayClassName,utcOffset:r.props.utcOffset})),a)break;o++,n=n.clone().add(1,"weeks");var i=t&&o>=m,s=!t&&!r.isWeekInMonth(n);if(i||s){if(!r.props.peekNextMonth)break;a=!0}}return e},r.getClassNames=function(){var e=r.props,t=e.selectingDate,n=e.selectsStart,o=e.selectsEnd;return(0,f.default)("react-datepicker__month",{"react-datepicker__month--selecting-range":t&&(n||o)})},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){return c.default.createElement("div",{className:this.getClassNames(),onMouseLeave:this.handleMouseLeave,role:"listbox"},this.renderWeeks())}}]),t}(c.default.Component);t.default=y},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(17)),f=r(l),d=n(19),h=r(d),m=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.handleDayClick=function(e,t){r.props.onDayClick&&r.props.onDayClick(e,t)},r.handleDayMouseEnter=function(e){r.props.onDayMouseEnter&&r.props.onDayMouseEnter(e)},r.handleWeekClick=function(e,t,n){"function"==typeof r.props.onWeekSelect&&r.props.onWeekSelect(e,t,n)},r.formatWeekNumber=function(e){return r.props.formatWeekNumber?r.props.formatWeekNumber(e):parseInt(e.format("w"),10)},r.renderDays=function(){var e=r.props.day.clone().startOf("week"),t=[],n=r.formatWeekNumber(e);if(r.props.showWeekNumber){var o=r.props.onWeekSelect?r.handleWeekClick.bind(r,e,n):void 0;t.push(c.default.createElement(h.default,{key:"W",weekNumber:n,onClick:o}))}return t.concat([0,1,2,3,4,5,6].map(function(t){var n=e.clone().add(t,"days");return c.default.createElement(f.default,{key:t,day:n,month:r.props.month,onClick:r.handleDayClick.bind(r,n),onMouseEnter:r.handleDayMouseEnter.bind(r,n),minDate:r.props.minDate,maxDate:r.props.maxDate,excludeDates:r.props.excludeDates,includeDates:r.props.includeDates,inline:r.props.inline,highlightDates:r.props.highlightDates,selectingDate:r.props.selectingDate,filterDate:r.props.filterDate,preSelection:r.props.preSelection,selected:r.props.selected,selectsStart:r.props.selectsStart,selectsEnd:r.props.selectsEnd,startDate:r.props.startDate,endDate:r.props.endDate,dayClassName:r.props.dayClassName,utcOffset:r.props.utcOffset})}))},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){return c.default.createElement("div",{className:"react-datepicker__week"},this.renderDays())}}]),t}(c.default.Component);t.default=m},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function s(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var p="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},c=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),u=n(2),l=r(u),f=n(4),d=r(f),h=n(5),m=(r(h),n(11)),y=r(m),v=n(18),b=function(e){function t(){var e,n,r,s;a(this,t);for(var c=arguments.length,u=Array(c),f=0;f<c;f++)u[f]=arguments[f];return n=r=i(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(u))),r.handleClick=function(e){!r.isDisabled()&&r.props.onClick&&r.props.onClick(e)},r.handleMouseEnter=function(e){!r.isDisabled()&&r.props.onMouseEnter&&r.props.onMouseEnter(e)},r.isSameDay=function(e){return(0,v.isSameDay)(r.props.day,e)},r.isKeyboardSelected=function(){return!r.props.inline&&!r.isSameDay(r.props.selected)&&r.isSameDay(r.props.preSelection)},r.isDisabled=function(){return(0,v.isDayDisabled)(r.props.day,r.props)},r.getHighLightedClass=function(e){var t=r.props,n=t.day,a=t.highlightDates;if(!a)return o({},e,!1);for(var i={},s=0,c=a.length;s<c;s++){var u=a[s];if(u instanceof l.default)(0,v.isSameDay)(n,u)&&(i[e]=!0);else if("object"===("undefined"==typeof u?"undefined":p(u))){var f=Object.keys(u),d=u[f[0]];if("string"==typeof f[0]&&d.constructor===Array)for(var h=0,m=d.length;h<m;h++)(0,v.isSameDay)(n,d[h])&&(i[f[0]]=!0)}}return i},r.isInRange=function(){var e=r.props,t=e.day,n=e.startDate,o=e.endDate;return!(!n||!o)&&(0,v.isDayInRange)(t,n,o)},r.isInSelectingRange=function(){var e=r.props,t=e.day,n=e.selectsStart,o=e.selectsEnd,a=e.selectingDate,i=e.startDate,s=e.endDate;return!(!n&&!o||!a||r.isDisabled())&&(n&&s&&a.isSameOrBefore(s)?(0,v.isDayInRange)(t,a,s):!!(o&&i&&a.isSameOrAfter(i))&&(0,v.isDayInRange)(t,i,a))},r.isSelectingRangeStart=function(){if(!r.isInSelectingRange())return!1;var e=r.props,t=e.day,n=e.selectingDate,o=e.startDate,a=e.selectsStart;return a?(0,v.isSameDay)(t,n):(0,v.isSameDay)(t,o)},r.isSelectingRangeEnd=function(){if(!r.isInSelectingRange())return!1;var e=r.props,t=e.day,n=e.selectingDate,o=e.endDate,a=e.selectsEnd;return a?(0,v.isSameDay)(t,n):(0,v.isSameDay)(t,o)},r.isRangeStart=function(){var e=r.props,t=e.day,n=e.startDate,o=e.endDate;return!(!n||!o)&&(0,v.isSameDay)(n,t)},r.isRangeEnd=function(){var e=r.props,t=e.day,n=e.startDate,o=e.endDate;return!(!n||!o)&&(0,v.isSameDay)(o,t)},r.isWeekend=function(){var e=r.props.day.day();return 0===e||6===e},r.isOutsideMonth=function(){return void 0!==r.props.month&&r.props.month!==r.props.day.month()},r.getClassNames=function(e){var t=r.props.dayClassName?r.props.dayClassName(e):void 0;return(0,y.default)("react-datepicker__day",t,"react-datepicker__day--"+(0,v.getDayOfWeekCode)(r.props.day),{"react-datepicker__day--disabled":r.isDisabled(),"react-datepicker__day--selected":r.isSameDay(r.props.selected),"react-datepicker__day--keyboard-selected":r.isKeyboardSelected(),"react-datepicker__day--range-start":r.isRangeStart(),"react-datepicker__day--range-end":r.isRangeEnd(),"react-datepicker__day--in-range":r.isInRange(),"react-datepicker__day--in-selecting-range":r.isInSelectingRange(),"react-datepicker__day--selecting-range-start":r.isSelectingRangeStart(),"react-datepicker__day--selecting-range-end":r.isSelectingRangeEnd(),"react-datepicker__day--today":r.isSameDay(l.default.utc().utcOffset(r.props.utcOffset)),"react-datepicker__day--weekend":r.isWeekend(),"react-datepicker__day--outside-month":r.isOutsideMonth()},r.getHighLightedClass("react-datepicker__day--highlighted"))},s=n,i(r,s)}return s(t,e),c(t,[{key:"render",value:function(){return d.default.createElement("div",{className:this.getClassNames(this.props.day),onClick:this.handleClick,onMouseEnter:this.handleMouseEnter,"aria-label":"day-"+this.props.day.date(),role:"option"},this.props.day.date())}}]),t}(d.default.Component);b.defaultProps={utcOffset:l.default.utc().utcOffset()},t.default=b},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){return e&&t?e.isSame(t,"day"):!e&&!t}function a(e,t){return e&&t?e.utcOffset()===t.utcOffset():!e&&!t}function i(e,t,n){var r=t.clone().startOf("day").subtract(1,"seconds"),o=n.clone().startOf("day").add(1,"seconds");return e.clone().startOf("day").isBetween(r,o)}function s(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=t.minDate,r=t.maxDate,a=t.excludeDates,i=t.includeDates,s=t.filterDate;return n&&e.isBefore(n,"day")||r&&e.isAfter(r,"day")||a&&a.some(function(t){return o(e,t)})||i&&!i.some(function(t){return o(e,t)})||s&&!s(e.clone())||!1}function p(e,t){for(var n=t.length,r=0;r<n;r++)if(t[r].get("hours")===e.get("hours")&&t[r].get("minutes")===e.get("minutes"))return!0;return!1}function c(e,t){var n=t.minTime,r=t.maxTime;if(!n||!r)throw new Error("Both minTime and maxTime props required");var o=(0,b.default)().hours(0).minutes(0).seconds(0),a=o.clone().hours(e.get("hours")).minutes(e.get("minutes")),i=o.clone().hours(n.get("hours")).minutes(n.get("minutes")),s=o.clone().hours(r.get("hours")).minutes(r.get("minutes"));return!(a.isSameOrAfter(i)&&a.isSameOrBefore(s))}function u(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},r=n.minDate,o=n.includeDates,a=e.clone().subtract(1,t);return r&&a.isBefore(r,t)||o&&o.every(function(e){return a.isBefore(e,t)})||!1}function l(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},r=n.maxDate,o=n.includeDates,a=e.clone().add(1,t);return r&&a.isAfter(r,t)||o&&o.every(function(e){return a.isAfter(e,t)})||!1}function f(e){var t=e.minDate,n=e.includeDates;return n&&t?b.default.min(n.filter(function(e){return t.isSameOrBefore(e,"day")})):n?b.default.min(n):t}function d(e){var t=e.maxDate,n=e.includeDates;return n&&t?b.default.max(n.filter(function(e){return t.isSameOrAfter(e,"day")})):n?b.default.max(n):t}function h(e,t){var n=t.dateFormat,r=t.locale,o=(0,b.default)(e,n,r||b.default.locale(),!0);return o.isValid()?o:null}function m(e,t){var n=t.dateFormat,r=t.locale;return e&&e.clone().locale(r||b.default.locale()).format(Array.isArray(n)?n[0]:n)||""}function y(e){return g[e.isoWeekday()]}Object.defineProperty(t,"__esModule",{value:!0}),t.isSameDay=o,t.isSameUtcOffset=a,t.isDayInRange=i,t.isDayDisabled=s,t.isTimeDisabled=p,t.isTimeInDisabledRange=c,t.allDaysDisabledBefore=u,t.allDaysDisabledAfter=l,t.getEffectiveMinDate=f,t.getEffectiveMaxDate=d,t.parseDate=h,t.safeDateFormat=m,t.getDayOfWeekCode=y;var v=n(2),b=r(v),g={1:"mon",2:"tue",3:"wed",4:"thu",5:"fri",6:"sat",7:"sun"}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(11)),f=r(l),d=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),c=0;c<s;c++)p[c]=arguments[c];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.handleClick=function(e){r.props.onClick&&r.props.onClick(e)},i=n,a(r,i)}return i(t,e),s(t,[{key:"render",value:function(){var e={"react-datepicker__week-number":!0,"react-datepicker__week-number--clickable":!!this.props.onClick};return c.default.createElement("div",{className:(0,f.default)(e),"aria-label":"week-"+this.props.weekNumber,onClick:this.handleClick},this.props.weekNumber)}}]),t}(c.default.Component);t.default=d},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(2)),f=r(l),d=n(18),h=function(e){function t(){var e,n,r,i;o(this,t);for(var s=arguments.length,p=Array(s),u=0;u<s;u++)p[u]=arguments[u];return n=r=a(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.handleClick=function(e){(r.props.minTime||r.props.maxTime)&&(0,d.isTimeInDisabledRange)(e,r.props)||r.props.excludeTimes&&(0,d.isTimeDisabled)(e,r.props.excludeTimes)||r.props.onChange(e)},r.liClasses=function(e,t,n){var o=["react-datepicker__time-list-item"];return t===e.get("hours")&&n===e.get("minutes")&&o.push("react-datepicker__time-list-item--selected"),((r.props.minTime||r.props.maxTime)&&(0,d.isTimeInDisabledRange)(e,r.props)||r.props.excludeTimes&&(0,d.isTimeDisabled)(e,r.props.excludeTimes))&&o.push("react-datepicker__time-list-item--disabled"),o.join(" ")},r.renderTimes=function(){for(var e=[],t=r.props.intervals,n=r.props.selected?r.props.selected:(0,f.default)(),o=n.get("hours"),a=n.get("minutes"),i=(0,f.default)().startOf("day"),s=1440/t,p=0;p<s;p++)e.push(i.clone().add(p*t,"minutes"));return e.map(function(e,t){return c.default.createElement("li",{key:t,onClick:r.handleClick.bind(r,e),className:r.liClasses(e,o,a)},e.format("hh:mm A"))})},i=n,a(r,i)}return i(t,e),s(t,[{key:"componentDidMount",value:function(){var e=60/this.props.intervals,t=this.props.selected?this.props.selected.get("hours"):(0,f.default)().get("hours");this.list.scrollTop=30*(e*t)}},{key:"render",value:function(){var e=this,t=null;return this.props.monthRef&&(t=this.props.monthRef.clientHeight-39),c.default.createElement("div",{className:"react-datepicker__time-container "+(this.props.todayButton?"react-datepicker__time-container--with-today-button":"")},c.default.createElement("div",{className:"react-datepicker__header react-datepicker__header--time"},c.default.createElement("div",{className:"react-datepicker-time__header"},"Time")),c.default.createElement("div",{className:"react-datepicker__time"},c.default.createElement("div",{className:"react-datepicker__time-box"},c.default.createElement("ul",{className:"react-datepicker__time-list",ref:function(t){e.list=t},style:t?{height:t}:{}},this.renderTimes.bind(this)()))))}}],[{key:"defaultProps",get:function(){return{intervals:30,onTimeChange:function(){},todayButton:null}}}]),t}(c.default.Component);t.default=h},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0}),t.popperPlacementPositions=void 0;var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),p=n(4),c=r(p),u=n(5),l=(r(u),n(22)),f=(t.popperPlacementPositions=["auto","auto-left","auto-right","bottom","bottom-end","bottom-start","left","left-end","left-start","right","right-end","right-start","top","top-end","top-start"],function(e){function t(){return o(this,t),a(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return i(t,e),s(t,[{key:"render",value:function(){var e=this.props,t=e.hidePopper,n=e.popperComponent,r=e.popperModifiers,o=e.popperPlacement,a=e.targetComponent;return c.default.createElement(l.Manager,null,c.default.createElement(l.Target,{className:"react-datepicker-wrapper"},a),!t&&c.default.createElement(l.Popper,{className:"react-datepicker-popper",modifiers:r,placement:o},n))}}],[{key:"defaultProps",get:function(){return{hidePopper:!0,popperModifiers:{preventOverflow:{enabled:!0,escapeWithReference:!0,boundariesElement:"viewport"}},popperPlacement:"bottom-start"}}}]),t}(c.default.Component));t.default=f},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.Arrow=t.Popper=t.Target=t.Manager=void 0;var o=n(23),a=r(o),i=n(24),s=r(i),p=n(25),c=r(p),u=n(29),l=r(u);t.Manager=a.default,t.Target=s.default,t.Popper=c.default,t.Arrow=l.default},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function s(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var p=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),c=n(4),u=(r(c),n(5)),l=r(u),f=function(e){function t(){var e,n,r,o;a(this,t);for(var s=arguments.length,p=Array(s),c=0;c<s;c++)p[c]=arguments[c];return n=r=i(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r._setTargetNode=function(e){r._targetNode=e},r._getTargetNode=function(){return r._targetNode},o=n,i(r,o)}return s(t,e),p(t,[{key:"getChildContext",value:function(){return{popperManager:{setTargetNode:this._setTargetNode,getTargetNode:this._getTargetNode}}}},{key:"render",value:function(){var e=this.props,t=e.tag,n=e.children,r=o(e,["tag","children"]);return t!==!1?(0,c.createElement)(t,r,n):n}}]),t}(c.Component);f.childContextTypes={popperManager:l.default.object.isRequired},f.propTypes={tag:l.default.oneOfType([l.default.string,l.default.bool])},f.defaultProps={tag:"div"},t.default=f},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}Object.defineProperty(t,"__esModule",{value:!0});var a=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},i=n(4),s=(r(i),n(5)),p=r(s),c=function(e,t){var n=e.component,r=void 0===n?"div":n,s=e.innerRef,p=e.children,c=o(e,["component","innerRef","children"]),u=t.popperManager,l=function(e){u.setTargetNode(e),"function"==typeof s&&s(e)};if("function"==typeof p){var f={ref:l};return p({targetProps:f,restProps:c})}var d=a({},c);return"string"==typeof r?d.ref=l:d.innerRef=l,(0,i.createElement)(r,d,p)};c.contextTypes={popperManager:p.default.object.isRequired},c.propTypes={component:p.default.oneOfType([p.default.node,p.default.func]),innerRef:p.default.func,children:p.default.oneOfType([p.default.node,p.default.func])},t.default=c},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function a(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function s(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function p(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var c=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},u=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),l=n(4),f=(r(l),n(5)),d=r(f),h=n(26),m=r(h),y=n(27),v=r(y),b=function(e){function t(){var e,n,r,o;i(this,t);for(var a=arguments.length,p=Array(a),u=0;u<a;u++)p[u]=arguments[u];return n=r=s(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(p))),r.state={},r._setArrowNode=function(e){r._arrowNode=e},r._getTargetNode=function(){return r.context.popperManager.getTargetNode()},r._updateStateModifier={enabled:!0,order:900,fn:function(e){return(r.state.data&&!(0,v.default)(e.offsets,r.state.data.offsets)||!r.state.data)&&r.setState({data:e}),e}},r._getPopperStyle=function(){var e=r.state.data;if(!r._popper||!e)return{position:"absolute",pointerEvents:"none",opacity:0};var t=e.offsets.popper,n=(t.top,t.left,t.position);return c({position:n},e.styles)},r._getPopperPlacement=function(){return r.state.data?r.state.data.placement:void 0},r._getArrowStyle=function(){if(r.state.data&&r.state.data.offsets.arrow){var e=r.state.data.offsets.arrow,t=e.top,n=e.left;return{top:t,left:n}}return{}},o=n,s(r,o)}return p(t,e),u(t,[{key:"getChildContext",value:function(){return{popper:{setArrowNode:this._setArrowNode,getArrowStyle:this._getArrowStyle}}}},{key:"componentDidMount",value:function(){this._updatePopper()}},{key:"componentDidUpdate",value:function(e){e.placement===this.props.placement&&e.eventsEnabled===this.props.eventsEnabled||this._updatePopper(),this._popper&&e.children!==this.props.children&&this._popper.scheduleUpdate()}},{key:"componentWillUnmount",value:function(){this._destroyPopper()}},{key:"_updatePopper",value:function(){this._destroyPopper(),this._node&&this._createPopper()}},{key:"_createPopper",value:function(){var e=this.props,t=e.placement,n=e.eventsEnabled,r=c({},this.props.modifiers,{applyStyle:{enabled:!1},updateState:this._updateStateModifier});this._arrowNode&&(r.arrow={
+element:this._arrowNode}),this._popper=new m.default(this._getTargetNode(),this._node,{placement:t,eventsEnabled:n,modifiers:r}),this._popper.scheduleUpdate()}},{key:"_destroyPopper",value:function(){this._popper&&this._popper.destroy()}},{key:"render",value:function(){var e=this,t=this.props,n=t.component,r=t.innerRef,i=(t.placement,t.eventsEnabled,t.modifiers,t.children),s=a(t,["component","innerRef","placement","eventsEnabled","modifiers","children"]),p=function(t){e._node=t,"function"==typeof r&&r(t)},u=this._getPopperStyle(),f=this._getPopperPlacement();if("function"==typeof i){var d=o({ref:p,style:u},"data-placement",f);return i({popperProps:d,restProps:s,scheduleUpdate:this._popper&&this._popper.scheduleUpdate})}var h=c({},s,{style:c({},s.style,u),"data-placement":f});return"string"==typeof n?h.ref=p:h.innerRef=p,(0,l.createElement)(n,h,i)}}]),t}(l.Component);b.contextTypes={popperManager:d.default.object.isRequired},b.childContextTypes={popper:d.default.object.isRequired},b.propTypes={component:d.default.oneOfType([d.default.node,d.default.func]),innerRef:d.default.func,placement:d.default.oneOf(m.default.placements),eventsEnabled:d.default.bool,modifiers:d.default.object,children:d.default.oneOfType([d.default.node,d.default.func])},b.defaultProps={component:"div",placement:"bottom",eventsEnabled:!0,modifiers:{}},t.default=b},function(e,t,n){(function(t){/**!
+	 * @fileOverview Kickass library to create and place poppers near their reference elements.
+	 * @version 1.12.3
+	 * @license
+	 * Copyright (c) 2016 Federico Zivolo and contributors
+	 *
+	 * Permission is hereby granted, free of charge, to any person obtaining a copy
+	 * of this software and associated documentation files (the "Software"), to deal
+	 * in the Software without restriction, including without limitation the rights
+	 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 * copies of the Software, and to permit persons to whom the Software is
+	 * furnished to do so, subject to the following conditions:
+	 *
+	 * The above copyright notice and this permission notice shall be included in all
+	 * copies or substantial portions of the Software.
+	 *
+	 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	 * SOFTWARE.
+	 */
+!function(t,n){e.exports=n()}(this,function(){"use strict";function e(e){var t=!1,n=0,r=document.createElement("span"),o=new MutationObserver(function(){e(),t=!1});return o.observe(r,{attributes:!0}),function(){t||(t=!0,r.setAttribute("x-index",n),n+=1)}}function n(e){var t=!1;return function(){t||(t=!0,setTimeout(function(){t=!1,e()},ce))}}function r(e){var t={};return e&&"[object Function]"===t.toString.call(e)}function o(e,t){if(1!==e.nodeType)return[];var n=window.getComputedStyle(e,null);return t?n[t]:n}function a(e){return"HTML"===e.nodeName?e:e.parentNode||e.host}function i(e){if(!e||["HTML","BODY","#document"].indexOf(e.nodeName)!==-1)return window.document.body;var t=o(e),n=t.overflow,r=t.overflowX,s=t.overflowY;return/(auto|scroll)/.test(n+s+r)?e:i(a(e))}function s(e){var t=e&&e.offsetParent,n=t&&t.nodeName;return n&&"BODY"!==n&&"HTML"!==n?["TD","TABLE"].indexOf(t.nodeName)!==-1&&"static"===o(t,"position")?s(t):t:window.document.documentElement}function p(e){var t=e.nodeName;return"BODY"!==t&&("HTML"===t||s(e.firstElementChild)===e)}function c(e){return null!==e.parentNode?c(e.parentNode):e}function u(e,t){if(!(e&&e.nodeType&&t&&t.nodeType))return window.document.documentElement;var n=e.compareDocumentPosition(t)&Node.DOCUMENT_POSITION_FOLLOWING,r=n?e:t,o=n?t:e,a=document.createRange();a.setStart(r,0),a.setEnd(o,0);var i=a.commonAncestorContainer;if(e!==i&&t!==i||r.contains(o))return p(i)?i:s(i);var l=c(e);return l.host?u(l.host,t):u(e,c(t).host)}function l(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"top",n="top"===t?"scrollTop":"scrollLeft",r=e.nodeName;if("BODY"===r||"HTML"===r){var o=window.document.documentElement,a=window.document.scrollingElement||o;return a[n]}return e[n]}function f(e,t){var n=arguments.length>2&&void 0!==arguments[2]&&arguments[2],r=l(t,"top"),o=l(t,"left"),a=n?-1:1;return e.top+=r*a,e.bottom+=r*a,e.left+=o*a,e.right+=o*a,e}function d(e,t){var n="x"===t?"Left":"Top",r="Left"===n?"Right":"Bottom";return+e["border"+n+"Width"].split("px")[0]+ +e["border"+r+"Width"].split("px")[0]}function h(e,t,n,r){return Math.max(t["offset"+e],t["scroll"+e],n["client"+e],n["offset"+e],n["scroll"+e],he()?n["offset"+e]+r["margin"+("Height"===e?"Top":"Left")]+r["margin"+("Height"===e?"Bottom":"Right")]:0)}function m(){var e=window.document.body,t=window.document.documentElement,n=he()&&window.getComputedStyle(t);return{height:h("Height",e,t,n),width:h("Width",e,t,n)}}function y(e){return be({},e,{right:e.left+e.width,bottom:e.top+e.height})}function v(e){var t={};if(he())try{t=e.getBoundingClientRect();var n=l(e,"top"),r=l(e,"left");t.top+=n,t.left+=r,t.bottom+=n,t.right+=r}catch(e){}else t=e.getBoundingClientRect();var a={left:t.left,top:t.top,width:t.right-t.left,height:t.bottom-t.top},i="HTML"===e.nodeName?m():{},s=i.width||e.clientWidth||a.right-a.left,p=i.height||e.clientHeight||a.bottom-a.top,c=e.offsetWidth-s,u=e.offsetHeight-p;if(c||u){var f=o(e);c-=d(f,"x"),u-=d(f,"y"),a.width-=c,a.height-=u}return y(a)}function b(e,t){var n=he(),r="HTML"===t.nodeName,a=v(e),s=v(t),p=i(e),c=o(t),u=+c.borderTopWidth.split("px")[0],l=+c.borderLeftWidth.split("px")[0],d=y({top:a.top-s.top-u,left:a.left-s.left-l,width:a.width,height:a.height});if(d.marginTop=0,d.marginLeft=0,!n&&r){var h=+c.marginTop.split("px")[0],m=+c.marginLeft.split("px")[0];d.top-=u-h,d.bottom-=u-h,d.left-=l-m,d.right-=l-m,d.marginTop=h,d.marginLeft=m}return(n?t.contains(p):t===p&&"BODY"!==p.nodeName)&&(d=f(d,t)),d}function g(e){var t=window.document.documentElement,n=b(e,t),r=Math.max(t.clientWidth,window.innerWidth||0),o=Math.max(t.clientHeight,window.innerHeight||0),a=l(t),i=l(t,"left"),s={top:a-n.top+n.marginTop,left:i-n.left+n.marginLeft,width:r,height:o};return y(s)}function w(e){var t=e.nodeName;return"BODY"!==t&&"HTML"!==t&&("fixed"===o(e,"position")||w(a(e)))}function _(e,t,n,r){var o={top:0,left:0},s=u(e,t);if("viewport"===r)o=g(s);else{var p=void 0;"scrollParent"===r?(p=i(a(e)),"BODY"===p.nodeName&&(p=window.document.documentElement)):p="window"===r?window.document.documentElement:r;var c=b(p,s);if("HTML"!==p.nodeName||w(s))o=c;else{var l=m(),f=l.height,d=l.width;o.top+=c.top-c.marginTop,o.bottom=f+c.top,o.left+=c.left-c.marginLeft,o.right=d+c.left}}return o.left+=n,o.top+=n,o.right-=n,o.bottom-=n,o}function D(e){var t=e.width,n=e.height;return t*n}function k(e,t,n,r,o){var a=arguments.length>5&&void 0!==arguments[5]?arguments[5]:0;if(e.indexOf("auto")===-1)return e;var i=_(n,r,a,o),s={top:{width:i.width,height:t.top-i.top},right:{width:i.right-t.right,height:i.height},bottom:{width:i.width,height:i.bottom-t.bottom},left:{width:t.left-i.left,height:i.height}},p=Object.keys(s).map(function(e){return be({key:e},s[e],{area:D(s[e])})}).sort(function(e,t){return t.area-e.area}),c=p.filter(function(e){var t=e.width,r=e.height;return t>=n.clientWidth&&r>=n.clientHeight}),u=c.length>0?c[0].key:p[0].key,l=e.split("-")[1];return u+(l?"-"+l:"")}function O(e,t,n){var r=u(t,n);return b(n,r)}function E(e){var t=window.getComputedStyle(e),n=parseFloat(t.marginTop)+parseFloat(t.marginBottom),r=parseFloat(t.marginLeft)+parseFloat(t.marginRight),o={width:e.offsetWidth+r,height:e.offsetHeight+n};return o}function C(e){var t={left:"right",right:"left",bottom:"top",top:"bottom"};return e.replace(/left|right|bottom|top/g,function(e){return t[e]})}function S(e,t,n){n=n.split("-")[0];var r=E(e),o={width:r.width,height:r.height},a=["right","left"].indexOf(n)!==-1,i=a?"top":"left",s=a?"left":"top",p=a?"height":"width",c=a?"width":"height";return o[i]=t[i]+t[p]/2-r[p]/2,n===s?o[s]=t[s]-r[c]:o[s]=t[C(s)],o}function M(e,t){return Array.prototype.find?e.find(t):e.filter(t)[0]}function P(e,t,n){if(Array.prototype.findIndex)return e.findIndex(function(e){return e[t]===n});var r=M(e,function(e){return e[t]===n});return e.indexOf(r)}function T(e,t,n){var o=void 0===n?e:e.slice(0,P(e,"name",n));return o.forEach(function(e){e.function&&console.warn("`modifier.function` is deprecated, use `modifier.fn`!");var n=e.function||e.fn;e.enabled&&r(n)&&(t.offsets.popper=y(t.offsets.popper),t.offsets.reference=y(t.offsets.reference),t=n(t,e))}),t}function x(){if(!this.state.isDestroyed){var e={instance:this,styles:{},arrowStyles:{},attributes:{},flipped:!1,offsets:{}};e.offsets.reference=O(this.state,this.popper,this.reference),e.placement=k(this.options.placement,e.offsets.reference,this.popper,this.reference,this.options.modifiers.flip.boundariesElement,this.options.modifiers.flip.padding),e.originalPlacement=e.placement,e.offsets.popper=S(this.popper,e.offsets.reference,e.placement),e.offsets.popper.position="absolute",e=T(this.modifiers,e),this.state.isCreated?this.options.onUpdate(e):(this.state.isCreated=!0,this.options.onCreate(e))}}function N(e,t){return e.some(function(e){var n=e.name,r=e.enabled;return r&&n===t})}function j(e){for(var t=[!1,"ms","Webkit","Moz","O"],n=e.charAt(0).toUpperCase()+e.slice(1),r=0;r<t.length-1;r++){var o=t[r],a=o?""+o+n:e;if("undefined"!=typeof window.document.body.style[a])return a}return null}function R(){return this.state.isDestroyed=!0,N(this.modifiers,"applyStyle")&&(this.popper.removeAttribute("x-placement"),this.popper.style.left="",this.popper.style.position="",this.popper.style.top="",this.popper.style[j("transform")]=""),this.disableEventListeners(),this.options.removeOnDestroy&&this.popper.parentNode.removeChild(this.popper),this}function W(e,t,n,r){var o="BODY"===e.nodeName,a=o?window:e;a.addEventListener(t,n,{passive:!0}),o||W(i(a.parentNode),t,n,r),r.push(a)}function I(e,t,n,r){n.updateBound=r,window.addEventListener("resize",n.updateBound,{passive:!0});var o=i(e);return W(o,"scroll",n.updateBound,n.scrollParents),n.scrollElement=o,n.eventsEnabled=!0,n}function L(){this.state.eventsEnabled||(this.state=I(this.reference,this.options,this.state,this.scheduleUpdate))}function A(e,t){return window.removeEventListener("resize",t.updateBound),t.scrollParents.forEach(function(e){e.removeEventListener("scroll",t.updateBound)}),t.updateBound=null,t.scrollParents=[],t.scrollElement=null,t.eventsEnabled=!1,t}function F(){this.state.eventsEnabled&&(window.cancelAnimationFrame(this.scheduleUpdate),this.state=A(this.reference,this.state))}function B(e){return""!==e&&!isNaN(parseFloat(e))&&isFinite(e)}function Y(e,t){Object.keys(t).forEach(function(n){var r="";["width","height","top","right","bottom","left"].indexOf(n)!==-1&&B(t[n])&&(r="px"),e.style[n]=t[n]+r})}function H(e,t){Object.keys(t).forEach(function(n){var r=t[n];r!==!1?e.setAttribute(n,t[n]):e.removeAttribute(n)})}function U(e){return Y(e.instance.popper,e.styles),H(e.instance.popper,e.attributes),e.arrowElement&&Object.keys(e.arrowStyles).length&&Y(e.arrowElement,e.arrowStyles),e}function V(e,t,n,r,o){var a=O(o,t,e),i=k(n.placement,a,t,e,n.modifiers.flip.boundariesElement,n.modifiers.flip.padding);return t.setAttribute("x-placement",i),Y(t,{position:"absolute"}),n}function q(e,t){var n=t.x,r=t.y,o=e.offsets.popper,a=M(e.instance.modifiers,function(e){return"applyStyle"===e.name}).gpuAcceleration;void 0!==a&&console.warn("WARNING: `gpuAcceleration` option moved to `computeStyle` modifier and will not be supported in future versions of Popper.js!");var i=void 0!==a?a:t.gpuAcceleration,p=s(e.instance.popper),c=v(p),u={position:o.position},l={left:Math.floor(o.left),top:Math.floor(o.top),bottom:Math.floor(o.bottom),right:Math.floor(o.right)},f="bottom"===n?"top":"bottom",d="right"===r?"left":"right",h=j("transform"),m=void 0,y=void 0;if(y="bottom"===f?-c.height+l.bottom:l.top,m="right"===d?-c.width+l.right:l.left,i&&h)u[h]="translate3d("+m+"px, "+y+"px, 0)",u[f]=0,u[d]=0,u.willChange="transform";else{var b="bottom"===f?-1:1,g="right"===d?-1:1;u[f]=y*b,u[d]=m*g,u.willChange=f+", "+d}var w={"x-placement":e.placement};return e.attributes=be({},w,e.attributes),e.styles=be({},u,e.styles),e.arrowStyles=be({},e.offsets.arrow,e.arrowStyles),e}function K(e,t,n){var r=M(e,function(e){var n=e.name;return n===t}),o=!!r&&e.some(function(e){return e.name===n&&e.enabled&&e.order<r.order});if(!o){var a="`"+t+"`",i="`"+n+"`";console.warn(i+" modifier is required by "+a+" modifier in order to work, be sure to include it before "+a+"!")}return o}function z(e,t){if(!K(e.instance.modifiers,"arrow","keepTogether"))return e;var n=t.element;if("string"==typeof n){if(n=e.instance.popper.querySelector(n),!n)return e}else if(!e.instance.popper.contains(n))return console.warn("WARNING: `arrow.element` must be child of its popper element!"),e;var r=e.placement.split("-")[0],a=e.offsets,i=a.popper,s=a.reference,p=["left","right"].indexOf(r)!==-1,c=p?"height":"width",u=p?"Top":"Left",l=u.toLowerCase(),f=p?"left":"top",d=p?"bottom":"right",h=E(n)[c];s[d]-h<i[l]&&(e.offsets.popper[l]-=i[l]-(s[d]-h)),s[l]+h>i[d]&&(e.offsets.popper[l]+=s[l]+h-i[d]);var m=s[l]+s[c]/2-h/2,v=o(e.instance.popper,"margin"+u).replace("px",""),b=m-y(e.offsets.popper)[l]-v;return b=Math.max(Math.min(i[c]-h,b),0),e.arrowElement=n,e.offsets.arrow={},e.offsets.arrow[l]=Math.round(b),e.offsets.arrow[f]="",e}function G(e){return"end"===e?"start":"start"===e?"end":e}function X(e){var t=arguments.length>1&&void 0!==arguments[1]&&arguments[1],n=we.indexOf(e),r=we.slice(n+1).concat(we.slice(0,n));return t?r.reverse():r}function J(e,t){if(N(e.instance.modifiers,"inner"))return e;if(e.flipped&&e.placement===e.originalPlacement)return e;var n=_(e.instance.popper,e.instance.reference,t.padding,t.boundariesElement),r=e.placement.split("-")[0],o=C(r),a=e.placement.split("-")[1]||"",i=[];switch(t.behavior){case _e.FLIP:i=[r,o];break;case _e.CLOCKWISE:i=X(r);break;case _e.COUNTERCLOCKWISE:i=X(r,!0);break;default:i=t.behavior}return i.forEach(function(s,p){if(r!==s||i.length===p+1)return e;r=e.placement.split("-")[0],o=C(r);var c=e.offsets.popper,u=e.offsets.reference,l=Math.floor,f="left"===r&&l(c.right)>l(u.left)||"right"===r&&l(c.left)<l(u.right)||"top"===r&&l(c.bottom)>l(u.top)||"bottom"===r&&l(c.top)<l(u.bottom),d=l(c.left)<l(n.left),h=l(c.right)>l(n.right),m=l(c.top)<l(n.top),y=l(c.bottom)>l(n.bottom),v="left"===r&&d||"right"===r&&h||"top"===r&&m||"bottom"===r&&y,b=["top","bottom"].indexOf(r)!==-1,g=!!t.flipVariations&&(b&&"start"===a&&d||b&&"end"===a&&h||!b&&"start"===a&&m||!b&&"end"===a&&y);(f||v||g)&&(e.flipped=!0,(f||v)&&(r=i[p+1]),g&&(a=G(a)),e.placement=r+(a?"-"+a:""),e.offsets.popper=be({},e.offsets.popper,S(e.instance.popper,e.offsets.reference,e.placement)),e=T(e.instance.modifiers,e,"flip"))}),e}function Q(e){var t=e.offsets,n=t.popper,r=t.reference,o=e.placement.split("-")[0],a=Math.floor,i=["top","bottom"].indexOf(o)!==-1,s=i?"right":"bottom",p=i?"left":"top",c=i?"width":"height";return n[s]<a(r[p])&&(e.offsets.popper[p]=a(r[p])-n[c]),n[p]>a(r[s])&&(e.offsets.popper[p]=a(r[s])),e}function Z(e,t,n,r){var o=e.match(/((?:\-|\+)?\d*\.?\d*)(.*)/),a=+o[1],i=o[2];if(!a)return e;if(0===i.indexOf("%")){var s=void 0;switch(i){case"%p":s=n;break;case"%":case"%r":default:s=r}var p=y(s);return p[t]/100*a}if("vh"===i||"vw"===i){var c=void 0;return c="vh"===i?Math.max(document.documentElement.clientHeight,window.innerHeight||0):Math.max(document.documentElement.clientWidth,window.innerWidth||0),c/100*a}return a}function $(e,t,n,r){var o=[0,0],a=["right","left"].indexOf(r)!==-1,i=e.split(/(\+|\-)/).map(function(e){return e.trim()}),s=i.indexOf(M(i,function(e){return e.search(/,|\s/)!==-1}));i[s]&&i[s].indexOf(",")===-1&&console.warn("Offsets separated by white space(s) are deprecated, use a comma (,) instead.");var p=/\s*,\s*|\s+/,c=s!==-1?[i.slice(0,s).concat([i[s].split(p)[0]]),[i[s].split(p)[1]].concat(i.slice(s+1))]:[i];return c=c.map(function(e,r){var o=(1===r?!a:a)?"height":"width",i=!1;return e.reduce(function(e,t){return""===e[e.length-1]&&["+","-"].indexOf(t)!==-1?(e[e.length-1]=t,i=!0,e):i?(e[e.length-1]+=t,i=!1,e):e.concat(t)},[]).map(function(e){return Z(e,o,t,n)})}),c.forEach(function(e,t){e.forEach(function(n,r){B(n)&&(o[t]+=n*("-"===e[r-1]?-1:1))})}),o}function ee(e,t){var n=t.offset,r=e.placement,o=e.offsets,a=o.popper,i=o.reference,s=r.split("-")[0],p=void 0;return p=B(+n)?[+n,0]:$(n,a,i,s),"left"===s?(a.top+=p[0],a.left-=p[1]):"right"===s?(a.top+=p[0],a.left+=p[1]):"top"===s?(a.left+=p[0],a.top-=p[1]):"bottom"===s&&(a.left+=p[0],a.top+=p[1]),e.popper=a,e}function te(e,t){var n=t.boundariesElement||s(e.instance.popper);e.instance.reference===n&&(n=s(n));var r=_(e.instance.popper,e.instance.reference,t.padding,n);t.boundaries=r;var o=t.priority,a=e.offsets.popper,i={primary:function(e){var n=a[e];return a[e]<r[e]&&!t.escapeWithReference&&(n=Math.max(a[e],r[e])),ve({},e,n)},secondary:function(e){var n="right"===e?"left":"top",o=a[n];return a[e]>r[e]&&!t.escapeWithReference&&(o=Math.min(a[n],r[e]-("right"===e?a.width:a.height))),ve({},n,o)}};return o.forEach(function(e){var t=["left","top"].indexOf(e)!==-1?"primary":"secondary";a=be({},a,i[t](e))}),e.offsets.popper=a,e}function ne(e){var t=e.placement,n=t.split("-")[0],r=t.split("-")[1];if(r){var o=e.offsets,a=o.reference,i=o.popper,s=["bottom","top"].indexOf(n)!==-1,p=s?"left":"top",c=s?"width":"height",u={start:ve({},p,a[p]),end:ve({},p,a[p]+a[c]-i[c])};e.offsets.popper=be({},i,u[r])}return e}function re(e){if(!K(e.instance.modifiers,"hide","preventOverflow"))return e;var t=e.offsets.reference,n=M(e.instance.modifiers,function(e){return"preventOverflow"===e.name}).boundaries;if(t.bottom<n.top||t.left>n.right||t.top>n.bottom||t.right<n.left){if(e.hide===!0)return e;e.hide=!0,e.attributes["x-out-of-boundaries"]=""}else{if(e.hide===!1)return e;e.hide=!1,e.attributes["x-out-of-boundaries"]=!1}return e}function oe(e){var t=e.placement,n=t.split("-")[0],r=e.offsets,o=r.popper,a=r.reference,i=["left","right"].indexOf(n)!==-1,s=["top","left"].indexOf(n)===-1;return o[i?"left":"top"]=a[n]-(s?o[i?"width":"height"]:0),e.placement=C(t),e.offsets.popper=y(o),e}for(var ae=["native code","[object MutationObserverConstructor]"],ie=function(e){return ae.some(function(t){return(e||"").toString().indexOf(t)>-1})},se="undefined"!=typeof window,pe=["Edge","Trident","Firefox"],ce=0,ue=0;ue<pe.length;ue+=1)if(se&&navigator.userAgent.indexOf(pe[ue])>=0){ce=1;break}var le=se&&ie(window.MutationObserver),fe=le?e:n,de=void 0,he=function(){return void 0===de&&(de=navigator.appVersion.indexOf("MSIE 10")!==-1),de},me=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},ye=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),ve=function(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e},be=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},ge=["auto-start","auto","auto-end","top-start","top","top-end","right-start","right","right-end","bottom-end","bottom","bottom-start","left-end","left","left-start"],we=ge.slice(3),_e={FLIP:"flip",CLOCKWISE:"clockwise",COUNTERCLOCKWISE:"counterclockwise"},De={shift:{order:100,enabled:!0,fn:ne},offset:{order:200,enabled:!0,fn:ee,offset:0},preventOverflow:{order:300,enabled:!0,fn:te,priority:["left","right","top","bottom"],padding:5,boundariesElement:"scrollParent"},keepTogether:{order:400,enabled:!0,fn:Q},arrow:{order:500,enabled:!0,fn:z,element:"[x-arrow]"},flip:{order:600,enabled:!0,fn:J,behavior:"flip",padding:5,boundariesElement:"viewport"},inner:{order:700,enabled:!1,fn:oe},hide:{order:800,enabled:!0,fn:re},computeStyle:{order:850,enabled:!0,fn:q,gpuAcceleration:!0,x:"bottom",y:"right"},applyStyle:{order:900,enabled:!0,fn:U,onLoad:V,gpuAcceleration:void 0}},ke={placement:"bottom",eventsEnabled:!0,removeOnDestroy:!1,onCreate:function(){},onUpdate:function(){},modifiers:De},Oe=function(){function e(t,n){var o=this,a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};me(this,e),this.scheduleUpdate=function(){return requestAnimationFrame(o.update)},this.update=fe(this.update.bind(this)),this.options=be({},e.Defaults,a),this.state={isDestroyed:!1,isCreated:!1,scrollParents:[]},this.reference=t.jquery?t[0]:t,this.popper=n.jquery?n[0]:n,this.options.modifiers={},Object.keys(be({},e.Defaults.modifiers,a.modifiers)).forEach(function(t){o.options.modifiers[t]=be({},e.Defaults.modifiers[t]||{},a.modifiers?a.modifiers[t]:{})}),this.modifiers=Object.keys(this.options.modifiers).map(function(e){return be({name:e},o.options.modifiers[e])}).sort(function(e,t){return e.order-t.order}),this.modifiers.forEach(function(e){e.enabled&&r(e.onLoad)&&e.onLoad(o.reference,o.popper,o.options,e,o.state)}),this.update();var i=this.options.eventsEnabled;i&&this.enableEventListeners(),this.state.eventsEnabled=i}return ye(e,[{key:"update",value:function(){return x.call(this)}},{key:"destroy",value:function(){return R.call(this)}},{key:"enableEventListeners",value:function(){return L.call(this)}},{key:"disableEventListeners",value:function(){return F.call(this)}}]),e}();return Oe.Utils=("undefined"!=typeof window?window:t).PopperUtils,Oe.placements=ge,Oe.Defaults=ke,Oe})}).call(t,function(){return this}())},function(e,t,n){/*!
+	 * is-equal-shallow <https://github.com/jonschlinkert/is-equal-shallow>
+	 *
+	 * Copyright (c) 2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+"use strict";var r=n(28);e.exports=function(e,t){if(!e&&!t)return!0;if(!e&&t||e&&!t)return!1;var n,o=0,a=0;for(n in t)if(a++,!r(t[n])||!e.hasOwnProperty(n)||e[n]!==t[n])return!1;for(n in e)o++;return o===a}},function(e,t){/*!
+	 * is-primitive <https://github.com/jonschlinkert/is-primitive>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+"use strict";e.exports=function(e){return null==e||"function"!=typeof e&&"object"!=typeof e}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){var n={};for(var r in e)t.indexOf(r)>=0||Object.prototype.hasOwnProperty.call(e,r)&&(n[r]=e[r]);return n}Object.defineProperty(t,"__esModule",{value:!0});var a=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},i=n(4),s=(r(i),n(5)),p=r(s),c=function(e,t){var n=e.component,r=void 0===n?"span":n,s=e.innerRef,p=e.children,c=o(e,["component","innerRef","children"]),u=t.popper,l=function(e){u.setArrowNode(e),"function"==typeof s&&s(e)},f=u.getArrowStyle();if("function"==typeof p){var d={ref:l,style:f};return p({arrowProps:d,restProps:c})}var h=a({},c,{style:a({},f,c.style)});return"string"==typeof r?h.ref=l:h.innerRef=l,(0,i.createElement)(r,h,p)};c.contextTypes={popper:p.default.object.isRequired},c.propTypes={component:p.default.oneOfType([p.default.node,p.default.func]),innerRef:p.default.func,children:p.default.oneOfType([p.default.node,p.default.func])},t.default=c}])});
 
 /***/ }),
 /* 257 */
 /***/ (function(module, exports, __webpack_require__) {
-
+=======
 "use strict";
 /* eslint-disable global-require */
 
@@ -41305,7 +41841,43 @@ if (true) {
 "use strict";
 /* eslint-disable react/prop-types */
 
+>>>>>>> master
 
+"use strict";
+/* eslint-disable global-require */
+
+<<<<<<< HEAD
+
+
+if (true) {
+  module.exports = __webpack_require__(258);
+} else {
+  module.exports = require('./AppContainer.dev');
+}
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* eslint-disable react/prop-types */
+=======
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = __webpack_require__(1);
+var Component = React.Component;
+>>>>>>> master
+
+var AppContainer = function (_Component) {
+  _inherits(AppContainer, _Component);
+
+<<<<<<< HEAD
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -41320,7 +41892,7 @@ var Component = React.Component;
 
 var AppContainer = function (_Component) {
   _inherits(AppContainer, _Component);
-
+=======
   function AppContainer() {
     _classCallCheck(this, AppContainer);
 
@@ -41350,8 +41922,192 @@ module.exports = AppContainer;
 "use strict";
 /* eslint-disable global-require */
 
+>>>>>>> master
+
+  function AppContainer() {
+    _classCallCheck(this, AppContainer);
+
+<<<<<<< HEAD
+    return _possibleConstructorReturn(this, (AppContainer.__proto__ || Object.getPrototypeOf(AppContainer)).apply(this, arguments));
+  }
+
+  _createClass(AppContainer, [{
+    key: 'render',
+    value: function render() {
+      if (this.props.component) {
+        return React.createElement(this.props.component, this.props.props);
+      }
+
+      return React.Children.only(this.props.children);
+    }
+  }]);
+
+  return AppContainer;
+}(Component);
+
+module.exports = AppContainer;
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* eslint-disable global-require */
 
 
+
+if (true) {
+  module.exports = __webpack_require__(260);
+} else {
+  module.exports = require('./index.dev');
+}
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports.AppContainer = __webpack_require__(257);
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var React = __webpack_require__(1);
+var PropTypes = __webpack_require__(7);
+var createClass = __webpack_require__(6);
+
+var sizerStyle = {
+	position: 'absolute',
+	top: 0,
+	left: 0,
+	visibility: 'hidden',
+	height: 0,
+	overflow: 'scroll',
+	whiteSpace: 'pre'
+};
+
+var AutosizeInput = createClass({
+	propTypes: {
+		className: PropTypes.string, // className for the outer element
+		defaultValue: PropTypes.any, // default field value
+		inputClassName: PropTypes.string, // className for the input element
+		inputStyle: PropTypes.object, // css styles for the input element
+		minWidth: PropTypes.oneOfType([// minimum width for input element
+		PropTypes.number, PropTypes.string]),
+		onAutosize: PropTypes.func, // onAutosize handler: function(newWidth) {}
+		onChange: PropTypes.func, // onChange handler: function(newValue) {}
+		placeholder: PropTypes.string, // placeholder text
+		placeholderIsMinWidth: PropTypes.bool, // don't collapse size to less than the placeholder
+		style: PropTypes.object, // css styles for the outer element
+		value: PropTypes.any },
+	// field value
+	getDefaultProps: function getDefaultProps() {
+		return {
+			minWidth: 1
+		};
+	},
+	getInitialState: function getInitialState() {
+		return {
+			inputWidth: this.props.minWidth
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		this.mounted = true;
+		this.copyInputStyles();
+		this.updateInputWidth();
+	},
+	componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+		if (prevState.inputWidth !== this.state.inputWidth) {
+			if (typeof this.props.onAutosize === 'function') {
+				this.props.onAutosize(this.state.inputWidth);
+			}
+		}
+		this.updateInputWidth();
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		this.mounted = false;
+	},
+	inputRef: function inputRef(el) {
+		this.input = el;
+	},
+	placeHolderSizerRef: function placeHolderSizerRef(el) {
+		this.placeHolderSizer = el;
+	},
+	sizerRef: function sizerRef(el) {
+		this.sizer = el;
+	},
+	copyInputStyles: function copyInputStyles() {
+		if (this.mounted || !window.getComputedStyle) {
+			return;
+		}
+		var inputStyle = this.input && window.getComputedStyle(this.input);
+		if (!inputStyle) {
+			return;
+		}
+		var widthNode = this.sizer;
+		widthNode.style.fontSize = inputStyle.fontSize;
+		widthNode.style.fontFamily = inputStyle.fontFamily;
+		widthNode.style.fontWeight = inputStyle.fontWeight;
+		widthNode.style.fontStyle = inputStyle.fontStyle;
+		widthNode.style.letterSpacing = inputStyle.letterSpacing;
+		widthNode.style.textTransform = inputStyle.textTransform;
+		if (this.props.placeholder) {
+			var placeholderNode = this.placeHolderSizer;
+			placeholderNode.style.fontSize = inputStyle.fontSize;
+			placeholderNode.style.fontFamily = inputStyle.fontFamily;
+			placeholderNode.style.fontWeight = inputStyle.fontWeight;
+			placeholderNode.style.fontStyle = inputStyle.fontStyle;
+			placeholderNode.style.letterSpacing = inputStyle.letterSpacing;
+			placeholderNode.style.textTransform = inputStyle.textTransform;
+		}
+	},
+	updateInputWidth: function updateInputWidth() {
+		if (!this.mounted || !this.sizer || typeof this.sizer.scrollWidth === 'undefined') {
+			return;
+		}
+		var newInputWidth = undefined;
+		if (this.props.placeholder && (!this.props.value || this.props.value && this.props.placeholderIsMinWidth)) {
+			newInputWidth = Math.max(this.sizer.scrollWidth, this.placeHolderSizer.scrollWidth) + 2;
+		} else {
+			newInputWidth = this.sizer.scrollWidth + 2;
+		}
+		if (newInputWidth < this.props.minWidth) {
+			newInputWidth = this.props.minWidth;
+		}
+		if (newInputWidth !== this.state.inputWidth) {
+			this.setState({
+				inputWidth: newInputWidth
+			});
+		}
+	},
+	getInput: function getInput() {
+		return this.input;
+	},
+	focus: function focus() {
+		this.input.focus();
+	},
+	blur: function blur() {
+		this.input.blur();
+	},
+	select: function select() {
+		this.input.select();
+	},
+	render: function render() {
+		var sizerValue = [this.props.defaultValue, this.props.value, ''].reduce(function (previousValue, currentValue) {
+			if (previousValue !== null && previousValue !== undefined) {
+				return previousValue;
+			}
+			return currentValue;
+		});
+=======
 if (true) {
   module.exports = __webpack_require__(260);
 } else {
@@ -54350,6 +55106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnUtils = __webpack_require__(7);
 	var KeyCodes = __webpack_require__(177);
 	var isFunction = __webpack_require__(25);
+>>>>>>> master
 
 	__webpack_require__(29);
 	__webpack_require__(75);
@@ -54361,6 +55118,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ReactDataGrid = React.createClass({
 	  displayName: 'ReactDataGrid',
 
+<<<<<<< HEAD
+/***/ }),
+/* 262 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+=======
+>>>>>>> master
 
 	  mixins: [ColumnMetricsMixin, DOMMetrics.MetricsComputatorMixin, KeyboardHandlerMixin],
 
@@ -54457,6 +55220,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return initialState;
 	  },
 
+<<<<<<< HEAD
+/***/ }),
+/* 263 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IGNORE_CLASS_NAME", function() { return IGNORE_CLASS_NAME; });
+/* harmony export (immutable) */ __webpack_exports__["default"] = onClickOutsideHOC;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__generateOutsideCheck__ = __webpack_require__(262);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+=======
 	  hasSelectedCellChanged: function hasSelectedCellChanged(selected) {
 	    var previouslySelected = Object.assign({}, this.state.selected);
 	    return previouslySelected.rowIdx !== selected.rowIdx || previouslySelected.idx !== selected.idx || previouslySelected.active === false;
@@ -54467,6 +55246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var newSelected = Object.assign({}, this.state.selected, { contextMenuDisplayed: false });
 	    this.setState({ selected: newSelected });
 	  },
+>>>>>>> master
 
 	  onColumnEvent: function onColumnEvent(ev, columnEvent) {
 	    var idx = columnEvent.idx,
@@ -54855,10 +55635,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
+<<<<<<< HEAD
+/***/ }),
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	  // columnKey not used here as this function will select the whole row,
 	  // but needed to match the function signature in the CheckboxEditor
 	  handleRowSelect: function handleRowSelect(rowIdx, columnKey, rowData, e) {
 	    e.stopPropagation();
+>>>>>>> master
 
 	    if (this.useNewRowSelection()) {
 	      if (this.props.rowSelection.enableShiftSelect === true) {
@@ -55084,9 +55870,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var row = this.props.rowGetter(rowIdx);
 	    var col = this.getColumn(idx);
 
+<<<<<<< HEAD
+var _utilsStripDiacritics = __webpack_require__(165);
+=======
 	    if (!ColumnUtils.canEdit(col, row, this.props.enableCellSelect)) {
 	      return;
 	    }
+>>>>>>> master
 
 	    var selected = { rowIdx: rowIdx, idx: idx };
 	    if (this.hasSelectedCellChanged(selected)) {
@@ -55373,7 +56163,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(71);
 
+<<<<<<< HEAD
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	var _utils2 = _interopRequireDefault(_utils);
+>>>>>>> master
 
 	__webpack_require__(30);
 
@@ -55435,8 +56231,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    );
 	  };
 
+<<<<<<< HEAD
+/***/ }),
+/* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	  return RowGroup;
 	}(_react.Component);
+>>>>>>> master
 
 	RowGroup.propTypes = {
 	  height: _react.PropTypes.number.isRequired,
@@ -55571,13 +56373,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
+<<<<<<< HEAD
+var _utilsDefaultFilterOptions = __webpack_require__(163);
+=======
 	module.exports = ScrollShim;
+>>>>>>> master
 
 /***/ }),
 /* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
+var _utilsDefaultMenuRenderer = __webpack_require__(164);
+=======
 	'use strict';
+>>>>>>> master
 
 	var React = __webpack_require__(2);
 	var Canvas = __webpack_require__(165);
@@ -56074,6 +56884,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return React.createElement(CustomEditor, _extends({ ref: editorRef }, editorProps));
 	    }
 
+<<<<<<< HEAD
+/***/ }),
+/* 267 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	    return React.createElement(SimpleTextEditor, { ref: editorRef, column: this.props.column, value: this.getInitialValue(), onBlur: this.commit, rowMetaData: this.getRowMetaData(), onKeyDown: function onKeyDown() {}, commit: function commit() {} });
 	  },
 	  onPressEnter: function onPressEnter() {
@@ -56126,6 +56941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (isFunction(this.getEditor().hasResults)) {
 	      return this.getEditor().hasResults();
 	    }
+>>>>>>> master
 
 	    return false;
 	  },
@@ -56314,8 +57130,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return function (_Component) {
 	    _inherits(ComponentWrapper, _Component);
 
+<<<<<<< HEAD
+/***/ }),
+/* 268 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	    function ComponentWrapper() {
 	      _classCallCheck(this, ComponentWrapper);
+>>>>>>> master
 
 	      var _this = _possibleConstructorReturn(this, _Component.call(this));
 
@@ -56432,7 +57254,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
+<<<<<<< HEAD
+/* 269 */
+=======
 /* 194 */
+>>>>>>> master
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56464,8 +57290,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports._helpers = __webpack_require__(192);
 
 /***/ }),
+<<<<<<< HEAD
+/* 270 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+exports['default'] = clearRenderer;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = __webpack_require__(1);
+=======
 /* 195 */
 /***/ (function(module, exports) {
+>>>>>>> master
 
 	"use strict";
 
@@ -56476,7 +57319,324 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isEmptyArray;
 
 /***/ }),
+<<<<<<< HEAD
+/* 271 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+var stylesInDom = {},
+	memoize = function(fn) {
+		var memo;
+		return function () {
+			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+			return memo;
+		};
+	},
+	isOldIE = memoize(function() {
+		// Test for IE <= 9 as proposed by Browserhacks
+		// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+		// Tests for existence of standard globals is to allow style-loader 
+		// to operate correctly into non-standard environments
+		// @see https://github.com/webpack-contrib/style-loader/issues/177
+		return window && document && document.all && !window.atob;
+	}),
+	getElement = (function(fn) {
+		var memo = {};
+		return function(selector) {
+			if (typeof memo[selector] === "undefined") {
+				memo[selector] = fn.call(this, selector);
+			}
+			return memo[selector]
+		};
+	})(function (styleTarget) {
+		return document.querySelector(styleTarget)
+	}),
+	singletonElement = null,
+	singletonCounter = 0,
+	styleElementsInsertedAtTop = [],
+	fixUrls = __webpack_require__(272);
+
+module.exports = function(list, options) {
+	if(typeof DEBUG !== "undefined" && DEBUG) {
+		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (typeof options.insertInto === "undefined") options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+	addStylesToDom(styles, options);
+
+	return function update(newList) {
+		var mayRemove = [];
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+		for(var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+			if(domStyle.refs === 0) {
+				for(var j = 0; j < domStyle.parts.length; j++)
+					domStyle.parts[j]();
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom(styles, options) {
+	for(var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+		if(domStyle) {
+			domStyle.refs++;
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles(list, options) {
+	var styles = [];
+	var newStyles = {};
+	for(var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+		if(!newStyles[id])
+			styles.push(newStyles[id] = {id: id, parts: [part]});
+		else
+			newStyles[id].parts.push(part);
+	}
+	return styles;
+}
+
+function insertStyleElement(options, styleElement) {
+	var styleTarget = getElement(options.insertInto)
+	if (!styleTarget) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+	if (options.insertAt === "top") {
+		if(!lastStyleElementInsertedAtTop) {
+			styleTarget.insertBefore(styleElement, styleTarget.firstChild);
+		} else if(lastStyleElementInsertedAtTop.nextSibling) {
+			styleTarget.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			styleTarget.appendChild(styleElement);
+		}
+		styleElementsInsertedAtTop.push(styleElement);
+	} else if (options.insertAt === "bottom") {
+		styleTarget.appendChild(styleElement);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement(styleElement) {
+	styleElement.parentNode.removeChild(styleElement);
+	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+	if(idx >= 0) {
+		styleElementsInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement(options) {
+	var styleElement = document.createElement("style");
+	options.attrs.type = "text/css";
+
+	attachTagAttrs(styleElement, options.attrs);
+	insertStyleElement(options, styleElement);
+	return styleElement;
+}
+
+function createLinkElement(options) {
+	var linkElement = document.createElement("link");
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	attachTagAttrs(linkElement, options.attrs);
+	insertStyleElement(options, linkElement);
+	return linkElement;
+}
+
+function attachTagAttrs(element, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		element.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle(obj, options) {
+	var styleElement, update, remove, transformResult;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    transformResult = options.transform(obj.css);
+	    
+	    if (transformResult) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = transformResult;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css. 
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+		styleElement = singletonElement || (singletonElement = createStyleElement(options));
+		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+	} else if(obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function") {
+		styleElement = createLinkElement(options);
+		update = updateLink.bind(null, styleElement, options);
+		remove = function() {
+			removeStyleElement(styleElement);
+			if(styleElement.href)
+				URL.revokeObjectURL(styleElement.href);
+		};
+	} else {
+		styleElement = createStyleElement(options);
+		update = applyToTag.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle(newObj) {
+		if(newObj) {
+			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+				return;
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag(styleElement, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = styleElement.childNodes;
+		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+		if (childNodes.length) {
+			styleElement.insertBefore(cssNode, childNodes[index]);
+		} else {
+			styleElement.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag(styleElement, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		styleElement.setAttribute("media", media)
+	}
+
+	if(styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = css;
+	} else {
+		while(styleElement.firstChild) {
+			styleElement.removeChild(styleElement.firstChild);
+		}
+		styleElement.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink(linkElement, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/* If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+	and there is no publicPath defined then lets turn convertToAbsoluteUrls
+	on by default.  Otherwise default to the convertToAbsoluteUrls option
+	directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls){
+		css = fixUrls(css);
+	}
+
+	if(sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = linkElement.href;
+
+	linkElement.href = URL.createObjectURL(blob);
+
+	if(oldSrc)
+		URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 272 */
+=======
 /* 196 */
+>>>>>>> master
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -56502,11 +57662,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isImmutableCollection;
 
 /***/ }),
+<<<<<<< HEAD
+/* 273 */
+=======
 /* 198 */
+>>>>>>> master
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+<<<<<<< HEAD
+// load the styles
+var content = __webpack_require__(233);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(271)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./btn-3d.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./btn-3d.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 274 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	var _immutable = __webpack_require__(19);
 
 	module.exports = _immutable.Map.isMap;
@@ -56514,6 +57708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ }),
 /* 199 */
 /***/ (function(module, exports) {
+>>>>>>> master
 
 	"use strict";
 
@@ -56533,18 +57728,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = getMixedTypeValueRetriever;
 
+<<<<<<< HEAD
+var _cookie = __webpack_require__(231);
+=======
 /***/ }),
 /* 200 */
 /***/ (function(module, exports, __webpack_require__) {
+>>>>>>> master
 
 	exports = module.exports = __webpack_require__(8)();
 	// imports
 
+<<<<<<< HEAD
+var _objectAssign = __webpack_require__(167);
+=======
+>>>>>>> master
 
 	// module
 	exports.push([module.id, ".react-grid-Cell{background-color:#fff;padding-left:8px;padding-right:8px;border-right:1px solid #eee;border-bottom:1px solid #ddd}.react-grid-Cell:focus{outline:2px solid #66afe9;outline-offset:-2px}.react-grid-Cell--locked:focus{z-index:100}.react-grid-Cell:focus .drag-handle{position:absolute;bottom:-5px;right:-4px;background:#66afe9;width:8px;height:8px;border:1px solid #fff;border-right:0;border-bottom:0;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Cell:not(.editing) .react-grid-Cell__value{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.react-grid-Cell:not(.editing):not(.rdg-child-cell) .react-grid-Cell__value{position:relative;top:50%;transform:translateY(-50%)}.rdg-child-cell .react-grid-Cell__value{line-height:35px}.react-grid-Cell.readonly{background-color:#000}.react-grid-Cell.copied{background:rgba(0,0,255,.2)!important}.react-grid-Cell--locked:last-of-type{border-right:1px solid #ddd;box-shadow:none}.react-grid-Cell:hover:focus .drag-handle .glyphicon-arrow-down{display:\"block\"}.react-grid-Cell.is-dragged-over-down{border-right:1px dashed #000;border-left:1px dashed #000;border-bottom:1px dashed #000}.react-grid-Cell.is-dragged-over-up{border-right:1px dashed #000;border-left:1px dashed #000;border-top:1px dashed #000}.react-grid-Cell.is-dragged-over-up .drag-handle{top:-5px}.react-grid-Cell:hover{background:#eee}.react-grid-cell .form-control-feedback{color:#a94442;position:absolute;top:0;right:10px;z-index:1000000;display:block;width:34px;height:34px}.react-grid-Cell.was-dragged-over{border-right:1px dashed #000;border-left:1px dashed #000}.react-grid-Cell:hover:focus .drag-handle{position:absolute;bottom:-8px;right:-7px;background:#fff;width:16px;height:16px;border:1px solid #66afe9;z-index:8;cursor:crosshair;cursor:-webkit-grab}.react-grid-Row.row-selected .react-grid-Cell{background-color:#dbecfa}.react-grid-Cell.editing{padding:0;overflow:visible!important}.react-grid-Cell--locked.editing{z-index:100}.react-grid-Cell.editing .has-error input{border:2px solid red!important;border-radius:2px!important}.react-grid-Cell__value ul{margin-top:0;margin-bottom:0;display:inline-block}.react-grid-Cell__value .btn-sm{padding:0}.cell-tooltip{position:relative;display:inline-block}.cell-tooltip .cell-tooltip-text{visibility:hidden;width:150px;background-color:#000;color:#fff;text-align:center;border-radius:6px;padding:5px 0;position:absolute;z-index:1;bottom:-150%;left:50%;margin-left:-60px;opacity:1s}.cell-tooltip:hover .cell-tooltip-text{visibility:visible;opacity:.8}.cell-tooltip .cell-tooltip-text:after{content:\" \";position:absolute;bottom:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:transparent transparent #000}.react-grid-Canvas.opaque .react-grid-Cell.cell-tooltip:hover .cell-tooltip-text{visibility:hidden}.rdg-cell-expand{top:0;right:20px;position:absolute;cursor:pointer}.rdg-child-row-action-cross-last:before,.rdg-child-row-action-cross:before,rdg-child-row-action-cross-last:after,rdg-child-row-action-cross:after{content:\"\";position:absolute;background:grey;height:50%}.rdg-child-row-action-cross:before{left:21px;width:1px;height:35px}.rdg-child-row-action-cross-last:before{left:21px;width:1px}.rdg-child-row-action-cross-last:after,.rdg-child-row-action-cross:after{top:50%;left:20px;height:1px;width:15px;content:\"\";position:absolute;background:grey}.rdg-child-row-action-cross:hover{background:red}.rdg-child-row-btn{position:absolute;cursor:pointer;border:1px solid grey;border-radius:14px;z-index:3;background:#fff}.rdg-child-row-btn div{font-size:12px;text-align:center;line-height:19px;color:grey;height:20px;width:20px;position:absolute;top:60%;left:53%;margin-top:-10px;margin-left:-10px}.rdg-empty-child-row:hover .glyphicon-plus-sign,.rdg-empty-child-row:hover a{color:green}.rdg-child-row-btn .glyphicon-remove-sign:hover{color:red}.last-column .cell-tooltip-text{right:100%;left:0!important}", ""]);
 
+<<<<<<< HEAD
+var _utils = __webpack_require__(275);
+=======
 	// exports
+>>>>>>> master
 
 
 /***/ }),
@@ -56604,7 +57811,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
+<<<<<<< HEAD
+/* 275 */
+=======
 /* 205 */
+>>>>>>> master
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -56651,14 +57862,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	      error.name = 'Invariant Violation';
 	    }
 
+<<<<<<< HEAD
+/***/ }),
+/* 276 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	    error.framesToPop = 1; // we don't care about invariant's own frame
 	    throw error;
 	  }
 	}
+>>>>>>> master
 
 	module.exports = invariant;
 
 /***/ }),
+<<<<<<< HEAD
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(2))(1);
+
+/***/ }),
+/* 278 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 /* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56673,10 +57900,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @providesModule keyMirror
 	 * @typechecks static-only
 	 */
+>>>>>>> master
 
 	'use strict';
 
+<<<<<<< HEAD
+/***/ }),
+/* 279 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	var invariant = __webpack_require__(205);
+>>>>>>> master
 
 	/**
 	 * Constructs an enumeration with keys equal to their value.
@@ -56709,7 +57943,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ret;
 	};
 
+<<<<<<< HEAD
+/***/ }),
+/* 280 */
+/***/ (function(module, exports, __webpack_require__) {
+=======
 	module.exports = keyMirror;
+>>>>>>> master
 
 /***/ })
 /******/ ])
@@ -56717,10 +57957,17 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
+<<<<<<< HEAD
+/* 281 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(2))(72);
+=======
 /* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(306);
+>>>>>>> master
 
 /***/ })
 /******/ ]);

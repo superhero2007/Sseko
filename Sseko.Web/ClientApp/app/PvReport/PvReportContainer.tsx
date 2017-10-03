@@ -9,7 +9,11 @@ import * as dtos from '../../dtos';
 
 type PvReportProps = MappedProps & typeof Report.actionCreators;
 
-class PvReportContainer extends React.Component<PvReportProps, {}> {
+interface PvReportState {
+    columns: any;
+}
+
+class PvReportContainer extends React.Component<PvReportProps, PvReportState> {
     constructor(props) {
         super(props);
 
@@ -22,6 +26,22 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         this.onHostessChange = this.onHostessChange.bind(this);
         this.onMonthChange = this.onMonthChange.bind(this);
         this.calculateTotalSales = this.calculateTotalSales.bind(this);
+        this.state = {
+            columns: [
+                { key: 'date', name: 'DATE', sortable: 0 },
+                { key: 'orderNumber', name: 'ORDER #', sortable: 0 },
+                { key: 'customer', name: 'CUSTOMER', sortable: 0 },
+                { key: 'hostess', name: 'HOSTESS', sortable: -1 },
+                { key: 'type', name: 'TRANSACTION TYPE', sortable: -1 },
+                { key: 'commission', name: 'COMMISSIONABLE SALE', sortable: 0 },
+                { key: 'return', name: 'RETURNS', sortable: 0 },
+                { key: 'sale', name: 'TOTAL SALE', sortable: 0 }
+            ]
+        };
+    }
+
+    state = {
+        columns: []
     }
 
     getHasHostesses = () => {
@@ -34,15 +54,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     }
 
     getColumns = () => {
-        let columns = [
-            { key: 'date', name: 'DATE', sortable: true },
-            { key: 'orderNumber', name: 'ORDER #', sortable: true },
-            { key: 'customer', name: 'CUSTOMER', sortable: true },
-            { key: 'hostess', name: 'HOSTESS', sortable: true },
-            { key: 'type', name: 'TYPE', sortable: true },
-            { key: 'commission', name: 'CS', sortable: true },
-            { key: 'sale', name: 'TOTAL', sortable: true }
-        ];
+        let columns = this.state.columns;
         // Calculate column widths based on character counts
         for (let c in columns) {
             // Magic numbers
@@ -53,12 +65,12 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             let sortable = 18;
             //
 
-            let headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"] ? sortable : 0);
+            let headerWidth = columns[c]["name"].length * headerCharacterWidth + headerPadding + (columns[c]["sortable"]>=0 ? sortable : 0);
 
             // Find the widest row item
             let maxRowWidth = headerWidth;
             this.props.rows.map(row => {
-                maxRowWidth = Math.max(maxRowWidth, row[columns[c].key].length * rowItemCharacterWidth + rowPadding);
+                maxRowWidth = Math.max(maxRowWidth, row[columns[c].key] ? row[columns[c].key].length * rowItemCharacterWidth + rowPadding : 0);
             });
             columns[c]["width"] = maxRowWidth;
         }
@@ -75,7 +87,23 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     }
 
     onGridSort(sortColumn, sortDirection) {
-        this.props.updateSort(sortColumn, sortDirection);
+        if (sortDirection >= 0) {
+            var stateCopy = Object.assign({}, this.state);
+            for (let index in stateCopy.columns) {
+                if (stateCopy.columns[index].key == sortColumn)
+                    stateCopy.columns[index].sortable = (sortDirection + 1) % 3;
+                else if (stateCopy.columns[index].sortable > 0)
+                    stateCopy.columns[index].sortable = 0;
+            }
+
+            this.setState(stateCopy);
+            if (sortDirection == 0)
+                this.props.updateSort(sortColumn, 'ASC');
+            else if (sortDirection == 1)
+                this.props.updateSort(sortColumn, 'DESC');
+            else
+                this.props.updateSort(sortColumn, 'NONE');
+        }
     }
 
     onSaleTypeChange(event) {
@@ -90,16 +118,19 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
     onHostessChange(event) {
         const values = event.value;
         var hostess = [];
-        for (var x in values) {
+        /*for (var x in values) {
             hostess.push(values[x].value);
+        }*/
+        if (values != "AllValue") {
+            hostess.push(values);
         }
         this.props.updateHostessFilter(hostess);
     }
 
-    onMonthChange(value) {
-        const startDate = value.value.value[0]; // my code good
-        const endDate = value.value.value[1];
-        // this.props.updateDateFilter(startDate, endDate);
+    onMonthChange(value1, value2) {
+        const startDate = value1; // my code good
+        const endDate = value2;
+        this.props.updateDateFilter(startDate, endDate);
     }
 
     calculateTotalSales() {
@@ -108,6 +139,17 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
         for (let r in rows) {
             if (rows.hasOwnProperty(r)) {
                 total += Number(rows[r].commission.substr(1));
+            }
+        }
+        return Formatters.moneyRounded(total);
+    }
+
+    calculateTotalPersonalVolume() {
+        let total = 0;
+        let rows = this.props.rows;
+        for (let r in rows) {
+            if (rows.hasOwnProperty(r)) {
+                total += Number(rows[r].sale.substr(1));
             }
         }
         return Formatters.moneyRounded(total);
@@ -133,8 +175,7 @@ class PvReportContainer extends React.Component<PvReportProps, {}> {
             loading={this.props.loading}
             totalSales={this.calculateTotalSales()}
             totalTransactions={this.props.rows.length}
-            totalPersonalVolume={"$2,466"}
-            balance={"$749.82"}
+            totalPersonalVolume={this.calculateTotalPersonalVolume()}
             columns={this.getColumns()}
         />
     }
@@ -146,8 +187,8 @@ interface MappedProps {
     hostessFilter: string,
     typeFilter: string,
     dateFilter: {
-        start: { month: number, year: number },
-        end: { month: number, year: number }
+        startDate: any,
+        endDate: any
     },
     loading: boolean
 }
@@ -158,14 +199,24 @@ function mapStateToProps(state) {
     var filteredRows = typeFilterer(rows, saleTypeFilter);
     filteredRows = sortGrid(filteredRows, sortColumn, sortDirection);
     filteredRows = hostessFilterer(filteredRows, hostessFilter);
-    // filteredRows = dateFilterer(filteredRows, startDate, endDate);
+    filteredRows = dateFilterer(filteredRows, startDate, endDate);
+    for (var x in filteredRows)
+        filteredRows[x].return = Formatters.moneyDecimal( Number(filteredRows[x].sale.substr(1)) - Number(filteredRows[x].commission.substr(1)) );
     var hostesses = rows.map((row) => {
         return row.hostess;
     });
     hostesses = hostesses.filter((x, i, a) => a.indexOf(x) == i);
 
     hostesses = hostesses.map((hostess) => {
-        return { value: hostess, label: hostess };
+        let label = hostess;
+        if (hostess == "")
+            label = "Other"
+        return { value: hostess, label: label };
+    });
+
+    hostesses.unshift({
+        value: "AllValue",
+        label: "All"
     });
 
     var currentHostessFilter = '';
@@ -177,8 +228,8 @@ function mapStateToProps(state) {
         currentTypeFilter = currentTypeFilter.concat(saleTypeFilter[x]).concat(',');
 
     var currentDateFilter = {
-        start: { month: startDate.getMonth(), year: startDate.getFullYear() },
-        end: { month: endDate.getMonth(), year: endDate.getFullYear() }
+        startDate: startDate,
+        endDate: endDate
     }
 
     return {
