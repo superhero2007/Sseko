@@ -31,7 +31,7 @@ export class Layout extends React.Component<{}, {}> {
                 <div id="page-wrapper" className={wrapperClass}>
                     <TopHeader role={GetRole()} />
                     <Progress />
-                    <div className="wrapper wrapper-content animated fadeInRight">
+                    <div className="wrapper wrapper-content">
                         {this.props.children}
                     </div>
                     <Footer />

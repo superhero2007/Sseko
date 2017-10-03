@@ -54,13 +54,11 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
                     <li>
                         <div className="notification-box">
                             <i className="fa fa-bell-o"></i>
-                            <span className="label label-danger">4</span>
                         </div>
                     </li>
                     <li>
                         <div className="notification-box">
                             <i className="fa fa-envelope-open-o"></i>
-                            <span className="label label-danger">1</span>
                          </div>
                     </li>
                     <li>

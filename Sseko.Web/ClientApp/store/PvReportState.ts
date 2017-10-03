@@ -6,8 +6,8 @@ export default class PvReportState {
     hostessFilter: string[];
     sortColumn: string;
     sortDirection: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: any;
+    endDate: any;
     errors: string;
     loading: boolean;
 }
