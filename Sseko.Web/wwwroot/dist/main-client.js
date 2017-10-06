@@ -7768,7 +7768,7 @@ var Option = /** @class */ (function (_super) {
             React.createElement("div", { className: "optionBody" },
                 React.createElement("div", { className: "pull-left" }, left),
                 React.createElement("div", { className: "date pull-left" },
-                    React.createElement(DateRangePicker, { startDate: this.state.startDate, endDate: this.state.endDate, ranges: this.state.ranges, onEvent: this.handleEvent },
+                    React.createElement(DateRangePicker, { startDate: this.state.startDate, endDate: this.state.endDate, ranges: this.state.ranges, onApply: this.handleEvent },
                         React.createElement("button", { className: "selected-date-range-btn" },
                             React.createElement("div", { className: "pull-left" },
                                 React.createElement("i", { className: "fa fa-calendar", "aria-hidden": "true" })),
