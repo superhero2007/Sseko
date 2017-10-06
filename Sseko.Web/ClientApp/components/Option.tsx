@@ -108,7 +108,7 @@ export class Option extends React.Component<OptionProps, OptionState> {
                             startDate={this.state.startDate}
                             endDate={this.state.endDate}
                             ranges={this.state.ranges}
-                            onEvent={this.handleEvent}
+                            onApply={this.handleEvent}
                         >
                             <button className="selected-date-range-btn">
                                 <div className="pull-left"><i className="fa fa-calendar" aria-hidden="true"></i></div>
