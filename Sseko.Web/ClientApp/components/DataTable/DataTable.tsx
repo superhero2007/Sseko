@@ -3,6 +3,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as ReactDataGrid from 'react-data-grid';
 import { EmptyRowsView } from './EmptyRowsView';
 import { LoadingView } from './LoadingView';
+import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 declare let $: any;
 
 interface DataTableProps {
@@ -69,6 +70,7 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
 
         // Logic for displaying bodys for current rows
         let tableBody = null;
+        const totalWidth = this.getTableWidth();
         if (this.props.rows.length != 0) {
             tableBody = (
                 <BootstrapTable data={dataRows} options={options} exportCSV>
@@ -83,12 +85,12 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
                                 icon = <i className="fa fa-sort-desc" aria-hidden="true"></i>
                             if (column.key == "orderNumber") {
                                 return (
-                                    <TableHeaderColumn dataFormat={dataFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={column.width.toString()} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                    <TableHeaderColumn dataFormat={dataFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
                                 )
                             }
                             else {
                                 return (
-                                    <TableHeaderColumn dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={column.width.toString()} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                    <TableHeaderColumn dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
                                 )
                             }
                         })
