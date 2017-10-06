@@ -3,6 +3,9 @@ import { Label } from "./Label";
 import { SelectList } from './SelectList';
 import { DateSelect } from './DateSelect';
 import { ButtonGroup } from './ButtonGroup';
+import * as DateRangePicker from "react-bootstrap-daterangepicker";
+import 'react-bootstrap-daterangepicker/css/daterangepicker.css';
+import * as moment from 'moment';
 
 interface OptionProps {
     title: string;
@@ -18,6 +21,7 @@ interface OptionState {
     startDate: any;
     endDate: any;
     selected: any;
+    ranges: any;
 }
 
 export class Option extends React.Component<OptionProps, OptionState> {
@@ -30,6 +34,14 @@ export class Option extends React.Component<OptionProps, OptionState> {
             selected: {
                 value: "AllValue",
                 label: "All"
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         };
     }
@@ -37,22 +49,21 @@ export class Option extends React.Component<OptionProps, OptionState> {
     state = {
         startDate: null,
         endDate: null,
-        selected: null
+        selected: null,
+        ranges: null
     }
 
     onSelectChange = (value) => {
-        console.log(value.value);
-        this.setState({ selected: value.value});
+        this.setState({ selected: value.value });
+        this.props.onChange(value.value);
     }
 
-    onMonthChange = (value1, value2) => {
-        this.setState({ startDate: value1, endDate: value2 });
-    }
-
-    applyChange = () => {
-        this.props.onMonthChange(this.state.startDate, this.state.endDate);
-        if (this.props.title == "Personal Volume")
-            this.props.onChange(this.state.selected);
+    handleEvent= (event, picker) => {
+        this.setState({
+            startDate: picker.startDate,
+            endDate: picker.endDate
+        });
+        this.props.onMonthChange(picker.startDate, picker.endDate);
     }
 
     render() {
@@ -71,33 +82,44 @@ export class Option extends React.Component<OptionProps, OptionState> {
                 htmlId={"showLevel"}
                 name={""}
                 error={""}
-                label={"Show Levels"}
+                label={"Show Hostess"}
                 options={this.props.hostesses}
                 initialValue={this.props.init}
                 clearable={false}
                 onChange={this.onSelectChange}
             />
+        const start = this.state.startDate.format('YYYY-MM-DD');
+        const end = this.state.endDate.format('YYYY-MM-DD');
+        let label = start + ' - ' + end;
+        if (start === end) {
+            label = start;
+        }
         return (
             <div className="option">
                 <div className="optionHeader">
                     <h3>{this.props.title}</h3>
                 </div>
                 <div className="optionBody">
-                    <div className="showLevel pull-left">
+                    <div className="pull-left">
                         { left }
                     </div>
                     <div className="date pull-left">
-                        <DateSelect
-                            htmlId={"dateRange"}
-                            error={""}
-                            label={"Date"}
-                            onMonthChange={this.onMonthChange}
+                        <DateRangePicker
                             startDate={this.state.startDate}
                             endDate={this.state.endDate}
-                        />
-                    </div>
-                    <div className="applyButton">
-                        <button onClick={this.applyChange} >Apply</button>
+                            ranges={this.state.ranges}
+                            onEvent={this.handleEvent}
+                        >
+                            <button className="selected-date-range-btn">
+                                <div className="pull-left"><i className="fa fa-calendar" aria-hidden="true"></i></div>
+                                <div className="pull-right">
+                                    <span>
+                                        {label}
+                                    </span>
+                                    <span className="caret"></span>
+                                </div>
+                            </button>
+                        </DateRangePicker>
                     </div>
                 </div>
             </div>

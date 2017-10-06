@@ -2,7 +2,7 @@
 import * as api from '../../api';
 import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from '../../store';
-import PvReportState from '../../store/PvReportState';
+import DashboardState from '../../store/DashboardState';
 import * as moment from 'moment';
 
 interface GetPvRows { type: 'GET_PV_ROWS', payload: dtos.ReportForPersonalVolumeDto[] }
@@ -41,7 +41,7 @@ export const actionCreators = {
 }
 
 const today = new Date();
-const unloadedState: PvReportState = {
+const unloadedState: DashboardState = {
     rows: [],
     errors: '',
     saleTypeFilter: [],
@@ -53,7 +53,7 @@ const unloadedState: PvReportState = {
     loading: true
 }
 
-export const reducer: Reducer<PvReportState> = (state: PvReportState, incomingAction: Action) => {
+export const reducer: Reducer<DashboardState> = (state: DashboardState, incomingAction: Action) => {
     const action = incomingAction as KnownAction;
     switch (action.type) {
         case 'GET_PV_ROWS':

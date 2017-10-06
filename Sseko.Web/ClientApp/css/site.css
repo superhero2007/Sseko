@@ -105,12 +105,13 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     }
 
         .nav-second-level li a {
-            padding: 13px;
+            padding: 10px;
             padding-left: 40px;
         }
 
 .option {
     margin-bottom: 20px;
+    display: inline-block;
 }
 
     .option .optionHeader {
@@ -129,51 +130,60 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
         font-size: 14px;
     }
 
-
-    .option .applyButton button {
-        background: black;
-        color: #e1ab82;
-        width: 100px;
-        border-radius: 3px;
-        outline: 0;
-        border: 0;
-        padding: 10px;
+    .option .optionBody .date {
         margin-top: 35px;
-        margin-left: 20px;
+        margin-left: 50px;
     }
 
-.dataTable {
-    display: inline-block;
+        .option .optionBody .date button {
+            height: 40px;
+            width: 240px;
+            color: #e1ab82;
+            background: black;
+            border: 0;
+            border-radius: 3px;
+            padding: 10px 20px;
+        }
+
+.dataTable button{
+    color: #e1ab82;
+    background: black;
+    border: 0;
+    margin-bottom: 20px;
+    padding: 10px 20px !important;
 }
 
 
-
-.table {
-    width: auto;
-    margin-bottom: 20px;
+.dataTable .table {
+    margin-bottom: 0;
     border: 1px solid #dedede;
     cursor: default;
 }
 
-th {
+.dataTable .table th {
     color: #e1ab82;
     background: black;
 }
 
-    th i {
-        margin: 10px;
-    }
-
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    height: 50px;
-    vertical-align: middle;
+.dataTable .table th i {
+    margin: 10px;
 }
 
-tr:nth-child(even) {
+    .dataTable .table th .order .caret {
+        color: #e1ab82 !important;
+    }
+    
+    .dataTable .table > thead > tr > th, .dataTable .table > tbody > tr > th, .dataTable .table > tfoot > tr > th, .dataTable .table > thead > tr > td, .dataTable .table > tbody > tr > td, .dataTable .table > tfoot > tr > td {
+        height: 50px;
+        vertical-align: middle;
+    }
+
+.dataTable tr:nth-child(even) {
     background: #fbfbfb;
 }
 
 .paginationOption {
+    margin-top:20px;
     height: 50px;
 }
 

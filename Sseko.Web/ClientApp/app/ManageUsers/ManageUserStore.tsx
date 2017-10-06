@@ -2,7 +2,7 @@
 import * as Cookies from 'universal-cookie';
 import * as dtos from '../../dtos';
 import { AppThunkAction } from '../../store';
-import { Reducer, ActionCreator } from 'redux';
+import { Action, Reducer, ActionCreator } from 'redux';
 import { RowHelpers } from '../../components/DataTable/RowHelpers';
 import ManageUsersState from '../../store/ManageUsersState';
 
@@ -67,7 +67,8 @@ const unloadedState: ManageUsersState = {
     loading: true
 }
 
-export const reducer: Reducer<ManageUsersState> = (state: ManageUsersState, action: KnownAction) => {
+export const reducer: Reducer<ManageUsersState> = (state: ManageUsersState, incomingAction: Action) => {
+    const action = incomingAction as KnownAction;
     switch (action.type) {
         case 'GET_USER_LIST':
             return { ...state, error: '', rows: action.payload, loading: false };

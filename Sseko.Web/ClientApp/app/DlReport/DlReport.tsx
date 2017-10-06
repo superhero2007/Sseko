@@ -15,11 +15,10 @@ import '../../css/btn-3d.scss';
 export const DlReport = (props: DlReportProps) => {
     return (
         <Layout>
-            <Header />
             <Totals>
                 <Total iconSrc={personIcon} label={"TOTAL PERSONAL VOLUME"} amount={props.totalPersonalVolume} />
                 <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
-                <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} />
+                <Total iconSrc={transactionsIcon} label={"TOTAL FELLOWS"} amount={props.totalTransactions} />
             </Totals>
             <Option title="Downline Summary" hostesses={[]} onChange={props.onLevelChange} onMonthChange={props.onMonthChange} startDate={props.startDate} endDate={props.endDate} init={props.levelFilter} />
             <DataTable

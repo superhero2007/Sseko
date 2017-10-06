@@ -1,18 +1,13 @@
 ﻿import * as React from 'react';
-import './PvReport.css';
 import { DataTable } from '../../components/DataTable/DataTable';
 import { Layout } from '../../components/Layout/Layout'
-import { SelectList } from '../../components/SelectList';
 import { Totals, Total } from '../../components/HelperTotals';
-import { Label } from "../../components/Label";
 import { Header } from "../../components/Header";
-import { Option } from "../../components/Option";
-const balanceIcon = require<string>('../../img/balance.png');
 const personIcon = require<string>('../../img/personal-volume.png');
 const salesIcon = require<string>('../../img/commissionable-sales.png');
 const transactionsIcon = require<string>('../../img/transaction.png');
 
-interface PvReportProps {
+interface DashboardProps {
     dateFilter: { startDate: any, endDate: any };
     hasHostesses: boolean;
     hostesses: string[];
@@ -31,18 +26,12 @@ interface PvReportProps {
     columns: any;
 }
 
-export const PvReport = (props: PvReportProps) =>
+export const Dashboard = (props: DashboardProps) =>
     <Layout>
+        <Header />
         <Totals>
             <Total iconSrc={personIcon} label={"TOTAL PERSONAL VOLUME"} amount={props.totalPersonalVolume} />
             <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
+            <Total iconSrc={transactionsIcon} label={"TOTAL TRANSACTIONS"} amount={props.totalTransactions} />
         </Totals>
-        <Option title="Personal Volume" hostesses={props.hostesses} onChange={props.onHostessChange} onMonthChange={props.onMonthChange} startDate={props.dateFilter.startDate} endDate={props.dateFilter.endDate} init={props.hostesses[0]} />
-        <DataTable
-            label="Personal Volume"
-            rows={props.rows}
-            columns={props.columns}
-            onGridSort={props.onGridSort}
-            isLoading={props.loading}
-        />
     </Layout>

@@ -2,7 +2,6 @@
 import * as React from 'react';
 import * as Select from 'react-select';
 import { Label } from './Label'
-
 interface SelectListProps {
     htmlId: string,
     name: string,
@@ -44,10 +43,11 @@ export class SelectList extends React.Component<SelectListProps, SelectListState
         if (this.props.onChange != null)
             this.props.onChange({ value: value });
     }
+    
 
     render() {
         return (
-            <div className={"section" + (this.props.error ? " has-danger" : "")}>
+            <div className={"section" + (this.props.error ? " has-danger" : "") + (this.props.htmlId == "showLevel" ? " showLevel" : "")}>
                 <Label
                     htmlId={this.props.htmlId + "-label"}
                     label={this.props.label}

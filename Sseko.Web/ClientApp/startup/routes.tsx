@@ -8,6 +8,7 @@ import DlReport from '../app/DlReport/DlReportContainer';
 import ForgotPassword from '../app/account/ForgotPassword/ForgotPasswordContainer';
 import Login from '../app/account/Login/LoginContainer';
 import ManageUser from '../app/ManageUsers/ManageUsersContainer';
+import Dashboard from '../app/Dashboard/DashboardContainer';
 import PvReport from '../app/PvReport/PvReportContainer';
 import ResetPassword from '../app/account/ResetPassword/ResetPasswordContainer';
 
@@ -17,7 +18,7 @@ const Admin = Authorization(['admin'])
 export const routes =
     <div>
         <Switch>
-            <Route path='/Dashboard' component={Fellow(PvReport)} />
+            <Route path='/Dashboard' component={Fellow(Dashboard)} />
             <Route path='/Login' component={Login} />
 
             <Route exact path='/Reports/' component={Fellow(PvReport)} />

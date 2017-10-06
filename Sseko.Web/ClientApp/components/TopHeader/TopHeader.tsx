@@ -7,7 +7,6 @@ import { AdminLinkGroup } from '../SideNav/AdminLinkGroup';
 import { smoothlyMenu } from '../Helpers';
 const loginLogo = require<string>('../../img/logo-login.png');
 declare let $: any;
-const balanceIcon = require<string>('../../img/profile_small.jpg');
 
 interface TopHeaderProps {
     role: string
@@ -33,6 +32,10 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
     }
 
     render() {
+        const today = new Date();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
         return (
             <nav className="navbar navbar-fixed-top navbar-margin-bottom" role="navigation">
                 <div className="navbar-header">
@@ -42,28 +45,12 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
                         <span className="hamburger-bottom"></span>
                     </span>
                     <img src={loginLogo} />
-                    <span>FELLOW INFORMATION</span>
+                    <span>Welcome <strong>Genavieve Moyer</strong>. Today is  {days[today.getDay()]}, <strong>{months[today.getMonth()]} {today.getDate()}, {today.getFullYear()}</strong></span>
                 </div>
                 <ul className="nav navbar-top-links navbar-right">
                     <li>
-                        <div className="search-box">
-                            <input type="text" placeholder="Search" />
-                            <i className="fa fa-search" aria-hidden="true"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="notification-box">
-                            <i className="fa fa-bell-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="notification-box">
-                            <i className="fa fa-envelope-open-o"></i>
-                         </div>
-                    </li>
-                    <li>
                         <div className="profile-box">
-                            <img alt="image" className="img-circle" src={balanceIcon} />
+                            <i className="fa fa-user-circle" aria-hidden="true"></i>
                         </div>
                     </li>
 		        </ul>

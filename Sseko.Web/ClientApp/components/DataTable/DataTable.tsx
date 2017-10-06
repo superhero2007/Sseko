@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as ReactDataGrid from 'react-data-grid';
 import { EmptyRowsView } from './EmptyRowsView';
 import { LoadingView } from './LoadingView';
@@ -16,6 +17,12 @@ interface DataTableState {
     currentPage: number,
     todosPerPage: number
 }
+
+
+function dataFormatter(cell, row) {
+    return '<a>' + cell + '</a>';
+}
+
 
 export class DataTable extends React.Component<DataTableProps, DataTableState> {
 
@@ -56,14 +63,17 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
         const dataColumns = this.props.columns;
         const dataRows = this.props.rows.slice(indexOfFirstTodo, indexOfLastTodo);
 
-        const tableHeaders =
-            (<thead>
-                <tr>
+        const options = {
+            exportCSVText: "Export"
+        };
+
+        // Logic for displaying bodys for current rows
+        let tableBody = null;
+        if (this.props.rows.length != 0) {
+            tableBody = (
+                <BootstrapTable data={dataRows} options={options} exportCSV>
                     {
                         dataColumns.map(function (column, index) {
-                            const widthStyle = {
-                                width: column.width
-                            };
                             let icon = null;
                             if (column.sortable == 0)
                                 icon = <i className="fa fa-sort" aria-hidden="true"></i>
@@ -71,34 +81,20 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
                                 icon = <i className="fa fa-sort-asc" aria-hidden="true"></i>
                             else if (column.sortable == 2)
                                 icon = <i className="fa fa-sort-desc" aria-hidden="true"></i>
-                            return <th key={index} style={widthStyle} onClick={this.onGridSort.bind(this, column.key, column.sortable)} ><span>{column.name}</span>{icon}</th>;
-                        }.bind(this))
+                            if (column.key == "orderNumber") {
+                                return (
+                                    <TableHeaderColumn dataFormat={dataFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={column.width.toString()} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                )
+                            }
+                            else {
+                                return (
+                                    <TableHeaderColumn dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={column.width.toString()} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                )
+                            }
+                        })
                     }
-                </tr>
-            </thead>);
-
-        // Logic for displaying bodys for current rows
-        let tableBody = null;
-        if (this.props.rows.length != 0) {
-            tableBody = (<tbody>
-                {
-                    dataRows.map(function (row, index) {
-                        return (
-                            <tr key={index}>
-                                {dataColumns.map(function (column, index) {
-                                    let element = null;
-                                    if (column.key == "orderNumber") {
-                                        element = <a> {row[column.key]} </a>
-                                    }
-                                    else {
-                                        element = row[column.key] ? row[column.key] : ""
-                                    }
-                                    return <td key={index}>{element}</td>;
-                                })}
-                            </tr>);
-                    })
-                }
-            </tbody>);
+                </BootstrapTable>
+            );
         }
 
         // Logic for displaying page numbers
@@ -113,7 +109,7 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
                     key={number}
                     id={number}
                     onClick={this.handleClick}
-                    className={currentPage == number ? "active":""}
+                    className={currentPage == number ? "active" : ""}
                 >
                     {number}
                 </li>
@@ -138,14 +134,11 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
         }
 
         const tableWidth = this.getTableWidth()
-        
+
         return (
             <div className="dataTable">
-                <table className="table" style={{ width: tableWidth }}>
-                    { tableHeaders }
-                    { tableBody }
-                </table>
-                { paginationOption }
+                {tableBody}
+                {paginationOption}
             </div>
         );
     }
