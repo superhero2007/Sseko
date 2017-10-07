@@ -13,6 +13,17 @@ interface ManageUserState {
     columns: any;
 }
 
+function testFormatter(cell, row) {
+    const props = {
+        id: cell.id,
+        disable: cell.disable,
+        enable: cell.enable,
+        resetPassword: cell.resetPassword,
+        impersonate: cell.impersonate
+    };
+    return <UserManagerButtonFormatter value={props} />;
+}
+
 class ManageUsersContainer extends React.Component<ManageUserProps, ManageUserState> {
     constructor(props) {
         super(props);
@@ -27,7 +38,7 @@ class ManageUsersContainer extends React.Component<ManageUserProps, ManageUserSt
             columns : [
                 { key: 'username', name: 'Fellow', width: 250, sortable: 0 },
                 { key: 'role', name: 'Role', width: 100, sortable: 0 },
-                { key: 'actions', name: 'Actions', sortable: -1, formatter: UserManagerButtonFormatter }
+                { key: 'actions', name: 'Actions', width: 500, sortable: -1, formatter: testFormatter }
             ]
         }
     }

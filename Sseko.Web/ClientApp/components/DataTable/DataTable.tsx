@@ -76,6 +76,11 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                                     <TableHeaderColumn dataFormat={dataFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
                                 )
                             }
+                            else if (column.key == "actions") {
+                                return (
+                                    <TableHeaderColumn dataFormat={column.formatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                )
+                            }
                             else {
                                 return (
                                     <TableHeaderColumn dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>

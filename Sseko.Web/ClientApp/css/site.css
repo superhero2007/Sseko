@@ -161,6 +161,11 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     padding: 10px 20px !important;
 }
 
+.dataTable table button {
+    margin: 0 10px;
+    border: 1px solid black;
+}
+
 .dataTable .table {
     margin-bottom: 0;
     border: 1px solid #dedede;

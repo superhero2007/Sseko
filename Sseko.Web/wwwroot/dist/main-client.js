@@ -6854,6 +6854,10 @@ var DataTable = /** @class */ (function (_super) {
                     return (React.createElement(react_bootstrap_table_1.TableHeaderColumn, { dataFormat: dataFormatter, dataField: column.key, key: column.key, isKey: index == 0 ? true : false, width: (column.width / totalWidth).toString() + '%', dataSort: column.sortable != -1 },
                         React.createElement("span", null, column.name)));
                 }
+                else if (column.key == "actions") {
+                    return (React.createElement(react_bootstrap_table_1.TableHeaderColumn, { dataFormat: column.formatter, dataField: column.key, key: column.key, isKey: index == 0 ? true : false, width: (column.width / totalWidth).toString() + '%', dataSort: column.sortable != -1 },
+                        React.createElement("span", null, column.name)));
+                }
                 else {
                     return (React.createElement(react_bootstrap_table_1.TableHeaderColumn, { dataField: column.key, key: column.key, isKey: index == 0 ? true : false, width: (column.width / totalWidth).toString() + '%', dataSort: column.sortable != -1 },
                         React.createElement("span", null, column.name)));
@@ -24354,6 +24358,16 @@ var ManageUsers_1 = __webpack_require__(206);
 var DatatableFilters_1 = __webpack_require__(17);
 var RowButtonFormatter_1 = __webpack_require__(222);
 var UserManagerButtonFormatter_1 = __webpack_require__(223);
+function testFormatter(cell, row) {
+    var props = {
+        id: cell.id,
+        disable: cell.disable,
+        enable: cell.enable,
+        resetPassword: cell.resetPassword,
+        impersonate: cell.impersonate
+    };
+    return React.createElement(UserManagerButtonFormatter_1.UserManagerButtonFormatter, { value: props });
+}
 var ManageUsersContainer = /** @class */ (function (_super) {
     __extends(ManageUsersContainer, _super);
     function ManageUsersContainer(props) {
@@ -24371,7 +24385,7 @@ var ManageUsersContainer = /** @class */ (function (_super) {
             columns: [
                 { key: 'username', name: 'Fellow', width: 250, sortable: 0 },
                 { key: 'role', name: 'Role', width: 100, sortable: 0 },
-                { key: 'actions', name: 'Actions', sortable: -1, formatter: UserManagerButtonFormatter_1.UserManagerButtonFormatter }
+                { key: 'actions', name: 'Actions', width: 500, sortable: -1, formatter: testFormatter }
             ]
         };
         return _this;
