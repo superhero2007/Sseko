@@ -1,4 +1,18 @@
-﻿.navbar-margin-bottom {
+﻿.headerText {
+    display: inline-block;
+    vertical-align: middle;
+}
+    .headerText span {
+        margin: 0 10px;
+    }
+.body-small .headerText {
+    display: inline-grid;
+    font-size: 10px;
+}
+    .body-small .headerText span {
+        margin: 0;
+    }
+.navbar-margin-bottom {
     background: white;
     margin-bottom: 0;
 }
@@ -8,13 +22,21 @@
         margin-right: 25px;
     }
 
+    .body-small .navbar .navbar-header img {
+        margin-right: 10px;
+    }
+
     .navbar .navbar-header > span {
         vertical-align: middle;
     }
 
         .body-small .navbar .navbar-header > span {
-            margin-right: 20px;
+            margin: 0 10px;
         }
+
+            .body-small .navbar ul {
+                margin-right: -10px;
+            }
 
     .navbar .navbar-header .hamburger {
         display: inline-block;
@@ -25,6 +47,7 @@
         width: 40px;
         height: 40px;
     }
+
 
         .navbar .navbar-header .hamburger span {
             backface-visibility: hidden;
@@ -66,7 +89,7 @@
         }
 
     .navbar .navbar-right .profile-box {
-        margin: 14px 20px;
+        margin: 14px 10px;
     }
 
         .navbar .navbar-right .profile-box i {

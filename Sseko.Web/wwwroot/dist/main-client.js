@@ -6810,44 +6810,39 @@ var DataTable = /** @class */ (function (_super) {
     __extends(DataTable, _super);
     function DataTable(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            currentPage: 1,
-            todosPerPage: 10
-        };
         _this.getTableWidth = function () {
             return _this.props.columns.reduce(function (tableWidth, column) { return tableWidth + column["width"]; }, 0) + 34;
         };
-        _this.state = {
-            currentPage: 1,
-            todosPerPage: 10
-        };
-        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
     DataTable.prototype.onGridSort = function (sortColumn, sortDir) {
         this.props.onGridSort(sortColumn, sortDir);
     };
-    DataTable.prototype.handleClick = function (event) {
-        this.setState({
-            currentPage: Number(event.target.id)
-        });
-    };
     DataTable.prototype.render = function () {
-        var _this = this;
-        var _a = this.state, currentPage = _a.currentPage, todosPerPage = _a.todosPerPage;
         // Logic for displaying headers for current rows
-        var indexOfLastTodo = currentPage * todosPerPage;
-        var indexOfFirstTodo = indexOfLastTodo - todosPerPage;
         var dataColumns = this.props.columns;
-        var dataRows = this.props.rows.slice(indexOfFirstTodo, indexOfLastTodo);
+        var dataRows = this.props.rows;
+        // Logic for displaying page numbers
+        var paginationOption = null;
+        if (this.props.rows.length != 0) {
+        }
+        else if (this.props.isLoading) {
+            paginationOption = LoadingView_1.LoadingView();
+        }
+        else {
+            paginationOption = EmptyRowsView_1.EmptyRowsView();
+        }
         var options = {
-            exportCSVText: "Export"
+            exportCSVText: "Export",
+            sizePerPage: 10,
+            sizePerPageList: [10],
+            paginationShowsTotal: true
         };
         // Logic for displaying bodys for current rows
         var tableBody = null;
         var totalWidth = this.getTableWidth();
         if (this.props.rows.length != 0) {
-            tableBody = (React.createElement(react_bootstrap_table_1.BootstrapTable, { data: dataRows, options: options, exportCSV: true }, dataColumns.map(function (column, index) {
+            tableBody = (React.createElement(react_bootstrap_table_1.BootstrapTable, { data: dataRows, options: options, exportCSV: true, pagination: true }, dataColumns.map(function (column, index) {
                 var icon = null;
                 if (column.sortable == 0)
                     icon = React.createElement("i", { className: "fa fa-sort", "aria-hidden": "true" });
@@ -6865,34 +6860,6 @@ var DataTable = /** @class */ (function (_super) {
                 }
             })));
         }
-        // Logic for displaying page numbers
-        var pageNumbers = [];
-        for (var i = 1; i <= Math.ceil(this.props.rows.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-        var renderPageNumbers = pageNumbers.map(function (number) {
-            return (React.createElement("li", { key: number, id: number, onClick: _this.handleClick, className: currentPage == number ? "active" : "" }, number));
-        });
-        var paginationOption = null;
-        if (this.props.rows.length != 0) {
-            paginationOption = (React.createElement("div", { className: "paginationOption" },
-                React.createElement("span", { className: "pull-left" },
-                    "Showing ",
-                    indexOfFirstTodo + 1,
-                    "-",
-                    indexOfLastTodo < this.props.rows.length ? indexOfLastTodo : this.props.rows.length,
-                    " of ",
-                    this.props.rows.length),
-                React.createElement("ul", { id: "page-numbers" }, renderPageNumbers),
-                React.createElement("span", { className: "pull-right page-label" }, " Page: ")));
-        }
-        else if (this.props.isLoading) {
-            paginationOption = LoadingView_1.LoadingView();
-        }
-        else {
-            paginationOption = EmptyRowsView_1.EmptyRowsView();
-        }
-        var tableWidth = this.getTableWidth();
         return (React.createElement("div", { className: "dataTable" },
             tableBody,
             paginationOption));
@@ -7766,7 +7733,7 @@ var Option = /** @class */ (function (_super) {
             React.createElement("div", { className: "optionHeader" },
                 React.createElement("h3", null, this.props.title)),
             React.createElement("div", { className: "optionBody" },
-                React.createElement("div", { className: "pull-left" }, left),
+                React.createElement("div", { className: "leftLevel pull-left" }, left),
                 React.createElement("div", { className: "date pull-left" },
                     React.createElement(DateRangePicker, { startDate: this.state.startDate, endDate: this.state.endDate, ranges: this.state.ranges, onApply: this.handleEvent },
                         React.createElement("button", { className: "selected-date-range-btn" },
@@ -7812,10 +7779,18 @@ var NavBarLinkSingle = /** @class */ (function (_super) {
     }
     NavBarLinkSingle.prototype.render = function () {
         var active = window.location.pathname.indexOf(this.props.href) > -1;
-        return (React.createElement("li", { className: active ? "active" : "" },
-            React.createElement(react_router_dom_1.Link, { to: this.props.href },
+        var element = null;
+        if (this.props.imgSrc) {
+            var href = this.props.href;
+            element = (React.createElement(react_router_dom_1.Link, { to: href },
                 React.createElement("img", { src: active ? this.props.imgActiveSrc : this.props.imgSrc }),
-                React.createElement("span", { className: "nav-label" }, this.props.label)),
+                React.createElement("span", { className: "nav-label" }, this.props.label)));
+        }
+        else {
+            element = (React.createElement(react_router_dom_1.Link, { to: this.props.href }, this.props.label));
+        }
+        return (React.createElement("li", { className: active ? "active" : "" },
+            element,
             this.props.children));
     };
     return NavBarLinkSingle;
@@ -22515,6 +22490,7 @@ var Fellow = Authorization_1.Authorization(['fellow', 'admin']);
 var Admin = Authorization_1.Authorization(['admin']);
 exports.routes = React.createElement("div", null,
     React.createElement(react_router_dom_1.Switch, null,
+        React.createElement(react_router_dom_1.Route, { exact: true, path: '/', component: Fellow(DashboardContainer_1.default) }),
         React.createElement(react_router_dom_1.Route, { path: '/Dashboard', component: Fellow(DashboardContainer_1.default) }),
         React.createElement(react_router_dom_1.Route, { path: '/Login', component: LoginContainer_1.default }),
         React.createElement(react_router_dom_1.Route, { exact: true, path: '/Reports/', component: Fellow(PvReportContainer_1.default) }),
@@ -25470,7 +25446,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(1);
 var NavBarLinkSingle_1 = __webpack_require__(42);
 exports.AdminLinkGroup = function () {
-    return (React.createElement("ul", { className: "nav", id: "side-menu" },
+    return (React.createElement("ul", { className: "nav metismenu", id: "side-menu" },
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Dashboard', label: 'Dashboard' }),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Manage/Users', label: 'Manage Users' })));
 };
@@ -25495,10 +25471,10 @@ var reportsIconActive = __webpack_require__(274);
 var linkIconActive = __webpack_require__(269);
 var logoutIconActive = __webpack_require__(271);
 exports.FellowLinkGroup = function () {
-    return (React.createElement("ul", { className: "nav", id: "side-menu" },
+    return (React.createElement("ul", { className: "nav metismenu", id: "side-menu" },
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Dashboard', imgSrc: dashboardIcon, imgActiveSrc: dashboardIconActive, label: 'Dashboard' }),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Reports', imgSrc: reportsIcon, imgActiveSrc: reportsIconActive, label: 'Reports' },
-            React.createElement("ul", { className: window.location.pathname.indexOf('/Reports') > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse" },
+            React.createElement("ul", { className: "nav nav-second-level collapse" },
                 React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Reports/PersonalVolume', label: 'Personal Volume' }),
                 React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Reports/Downline', label: 'Downline Summary' }))),
         React.createElement(NavBarLinkSingle_1.NavBarLinkSingle, { href: '/Banners', imgSrc: linkIcon, imgActiveSrc: linkIconActive, label: 'Banners & Links' }),
@@ -25533,7 +25509,7 @@ var Navigation = /** @class */ (function (_super) {
     }
     Navigation.prototype.componentDidMount = function () {
         var menu = this.refs.menu;
-        $(menu).metisMenu();
+        $("#side-menu").metisMenu();
     };
     Navigation.prototype.render = function () {
         return (React.createElement("nav", { className: "navbar-default navbar-static-side", role: "navigation" },
@@ -25584,8 +25560,8 @@ var TopHeader = /** @class */ (function (_super) {
     }
     TopHeader.prototype.render = function () {
         var today = new Date();
-        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         return (React.createElement("nav", { className: "navbar navbar-fixed-top navbar-margin-bottom", role: "navigation" },
             React.createElement("div", { className: "navbar-header" },
                 React.createElement("span", { className: "hamburger" + (this.state.sideNavCollapsed ? "" : " open"), onClick: this.toggleNavigation },
@@ -25593,18 +25569,21 @@ var TopHeader = /** @class */ (function (_super) {
                     React.createElement("span", { className: "hamburger-middle" }),
                     React.createElement("span", { className: "hamburger-bottom" })),
                 React.createElement("img", { src: loginLogo }),
-                React.createElement("span", null,
-                    "Welcome ",
-                    React.createElement("strong", null, "Genavieve Moyer"),
-                    ". Today is  ",
-                    days[today.getDay()],
-                    ", ",
-                    React.createElement("strong", null,
-                        months[today.getMonth()],
-                        " ",
-                        today.getDate(),
+                React.createElement("div", { className: "headerText" },
+                    React.createElement("span", null,
+                        "Welcome ",
+                        React.createElement("strong", null, "Genavieve Moyer"),
+                        "."),
+                    React.createElement("span", null,
+                        "Today is  ",
+                        days[today.getDay()],
                         ", ",
-                        today.getFullYear()))),
+                        React.createElement("strong", null,
+                            months[today.getMonth()],
+                            " ",
+                            today.getDate(),
+                            ", ",
+                            today.getFullYear())))),
             React.createElement("ul", { className: "nav navbar-top-links navbar-right" },
                 React.createElement("li", null,
                     React.createElement("div", { className: "profile-box" },

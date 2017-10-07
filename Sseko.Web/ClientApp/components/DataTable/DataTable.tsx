@@ -14,41 +14,20 @@ interface DataTableProps {
     isLoading: boolean,
 }
 
-interface DataTableState {
-    currentPage: number,
-    todosPerPage: number
-}
-
 
 function dataFormatter(cell, row) {
     return '<a>' + cell + '</a>';
 }
 
 
-export class DataTable extends React.Component<DataTableProps, DataTableState> {
+export class DataTable extends React.Component<DataTableProps, {}> {
 
     constructor(props) {
         super(props)
-        this.state = {
-            currentPage: 1,
-            todosPerPage: 10
-        };
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    state = {
-        currentPage: 1,
-        todosPerPage: 10
     }
 
     onGridSort(sortColumn, sortDir) {
         this.props.onGridSort(sortColumn, sortDir);
-    }
-
-    handleClick(event) {
-        this.setState({
-            currentPage: Number(event.target.id)
-        });
     }
 
     getTableWidth = () => {
@@ -56,16 +35,25 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
     }
 
     render() {
-        const { currentPage, todosPerPage } = this.state;
-
         // Logic for displaying headers for current rows
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
         const dataColumns = this.props.columns;
-        const dataRows = this.props.rows.slice(indexOfFirstTodo, indexOfLastTodo);
+        const dataRows = this.props.rows;
+        // Logic for displaying page numbers
+        let paginationOption = null;
+        if (this.props.rows.length != 0) {
+        }
+        else if (this.props.isLoading) {
+            paginationOption = LoadingView();
+        }
+        else {
+            paginationOption = EmptyRowsView();
+        }
 
         const options = {
-            exportCSVText: "Export"
+            exportCSVText: "Export",
+            sizePerPage: 10,
+            sizePerPageList: [10],
+            paginationShowsTotal: true
         };
 
         // Logic for displaying bodys for current rows
@@ -73,7 +61,7 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
         const totalWidth = this.getTableWidth();
         if (this.props.rows.length != 0) {
             tableBody = (
-                <BootstrapTable data={dataRows} options={options} exportCSV>
+                <BootstrapTable data={dataRows} options={options} exportCSV pagination>
                     {
                         dataColumns.map(function (column, index) {
                             let icon = null;
@@ -98,45 +86,6 @@ export class DataTable extends React.Component<DataTableProps, DataTableState> {
                 </BootstrapTable>
             );
         }
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(this.props.rows.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                    className={currentPage == number ? "active" : ""}
-                >
-                    {number}
-                </li>
-            );
-        });
-
-        let paginationOption = null;
-        if (this.props.rows.length != 0) {
-            paginationOption = (<div className="paginationOption">
-                <span className="pull-left">Showing {indexOfFirstTodo + 1}-{indexOfLastTodo < this.props.rows.length ? indexOfLastTodo : this.props.rows.length} of {this.props.rows.length}</span>
-                <ul id="page-numbers">
-                    {renderPageNumbers}
-                </ul>
-                <span className="pull-right page-label"> Page: </span>
-            </div>);
-        }
-        else if (this.props.isLoading) {
-            paginationOption = LoadingView();
-        }
-        else {
-            paginationOption = EmptyRowsView();
-        }
-
-        const tableWidth = this.getTableWidth()
-
         return (
             <div className="dataTable">
                 {tableBody}

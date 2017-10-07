@@ -12,7 +12,7 @@ const logoutIconActive = require<string>('../../img/logout-active-ico.png');
 
 export const FellowLinkGroup = () => {
     return (
-        <ul className="nav" id="side-menu">
+        <ul className="nav metismenu" id="side-menu">
             <NavBarLinkSingle
                 href='/Dashboard'
                 imgSrc={dashboardIcon}
@@ -25,7 +25,7 @@ export const FellowLinkGroup = () => {
                 imgActiveSrc={reportsIconActive}
                 label='Reports'
             >
-                <ul className={ window.location.pathname.indexOf('/Reports') > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse" } >
+                <ul className="nav nav-second-level collapse">
                     <NavBarLinkSingle
                         href='/Reports/PersonalVolume'
                         label='Personal Volume'

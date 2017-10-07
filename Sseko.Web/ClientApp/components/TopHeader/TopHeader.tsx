@@ -33,8 +33,8 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
 
     render() {
         const today = new Date();
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         return (
             <nav className="navbar navbar-fixed-top navbar-margin-bottom" role="navigation">
@@ -45,7 +45,10 @@ class TopHeader extends React.Component<TopHeaderProps, TopHeaderState> {
                         <span className="hamburger-bottom"></span>
                     </span>
                     <img src={loginLogo} />
-                    <span>Welcome <strong>Genavieve Moyer</strong>. Today is  {days[today.getDay()]}, <strong>{months[today.getMonth()]} {today.getDate()}, {today.getFullYear()}</strong></span>
+                    <div className="headerText">
+                        <span>Welcome <strong>Genavieve Moyer</strong>.</span>
+                        <span>Today is  {days[today.getDay()]}, <strong>{months[today.getMonth()]} {today.getDate()}, {today.getFullYear()}</strong></span>
+                    </div>
                 </div>
                 <ul className="nav navbar-top-links navbar-right">
                     <li>

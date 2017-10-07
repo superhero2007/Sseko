@@ -11,14 +11,25 @@ interface NavBarLinkProps {
 export class NavBarLinkSingle extends React.Component<NavBarLinkProps, {}> {
     render() {
         const active = window.location.pathname.indexOf(this.props.href) > -1;
+        let element = null;
+        if (this.props.imgSrc) {
+            let href = this.props.href;
+            element = (< Link to={href} >
+                <img src={active ? this.props.imgActiveSrc : this.props.imgSrc} />
+                <span className="nav-label">
+                    {this.props.label}
+                </span>
+            </Link>);
+        }
+        else {
+            element = (< Link to={this.props.href} >
+                    {this.props.label}
+            </Link>);
+        }
+        
         return (
             <li className={active ? "active" : ""} >
-                <Link to={this.props.href}>
-                    <img src={active? this.props.imgActiveSrc : this.props.imgSrc} />
-                    <span className="nav-label">
-                        {this.props.label}
-                    </span>
-                </Link>
+                {element}
                 {this.props.children}
             </li>
         );

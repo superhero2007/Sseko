@@ -18,6 +18,7 @@ const Admin = Authorization(['admin'])
 export const routes =
     <div>
         <Switch>
+            <Route exact path='/' component={Fellow(Dashboard)} />
             <Route path='/Dashboard' component={Fellow(Dashboard)} />
             <Route path='/Login' component={Login} />
 

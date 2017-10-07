@@ -9,7 +9,7 @@
     #pv-totals .total-container {
         position: relative;
         min-width: 275px;
-        padding: 10px;
+        padding: 15px;
         /*border: 1px solid var(--nav-gray);*/
     }
 

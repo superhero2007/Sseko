@@ -11,7 +11,7 @@ interface NavigationProps {
 class Navigation extends React.Component<NavigationProps, {}> {
     componentDidMount() {
         const { menu } = this.refs;
-        $(menu).metisMenu();
+        $("#side-menu").metisMenu();
     }
 
     render() {

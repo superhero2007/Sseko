@@ -4,7 +4,7 @@ import { NavBarLinkSingle } from './NavBarLinkSingle';
 
 export const AdminLinkGroup = () => {
     return (
-        <ul className="nav" id="side-menu">
+        <ul className="nav metismenu" id="side-menu">
             <NavBarLinkSingle
                 href='/Dashboard'
                 label='Dashboard'

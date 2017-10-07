@@ -100,7 +100,7 @@ export class Option extends React.Component<OptionProps, OptionState> {
                     <h3>{this.props.title}</h3>
                 </div>
                 <div className="optionBody">
-                    <div className="pull-left">
+                    <div className="leftLevel pull-left">
                         { left }
                     </div>
                     <div className="date pull-left">

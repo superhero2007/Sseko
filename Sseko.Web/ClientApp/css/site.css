@@ -106,8 +106,14 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
 
         .nav-second-level li a {
             padding: 10px;
-            padding-left: 40px;
+            padding-left: 35px;
         }
+
+.mini-navbar .nav .nav-second-level {
+    border: 1px solid #eee;
+    background: white;
+    box-shadow: grey 0.5px 0.5px 0.5px 0.5px;
+}
 
 .option {
     margin-bottom: 20px;
@@ -132,17 +138,19 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
 
     .option .optionBody .date {
         margin-top: 35px;
-        margin-left: 50px;
+    }
+    .option .optionBody .leftLevel {
+        margin-right: 35px;
     }
 
         .option .optionBody .date button {
             height: 40px;
-            width: 240px;
+            width: 210px;
             color: #e1ab82;
             background: black;
             border: 0;
             border-radius: 3px;
-            padding: 10px 20px;
+            padding: 10px;
         }
 
 .dataTable button{
@@ -152,7 +160,6 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     margin-bottom: 20px;
     padding: 10px 20px !important;
 }
-
 
 .dataTable .table {
     margin-bottom: 0;
@@ -183,28 +190,23 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
 }
 
 .paginationOption {
-    margin-top:20px;
-    height: 50px;
+    display: inline-block;
+    margin-top:-40px;
+    height: 30px;
 }
-
-#page-numbers {
-    list-style: none;
-    float: right;
-    display: flex;
-    padding: 0;
-}
-
-    #page-numbers li {
-        padding: 0 5px;
-        margin: 5px;
-        cursor: default;
-    }
-
-    #page-numbers .active {
-        background: black;
-        color: #e1ab82;
-    }
 
 .page-label {
     margin: 5px
+}
+
+.pagination > li > a, .pagination > li > span {
+    border: 0;
+    margin: 0 3px;
+    padding: 4px;
+    color: black;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background: black;
+    color: #e1ab82;
 }
