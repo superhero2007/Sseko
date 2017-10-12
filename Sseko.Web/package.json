@@ -2,6 +2,7 @@
   "name": "WebApplicationBasic",
   "version": "0.0.0",
   "dependencies": {
+    "@types/highcharts": "^5.0.7",
     "@types/history": "4.5.1",
     "@types/react": "^15.6.2",
     "@types/react-bootstrap-daterangepicker": "0.0.22",
