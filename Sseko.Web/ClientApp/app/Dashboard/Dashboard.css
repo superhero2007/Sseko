@@ -1,0 +1,110 @@
+﻿.DashboardHeader {
+    background: black;
+    border: 1px solid #dedede;
+    margin: 0;
+}
+
+    .DashboardHeader .widgetText {
+        color: #e1ab82;
+    }
+
+        .DashboardHeader .widgetText .headerTitle {
+            display: inline-block;
+            margin-top: 12px;
+            margin-left: 15px;
+            vertical-align: top;
+        }
+
+        .DashboardHeader .widgetText .subList {
+            list-style: none;
+            display: inline-block;
+            margin-top: 12px;
+            margin-bottom: 0;
+        }
+
+            .DashboardHeader .widgetText .subList li {
+                border-bottom: 3px solid #f9e5d6;
+                padding: 5px;
+            }
+
+    .DashboardHeader .widgetIcon {
+        margin-right: 10px;
+    }
+
+        .DashboardHeader .widgetIcon i {
+            margin: 15px 6px;
+            font-size: 13px;
+        }
+
+.DashboardBody  {
+    margin: 0;
+}
+    .DashboardBody .DashboardSubBody {
+        border: 1px solid #dedede;
+        border-radius: 1px;
+        margin: 0;
+    }
+        .DashboardBody .DashboardSubBody #chartContainer {
+            overflow: hidden;
+        }
+
+        .DashboardBody .DashboardSubBody .DashboardSelectOption {
+            width: 20%;
+            padding: 10px;
+            float: left;
+            min-width: 180px;
+        }
+
+        .DashboardBody .DashboardSubBody .DateRangeOption {
+            width: 24%;
+            max-width: 230px;
+            min-width: 220px;
+        }
+
+        .DashboardBody .DashboardSubBody .DashboardLegendButton {
+            width: 10%;
+            min-width: 90px;
+        }
+
+            .DashboardBody .DashboardSubBody .DashboardLegendButton .legendButton {
+                width: 100%;
+                height: 35px;
+                color: #e1ab82;
+                background: white;
+                border-style: solid;
+                border-radius: 5px;
+            }
+
+        .DashboardBody .DashboardSubBody .DashboardSelectOption .selected-date-range-btn {
+            width: 100%;
+            height: 35px;
+            color: #e1ab82;
+            background: white;
+            border-style: solid;
+            border-radius: 5px;
+            outline: 0;
+        }
+
+        .DashboardBody .DashboardSubBody .DashboardSelectOption .has-value.Select--single > .Select-control .Select-value .Select-value-label, .DashboardSubBody .DashboardSelectOption .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {
+            color: #e1ab82;
+        }
+
+        .DashboardBody .DashboardSubBody .DashboardSelectOption .Select-option.is-focused, .DashboardSubBody .DashboardSelectOption .Select-option.is-selected {
+            background: #f9e5d6;
+        }
+
+.hideBody {
+    -webkit-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+    -o-transition: opacity 0.4s;
+    transition: opacity 0.4s;
+    opacity: 0;
+}
+
+.showBody {
+    -webkit-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+    -o-transition: opacity 0.4s;
+    transition: opacity 0.4s;
+    opacity: 1;
+}

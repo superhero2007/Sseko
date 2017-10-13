@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import * as ReactDataGrid from 'react-data-grid';
 import { EmptyRowsView } from './EmptyRowsView';
 import { LoadingView } from './LoadingView';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
@@ -19,11 +18,27 @@ function dataFormatter(cell, row) {
     return '<a>' + cell + '</a>';
 }
 
+function levelFormatter(cell, row) {
+    if (cell == '1')
+        return 'Little Sis';
+    else if (cell == '2')
+        return 'Niece';
+    else if (cell == '3')
+        return 'Granddaughter';
+}
+
 
 export class DataTable extends React.Component<DataTableProps, {}> {
 
     constructor(props) {
         super(props)
+    }
+
+    componentDidMount() {
+        console.log("componentDidMount");
+        $('#pageDropDown').click(() => {
+            console.log("Clicked");
+        });
     }
 
     onGridSort(sortColumn, sortDir) {
@@ -52,8 +67,7 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         const options = {
             exportCSVText: "Export",
             sizePerPage: 10,
-            sizePerPageList: [10],
-            paginationShowsTotal: true
+            sizePerPageList: [10, 25, 50]
         };
 
         // Logic for displaying bodys for current rows
@@ -74,6 +88,11 @@ export class DataTable extends React.Component<DataTableProps, {}> {
                             if (column.key == "orderNumber") {
                                 return (
                                     <TableHeaderColumn dataFormat={dataFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
+                                )
+                            }
+                            else if (column.key == "level") {
+                                return (
+                                    <TableHeaderColumn dataFormat={levelFormatter} dataField={column.key} key={column.key} isKey={index == 0 ? true : false} width={(column.width / totalWidth).toString() + '%'} dataSort={column.sortable != -1} ><span>{column.name}</span></TableHeaderColumn>
                                 )
                             }
                             else if (column.key == "actions") {

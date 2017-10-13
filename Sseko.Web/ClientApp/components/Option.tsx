@@ -36,12 +36,10 @@ export class Option extends React.Component<OptionProps, OptionState> {
                 label: "All"
             },
             ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Month To Date': [moment().startOf('month'), moment()],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                '2 Months ago': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                '3 Months ago': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')]
             }
         };
     }
@@ -128,7 +126,7 @@ export class Option extends React.Component<OptionProps, OptionState> {
 }
 
 const levelOptions = [
-    { value: '1', label: '1' },
-    { value: '2', label: '2' },
-    { value: '3', label: '3' }
+    { value: '1', label: 'Little Sis' },
+    { value: '2', label: 'Nieces' },
+    { value: '3', label: 'Granddaughters' }
 ];

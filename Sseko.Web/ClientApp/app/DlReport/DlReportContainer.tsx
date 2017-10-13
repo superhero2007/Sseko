@@ -26,10 +26,10 @@ class DlReportContainer extends React.Component<DlReportProps, DlReportState> {
 
         this.state = {
             columns : [
-                { key: 'fellow', name: 'NAME', width: 150, sortable: -1 },
-                { key: 'parent', name: 'UPLINE', width: 100, sortable: -1 },
-                { key: 'grandparent', name: 'UPLINE 2', width: 125, sortable: -1 },
-                { key: 'level', name: 'LEVEL', width: 100, sortable: 0 },
+                { key: 'fellow', name: 'Fellow Name', width: 150, sortable: -1 },
+                { key: 'parent', name: 'Big Sis', width: 100, sortable: -1 },
+                { key: 'grandparent', name: 'Auntie', width: 125, sortable: -1 },
+                { key: 'level', name: 'Jajja', width: 100, sortable: 0 },
                 { key: 'commissionableSales', name: 'TOTAL CS', width: 125, sortable: 0 },
                 { key: 'pv', name: 'TOTAL PV', width: 125, sortable: -1 }
             ]

@@ -153,7 +153,7 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
             padding: 10px;
         }
 
-.dataTable button{
+.dataTable button {
     color: #e1ab82;
     background: black;
     border: 0;
@@ -194,6 +194,10 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     background: #fbfbfb;
 }
 
+.dataTable .dropdown-menu {
+    top: -112px;
+}
+
 .paginationOption {
     display: inline-block;
     margin-top:-40px;
@@ -215,3 +219,4 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     background: black;
     color: #e1ab82;
 }
+

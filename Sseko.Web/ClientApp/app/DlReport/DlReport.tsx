@@ -13,12 +13,25 @@ const transactionsIcon = require<string>('../../img/transaction.png');
 import '../../css/btn-3d.scss';
 
 export const DlReport = (props: DlReportProps) => {
+    let commonlabel = '';
+    for (let i = 0; i < props.levelFilter.length; i++) {
+        if (commonlabel != '')
+            commonlabel += ' and ';
+        if (props.levelFilter[i] == '1')
+            commonlabel += 'Little Sis';
+        else if (props.levelFilter[i] == '2')
+            commonlabel += 'Niece';
+        else if (props.levelFilter[i] == '3')
+            commonlabel += 'Granddaughter';
+    }
+    if (props.levelFilter.length == 3 || props.levelFilter.length == 0)
+        commonlabel = 'Family'
     return (
         <Layout>
             <Totals>
-                <Total iconSrc={personIcon} label={"TOTAL PERSONAL VOLUME"} amount={props.totalPersonalVolume} />
-                <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={props.totalSales} />
-                <Total iconSrc={transactionsIcon} label={"TOTAL FELLOWS"} amount={props.totalTransactions} />
+                <Total iconSrc={personIcon} label={"Total " + commonlabel + " Volume"} amount={props.totalPersonalVolume} />
+                <Total iconSrc={salesIcon} label={"Total " + commonlabel + " Commissionable Sales"} amount={props.totalSales} />
+                <Total iconSrc={transactionsIcon} label={"Total " + commonlabel + " Fellows"} amount={props.totalTransactions} />
             </Totals>
             <Option title="Downline Summary" hostesses={[]} onChange={props.onLevelChange} onMonthChange={props.onMonthChange} startDate={props.startDate} endDate={props.endDate} init={props.levelFilter} />
             <DataTable
