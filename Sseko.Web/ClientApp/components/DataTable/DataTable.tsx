@@ -33,13 +33,7 @@ export class DataTable extends React.Component<DataTableProps, {}> {
     constructor(props) {
         super(props)
     }
-
-    componentDidMount() {
-        console.log("componentDidMount");
-        $('#pageDropDown').click(() => {
-            console.log("Clicked");
-        });
-    }
+    
 
     onGridSort(sortColumn, sortDir) {
         this.props.onGridSort(sortColumn, sortDir);
@@ -75,7 +69,7 @@ export class DataTable extends React.Component<DataTableProps, {}> {
         const totalWidth = this.getTableWidth();
         if (this.props.rows.length != 0) {
             tableBody = (
-                <BootstrapTable data={dataRows} options={options} exportCSV pagination>
+                <BootstrapTable data={dataRows} options={options} exportCSV pagination search>
                     {
                         dataColumns.map(function (column, index) {
                             let icon = null;

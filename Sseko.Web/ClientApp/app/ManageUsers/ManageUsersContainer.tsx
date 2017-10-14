@@ -36,7 +36,7 @@ class ManageUsersContainer extends React.Component<ManageUserProps, ManageUserSt
         this.onResetPassword = this.onResetPassword.bind(this);
         this.state = {
             columns : [
-                { key: 'username', name: 'Fellow', width: 250, sortable: 0 },
+                { key: 'username', name: 'Email', width: 250, sortable: 0 },
                 { key: 'role', name: 'Role', width: 100, sortable: 0 },
                 { key: 'actions', name: 'Actions', width: 500, sortable: -1, formatter: testFormatter }
             ]

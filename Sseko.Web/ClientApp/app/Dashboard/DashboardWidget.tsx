@@ -49,7 +49,7 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
     componentDidMount() {
         let myChart = Highcharts.chart('chartContainer', {
             chart: {
-                type: 'area'
+                type: 'areaspline'
             },
             title: {
                 text: ''
@@ -89,7 +89,7 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
             },
             colors: ['#fca869', '#febf8f', '#fbd6bb'],
             plotOptions: {
-                area: {
+                areaspline: {
                     pointStart: 0,
                     marker: {
                         enabled: false,

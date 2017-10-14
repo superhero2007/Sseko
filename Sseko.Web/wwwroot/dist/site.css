@@ -8719,6 +8719,15 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
     padding: 10px 20px !important;
 }
 
+.filterButton button {
+    color: #e1ab82;
+    background: black;
+    border: 0;
+    margin: 10px;
+    padding: 10px 20px !important;
+    width: 150px;
+}
+
 .dataTable table button {
     margin: 0 10px;
     border: 1px solid black;
