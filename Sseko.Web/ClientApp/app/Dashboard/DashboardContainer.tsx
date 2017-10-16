@@ -130,6 +130,7 @@ class DashboardContainer extends React.Component<DashboardProps, DashboardState>
     onMonthChange(value1, value2) {
         const startDate = value1; // my code good
         const endDate = value2;
+
         this.props.updateDateFilter(startDate, endDate);
     }
 

@@ -14,7 +14,7 @@ namespace Sseko.Akka.DataService.Magento.Messages
 
         public class DataOperation : IOperation
         {
-            public DataOperation(ReportType reportType, int fellowId = 0, DateTime? start = null, DateTime? end = null )
+            public DataOperation(OperationType reportType, int fellowId = 0, DateTime? start = null, DateTime? end = null )
             {
                 ReportType = reportType;
                 FellowId = fellowId;
@@ -23,7 +23,7 @@ namespace Sseko.Akka.DataService.Magento.Messages
                 EndDate = end ?? DateTime.MaxValue;
             }
 
-            public ReportType ReportType { get; }
+            public OperationType ReportType { get; }
 
             public int FellowId { get; }
 

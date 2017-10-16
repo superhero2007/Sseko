@@ -1,7 +1,6 @@
 ﻿import 'react-bootstrap-daterangepicker/css/daterangepicker.css';
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
-import * as Highcharts from 'highcharts';
 import * as DateRangePicker from "react-bootstrap-daterangepicker";
 import * as moment from 'moment';
 import { DashboardSelectOption } from '../../components/DashboardSelectOption';
@@ -46,79 +45,79 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
         close: false
     }
 
-    componentDidMount() {
-        let myChart = Highcharts.chart('chartContainer', {
-            chart: {
-                type: 'areaspline'
-            },
-            title: {
-                text: ''
-            },
-            legend: {
-                enabled: false
-            },
-            xAxis: {
-                allowDecimals: false,
-                labels: {
-                    formatter: function () {
-                        return this.value; // clean, unformatted number for year
-                    }
-                },
-                tickWidth: 0,
-                tickmarkPlacement: 'on',
-                gridLineWidth: 1,
-                gridZIndex: 4,
-                lineWidth: 0,
-                opposite: true,
-                gridLineColor: '#e8a877',
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                labels: {
-                    formatter: function () {
-                        return '';
-                    }
-                },
-                gridLineWidth: 0
-            },
-            tooltip: {
-                pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
-            },
-            colors: ['#fca869', '#febf8f', '#fbd6bb'],
-            plotOptions: {
-                areaspline: {
-                    pointStart: 0,
-                    marker: {
-                        enabled: false,
-                        symbol: 'circle',
-                        radius: 5,
-                        states: {
-                            hover: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    fillOpacity: 1
-                }
-            },
-            series: [{
-                name: '1',
-                data: [550, 650, 500, 800, 820, 650, 400, 500, 700, 650, 850, 900],
-                color: '#fca869'
-            }, {
-                name: '2',
-                data: [400, 500, 350, 650, 670, 500, 250, 350, 550, 500, 700, 750],
-                color: '#febf8f'
-            }, {
-                name: '3',
-                data: [300, 400, 250, 550, 570, 400, 150, 250, 450, 400, 600, 650],
-                color: '#fbd6bb'
-            }]
-        });
-    }
+    //componentDidMount() {
+    //    let myChart = Highcharts.chart('chartContainer', {
+    //        chart: {
+    //            type: 'areaspline'
+    //        },
+    //        title: {
+    //            text: ''
+    //        },
+    //        legend: {
+    //            enabled: false
+    //        },
+    //        xAxis: {
+    //            allowDecimals: false,
+    //            labels: {
+    //                formatter: function () {
+    //                    return this.value; // clean, unformatted number for year
+    //                }
+    //            },
+    //            tickWidth: 0,
+    //            tickmarkPlacement: 'on',
+    //            gridLineWidth: 1,
+    //            gridZIndex: 4,
+    //            lineWidth: 0,
+    //            opposite: true,
+    //            gridLineColor: '#e8a877',
+    //            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    //        },
+    //        yAxis: {
+    //            title: {
+    //                text: ''
+    //            },
+    //            labels: {
+    //                formatter: function () {
+    //                    return '';
+    //                }
+    //            },
+    //            gridLineWidth: 0
+    //        },
+    //        tooltip: {
+    //            pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    //        },
+    //        colors: ['#fca869', '#febf8f', '#fbd6bb'],
+    //        plotOptions: {
+    //            areaspline: {
+    //                pointStart: 0,
+    //                marker: {
+    //                    enabled: false,
+    //                    symbol: 'circle',
+    //                    radius: 5,
+    //                    states: {
+    //                        hover: {
+    //                            enabled: true
+    //                        }
+    //                    }
+    //                },
+    //                fillOpacity: 1
+    //            }
+    //        },
+    //        series: [{
+    //            name: '1',
+    //            data: [550, 650, 500, 800, 820, 650, 400, 500, 700, 650, 850, 900],
+    //            color: '#fca869'
+    //        }, {
+    //            name: '2',
+    //            data: [400, 500, 350, 650, 670, 500, 250, 350, 550, 500, 700, 750],
+    //            color: '#febf8f'
+    //        }, {
+    //            name: '3',
+    //            data: [300, 400, 250, 550, 570, 400, 150, 250, 450, 400, 600, 650],
+    //            color: '#fbd6bb'
+    //        }]
+    //    });
+    //}
 
     onTransactionChange = (value) => {
         console.log("TransactionChange", value);
