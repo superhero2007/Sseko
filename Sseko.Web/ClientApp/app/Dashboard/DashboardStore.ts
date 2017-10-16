@@ -73,6 +73,8 @@ export const reducer: Reducer<DashboardState> = (state: DashboardState, incoming
             return { ...state, hostessFilter: action.hostessFilter };
         case 'UPDATE_DATE_FILTER':
             return { ...state, startDate: action.startDate, endDate: action.endDate };
+        case 'GET_DASHBOARD_MODEL':
+            return { ...state, dashboardModel: action.payload };
         default:
             const exhaustiveCheck: never = action;
     }

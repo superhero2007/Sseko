@@ -7575,6 +7575,8 @@ exports.reducer = function (state, incomingAction) {
             return __assign({}, state, { hostessFilter: action.hostessFilter });
         case 'UPDATE_DATE_FILTER':
             return __assign({}, state, { startDate: action.startDate, endDate: action.endDate });
+        case 'GET_DASHBOARD_MODEL':
+            return __assign({}, state, { dashboardModel: action.payload });
         default:
             var exhaustiveCheck = action;
     }
@@ -24331,7 +24333,7 @@ exports.Reports = {
         return axios_1.default.get('/api/reports/downline/?startDate=' + startDate + '&endDate=' + endDate, { headers: Utilities.GetHeaders() });
     },
     Dashboard: function (startDate, endDate) {
-        return axios_1.default.get('/api/reports/dashboard/?startDate=' + startDate.format("YYYY-MM-DD") + '&endDate=' + endDate.format("YYYY-MM-DD"), { headers: Utilities.GetHeaders() });
+        return axios_1.default.get('/api/reports/dashboard/?s=' + startDate.format("YYYY-MM-DD") + '&e=' + endDate.format("YYYY-MM-DD"), { headers: Utilities.GetHeaders() });
     }
 };
 
@@ -24423,6 +24425,8 @@ var react_redux_1 = __webpack_require__(11);
 var Dashboard_1 = __webpack_require__(208);
 var DatatableFilters_1 = __webpack_require__(18);
 var Formatters_1 = __webpack_require__(26);
+var api = __webpack_require__(12);
+var moment = __webpack_require__(0);
 var DashboardContainer = /** @class */ (function (_super) {
     __extends(DashboardContainer, _super);
     function DashboardContainer(props) {
@@ -24492,6 +24496,9 @@ var DashboardContainer = /** @class */ (function (_super) {
         };
         return _this;
     }
+    DashboardContainer.prototype.componentDidMount = function () {
+        api.Reports.Dashboard(moment().subtract('364', 'days'), moment()).then(function (response) { });
+    };
     DashboardContainer.prototype.onGridSort = function (sortColumn, sortDirection) {
         if (sortDirection >= 0) {
             var stateCopy = Object.assign({}, this.state);

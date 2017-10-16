@@ -19,6 +19,7 @@ namespace Sseko.Data.Models
         public decimal Commission { get; set; }
         public decimal CommissionPlus { get; set; }
         public string CouponCode { get; set; }
+        public string SalesCouponCode { get; set; }
         public DateTime? CreatedTime { get; set; }
         public string CreditmemoIds { get; set; }
         public string CustomerEmail { get; set; }

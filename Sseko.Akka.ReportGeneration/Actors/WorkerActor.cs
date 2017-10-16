@@ -177,11 +177,10 @@ namespace Sseko.Akka.DataService.Magento.Actors
                     predicate = t => true;
 
                 var transactions = DataStore.Transactions(predicate, fellowId);
-                var salesFlatOrders = DataStore.SalesFlatOrders(transactions);
 
                 return (from transaction in transactions
-                        let hostess = transaction.AccountName.Contains("Hostess") ? transaction.AccountName.Replace("Hostess ", "") : string.Empty
-                        let saleOrder = salesFlatOrders.FirstOrDefault(s => s.EntityId == transaction.OrderId)
+                    let hostess = transaction.AccountName.Contains("Hostess") ? transaction.AccountName.Replace("Hostess ", "") : string.Empty
+                    let saleOrder = DataStore.SalesFlatOrder(transaction.OrderId)
 
                         select new TransactionModel
                         {

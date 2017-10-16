@@ -73,15 +73,15 @@ namespace Sseko.Web.Controllers
                 DateTime end;
 
                 if (string.IsNullOrWhiteSpace(s) || string.IsNullOrWhiteSpace(e) ||
-                  DateTime.TryParseExact(s, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out start) ||
-                  DateTime.TryParseExact(e, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out end))
+                  !DateTime.TryParseExact(s, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out start) ||
+                  !DateTime.TryParseExact(e, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out end))
                     return BadRequest();
 
                 var id = GetMagentoId();
 
                 var serviceFactory = new ServiceFactory();
 
-                var model = serviceFactory.MagentoService().GetDashboard(id, start, end);
+                var model = await serviceFactory.MagentoService().GetDashboard(id, start, end);
 
                 return Ok(model);
             }

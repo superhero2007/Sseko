@@ -13,6 +13,6 @@ export const Reports = {
     },
 
     Dashboard(startDate: moment.Moment, endDate: moment.Moment): AxiosPromise {
-        return axios.get('/api/reports/dashboard/?startDate=' + startDate.format("YYYY-MM-DD") + '&endDate=' + endDate.format("YYYY-MM-DD"), { headers: Utilities.GetHeaders() });
+        return axios.get('/api/reports/dashboard/?s=' + startDate.format("YYYY-MM-DD") + '&e=' + endDate.format("YYYY-MM-DD"), { headers: Utilities.GetHeaders() });
     }
 }

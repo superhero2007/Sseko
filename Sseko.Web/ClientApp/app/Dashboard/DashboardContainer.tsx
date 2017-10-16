@@ -6,7 +6,8 @@ import { Dashboard } from './Dashboard';
 import { sortGrid, typeFilterer, hostessFilterer, dateFilterer } from '../../utils/DatatableFilters';
 import { Formatters } from '../../utils/Formatters'
 import * as dtos from '../../dtos';
-
+import * as api from '../../api/';
+import * as moment from 'moment';
 type DashboardProps = MappedProps & typeof Report.actionCreators;
 
 interface DashboardState {
@@ -42,6 +43,10 @@ class DashboardContainer extends React.Component<DashboardProps, DashboardState>
 
     state = {
         columns: []
+    }
+
+    componentDidMount() {
+        api.Reports.Dashboard(moment().subtract('364', 'days'), moment()).then(response => { });
     }
 
     getHasHostesses = () => {
