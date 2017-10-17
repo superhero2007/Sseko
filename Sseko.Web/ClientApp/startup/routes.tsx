@@ -9,6 +9,7 @@ import ForgotPassword from '../app/account/ForgotPassword/ForgotPasswordContaine
 import Login from '../app/account/Login/LoginContainer';
 import ManageUser from '../app/ManageUsers/ManageUsersContainer';
 import Dashboard from '../app/Dashboard/DashboardContainer';
+import Banner from '../app/Banner/BannerContainer';
 import PvReport from '../app/PvReport/PvReportContainer';
 import ResetPassword from '../app/account/ResetPassword/ResetPasswordContainer';
 
@@ -26,7 +27,7 @@ export const routes =
             <Route path='/Reports/PersonalVolume/' component={Fellow(PvReport)} />
             <Route path='/Reports/DownLine/' component={Fellow(DlReport)} />
 
-            <Route path='/Banners/' component={Fellow(DlReport)} />
+            <Route path='/Banners/' component={Fellow(Banner)} />
 
             <Route path='/Manage/Users/' component={Admin(ManageUser)} />
 

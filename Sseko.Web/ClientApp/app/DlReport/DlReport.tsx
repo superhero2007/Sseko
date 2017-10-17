@@ -4,7 +4,6 @@ import { Layout } from '../../components/Layout/Layout'
 import { ButtonGroup } from '../../components/ButtonGroup';
 import { Totals, Total } from '../../components/HelperTotals';
 import { Label } from "../../components/Label";
-import { Header } from "../../components/Header";
 import { Option } from "../../components/Option";
 const balanceIcon = require<string>('../../img/balance.png');
 const personIcon = require<string>('../../img/personal-volume.png');

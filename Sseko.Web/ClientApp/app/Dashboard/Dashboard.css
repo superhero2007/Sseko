@@ -108,3 +108,27 @@
     transition: opacity 0.4s;
     opacity: 1;
 }
+
+.c3-area {
+    opacity: 1 !important;
+}
+
+.c3-xgrid-line line {
+    stroke: #e8a877;
+}
+
+.c3-xgrid-line text {
+    stroke: #e8a877;
+}
+
+.c3-axis .domain {
+    display: none;
+}
+
+.c3-axis .tick line {
+    display: none;
+}
+
+.c3-xgrid, .c3-ygrid {
+    stroke-dasharray: 1 !important;
+}

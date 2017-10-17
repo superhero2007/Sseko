@@ -3,12 +3,14 @@ import PvReportState from './PvReportState';
 import DlReportState from './DlReportState';
 import ManageUserState from './ManageUsersState';
 import DashboardState from './DashboardState';
+import BannerState from './BannerState';
 
 import * as Auth from '../app/account/AuthStore';
 import * as PvReport from '../app/PvReport/PvReportStore';
 import * as DlReport from '../app/DlReport/DlReportStore';
 import * as ManageUsers from '../app/ManageUsers/ManageUserStore';
 import * as Dashboard from '../app/Dashboard/DashboardStore';
+import * as Banner from '../app/Banner/BannerStore';
 
 // The top-level state object
 export interface ApplicationState {
@@ -17,6 +19,7 @@ export interface ApplicationState {
     dlReport: DlReportState,
     users: ManageUserState,
     dashboard: DashboardState,
+    banner: BannerState,
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -28,6 +31,7 @@ export const reducers = {
     dlReport: DlReport.reducer,
     users: ManageUsers.reducer,
     dashboard: Dashboard.reducer,
+    banner: Banner.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

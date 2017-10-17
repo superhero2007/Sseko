@@ -128,5 +128,4 @@ export class Option extends React.Component<OptionProps, OptionState> {
 const levelOptions = [
     { value: '1', label: 'Little Sis' },
     { value: '2', label: 'Nieces' },
-    { value: '3', label: 'Granddaughters' }
-];
+    { value: '3', label: 'Granddaughters' }];

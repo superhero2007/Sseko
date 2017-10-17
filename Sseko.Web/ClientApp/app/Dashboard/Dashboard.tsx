@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as ReactDOM from "react-dom";
 import { Layout } from '../../components/Layout/Layout'
 import { Totals, Total } from '../../components/HelperTotals';
-import { Header } from "../../components/Header";
 const personIcon = require<string>('../../img/personal-volume.png');
 const salesIcon = require<string>('../../img/commissionable-sales.png');
 const transactionsIcon = require<string>('../../img/transaction.png');
@@ -32,7 +31,6 @@ export class Dashboard extends React.Component<DashboardProps, {}> {
     
     public render() {
         return <Layout>
-            <Header />
             <Totals>
                 <Total iconSrc={personIcon} label={"TOTAL PERSONAL VOLUME"} amount={this.props.totalPersonalVolume} />
                 <Total iconSrc={salesIcon} label={"TOTAL COMMISSIONABLE SALES"} amount={this.props.totalSales} />

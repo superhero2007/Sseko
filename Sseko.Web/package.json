@@ -45,6 +45,7 @@
     "react-bootstrap": "^0.31.3",
     "react-bootstrap-daterangepicker": "^3.4.1",
     "react-bootstrap-table": "^4.0.6",
+    "react-c3js": "^0.1.19",
     "react-cookie": "^2.1.0",
     "react-data-grid": "^2.0.58",
     "react-datepicker": "^0.55.0",

@@ -27,10 +27,18 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
 
     onValueChange = (value) => () => {
         let { values } = this.state;
-        if (values.includes(value)) {
-            values.splice(values.indexOf(value), 1);
-        } else {
-            values.push(value);
+        if (value != "4") {
+            if (values.includes(value)) {
+                values.splice(values.indexOf(value), 1);
+            } else {
+                values.push(value);
+            }
+        }
+        else {
+            if (values.length != 3)
+                values = ["1", "2", "3"];
+            else
+                values = [];
         }
         this.setState({ values });
         let onChangeValues = [];
@@ -55,6 +63,15 @@ export class ButtonGroup extends React.Component<ButtonGroupProps, ButtonGroupSt
                 </button>
             );
         }
+        buttons.push(
+            <button
+                className={"btn-3d btn-primary" + (this.state.values.length == 3 ? " selected" : "")}
+                onClick={this.onValueChange("4")}
+                key={"All"}
+            >
+                <span><span>All</span></span>
+            </button>
+        );
         return buttons;
     }
 
