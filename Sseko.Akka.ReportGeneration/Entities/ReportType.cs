@@ -1,9 +1,10 @@
 ﻿namespace Sseko.Akka.DataService.Magento.Entities
 {
-    public enum ReportType
+    public enum OperationType
     {
         PersonalVolume,
         DownlineSummary,
-        AdminSummary
+        AdminSummary,
+        Dashboard
     }
 }

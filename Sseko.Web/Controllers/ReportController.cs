@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,6 +59,35 @@ namespace Sseko.Web.Controllers
             catch (Exception e)
             {
                 e.ToExceptionless().Submit();
+                return StatusCode(500);
+            }
+        }
+
+        //s and e must be in format yyyy-MM-dd
+        [HttpGet("Dashboard")]
+        public async Task<IActionResult> Dasboard([FromQuery] string s, [FromQuery] string e)
+        {
+            try
+            {
+                DateTime start;
+                DateTime end;
+
+                if (string.IsNullOrWhiteSpace(s) || string.IsNullOrWhiteSpace(e) ||
+                  !DateTime.TryParseExact(s, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out start) ||
+                  !DateTime.TryParseExact(e, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out end))
+                    return BadRequest();
+
+                var id = GetMagentoId();
+
+                var serviceFactory = new ServiceFactory();
+
+                var model = await serviceFactory.MagentoService().GetDashboard(id, start, end);
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                ex.ToExceptionless().Submit();
                 return StatusCode(500);
             }
         }

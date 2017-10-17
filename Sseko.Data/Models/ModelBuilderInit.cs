@@ -1155,6 +1155,10 @@ namespace Sseko.Data.Models
                     .HasColumnName("program_name")
                     .HasColumnType("varchar(255)");
 
+                entity.Property(e => e.SalesCouponCode)
+                    .HasColumnName("sales_coupon_code")
+                    .HasColumnType("varchar(255)");
+
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
                     .HasColumnType("tinyint(1)")

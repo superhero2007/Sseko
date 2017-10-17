@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Akka.Actor;
+using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransformations;
 using Sseko.Akka.DataService.Magento.Entities;
 using Sseko.Akka.DataService.Magento.Messages;
+using Sseko.Core.Models;
 using Sseko.Data.Models;
 using Sseko.DAL.DocumentDb.Entities;
 
@@ -17,17 +19,21 @@ namespace Sseko.Akka.DataService.Magento.Actors
             {
                 switch (message.ReportType)
                 {
-                    case ReportType.DownlineSummary:
+                    case OperationType.DownlineSummary:
                         var dlReport = GetDownlineReport(message);
                         Sender.Tell(new DataOperations.Result<Report>(dlReport));
                         break;
-                    case ReportType.PersonalVolume:
+                    case OperationType.PersonalVolume:
                         var pvReport = GetPvTransactionSummaryReport(message);
                         Sender.Tell(new DataOperations.Result<Report>(pvReport));
                         break;
-                    case ReportType.AdminSummary:
+                    case OperationType.AdminSummary:
                         var adminReport = GetAdminSummaryReport(message);
                         Sender.Tell(new DataOperations.Result<Report>(adminReport));
+                        break;
+                    case OperationType.Dashboard:
+                        var dashboard = GetDashboard(message.FellowId, message.StartDate, message.EndDate);
+                        Sender.Tell(new DataOperations.Result<DashboardModel>(dashboard));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -38,6 +44,28 @@ namespace Sseko.Akka.DataService.Magento.Actors
                 var newFellows = GetNewFellows(message.LastUpdated);
                 Sender.Tell(new DataOperations.ResultList<User>(newFellows));
             });
+        }
+
+        private static DashboardModel GetDashboard(int fellowId, DateTime start, DateTime end)
+        {
+            var dashboardModel = new DashboardModel();
+
+            var myTransactions = GetTransactions(fellowId, start, end);
+
+            dashboardModel.MyTransactions = myTransactions;
+
+            var childFellows = DataStore.GetAllChildren(fellowId);
+
+            foreach (var childFellow in childFellows)
+            {
+                dashboardModel.MyDownlineTransactions.Add(new DownlineTransactionGroup
+                {
+                    DownlineFellowId = childFellow.Id,
+                    DownlineFellowLevel = childFellow.Level,
+                    Transactions = GetTransactions(childFellow.Id, start, end)
+                });
+            }
+            return dashboardModel;
         }
 
         private static Report GetDownlineReport(DataOperations.DataOperation message)
@@ -70,7 +98,7 @@ namespace Sseko.Akka.DataService.Magento.Actors
         {
             var report = new Report();
             var fellowId = message.FellowId;
-            var transactions = MapTransactions(fellowId);
+            var transactions = GetTransactions(fellowId);
 
             var rows = (from transaction in transactions
                         select new Dictionary<string, string>
@@ -137,18 +165,24 @@ namespace Sseko.Akka.DataService.Magento.Actors
             }).AsParallel().ToList();
         }
 
-        private static List<Transaction> MapTransactions(int fellowId)
+        private static List<TransactionModel> GetTransactions(int fellowId, DateTime? start = null, DateTime? end = null)
         {
             try
             {
-                var transactions = DataStore.Transactions(fellowId);
-                var salesFlatOrders = DataStore.SalesFlatOrders(transactions);
+                Func<AffiliateplusTransaction, bool> predicate;
+
+                if (start.HasValue && end.HasValue)
+                    predicate = t => t.CreatedTime.HasValue && t.CreatedTime > start.Value && t.CreatedTime < end;
+                else
+                    predicate = t => true;
+
+                var transactions = DataStore.Transactions(predicate, fellowId);
 
                 return (from transaction in transactions
-                        let hostess = transaction.AccountName.Contains("Hostess") ? transaction.AccountName.Replace("Hostess ", "") : string.Empty
-                        let saleOrder = salesFlatOrders.FirstOrDefault(s => s.EntityId == transaction.OrderId)
+                    let hostess = transaction.AccountName.Contains("Hostess") ? transaction.AccountName.Replace("Hostess ", "") : string.Empty
+                    let saleOrder = DataStore.SalesFlatOrder(transaction.OrderId)
 
-                        select new Transaction
+                        select new TransactionModel
                         {
                             Date = transaction.CreatedTime ?? DateTime.MinValue,
                             OrderId = transaction.OrderNumber,

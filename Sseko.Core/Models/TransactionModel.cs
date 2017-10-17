@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Sseko.Akka.DataService.Magento.Entities
+namespace Sseko.Core.Models
 {
-    public class Transaction
+    public class TransactionModel
     {
         public DateTime Date { get; set; }
         public string OrderId { get; set; }

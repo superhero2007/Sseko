@@ -6,7 +6,8 @@ import { Dashboard } from './Dashboard';
 import { sortGrid, typeFilterer, hostessFilterer, dateFilterer } from '../../utils/DatatableFilters';
 import { Formatters } from '../../utils/Formatters'
 import * as dtos from '../../dtos';
-
+import * as api from '../../api/';
+import * as moment from 'moment';
 type DashboardProps = MappedProps & typeof Report.actionCreators;
 
 interface DashboardState {
@@ -18,7 +19,7 @@ class DashboardContainer extends React.Component<DashboardProps, DashboardState>
         super(props);
 
         if (this.props.rows.length == 0)
-            this.props.getPvReport();
+            this.props.getDashboardModel(this.props.dateFilter.startDate, this.props.dateFilter.endDate);
 
         this.onGridSort = this.onGridSort.bind(this);
         this.rowGetter = this.rowGetter.bind(this);
@@ -42,6 +43,10 @@ class DashboardContainer extends React.Component<DashboardProps, DashboardState>
 
     state = {
         columns: []
+    }
+
+    componentDidMount() {
+        api.Reports.Dashboard(moment().subtract('364', 'days'), moment()).then(response => { });
     }
 
     getHasHostesses = () => {
@@ -130,6 +135,7 @@ class DashboardContainer extends React.Component<DashboardProps, DashboardState>
     onMonthChange(value1, value2) {
         const startDate = value1; // my code good
         const endDate = value2;
+
         this.props.updateDateFilter(startDate, endDate);
     }
 

@@ -47,7 +47,6 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
         close: false
     }
 
-  
     onTransactionChange = (value) => {
         console.log("TransactionChange", value);
     }

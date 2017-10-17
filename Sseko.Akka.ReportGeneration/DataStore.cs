@@ -41,6 +41,15 @@ namespace Sseko.Akka.DataService.Magento
             return TransactionsWhere(t => t.AccountId == fellowId || hostesses.Contains(t.AccountId));
         }
 
+        internal static ImmutableList<AffiliateplusTransaction> Transactions(Func<AffiliateplusTransaction, bool> predicate, int fellowId)
+        {
+            var hostesses = GetHostessIds(fellowId);
+
+            Init();
+
+            return _aPlusTransactions.Where(predicate).Where(t => t.AccountId == fellowId || hostesses.Contains(t.AccountId) && t.CreatedTime.HasValue).ToImmutableList();
+        }
+
         internal static ImmutableList<AffiliateplusTransaction> TransactionsWhere(Func<AffiliateplusTransaction, bool> predicate)
         {
             Init();
@@ -48,10 +57,9 @@ namespace Sseko.Akka.DataService.Magento
             return _aPlusTransactions.Where(predicate).Where(t => t.CreatedTime.HasValue).ToImmutableList();
         }
 
-        internal static ImmutableList<SalesFlatOrder> SalesFlatOrders(IEnumerable<AffiliateplusTransaction> transactions)
+        internal static SalesFlatOrder SalesFlatOrder(int id)
         {
-            var transactionIds = transactions.Select(t => t.OrderId);
-            return SalesFlatOrders(t => transactionIds.Contains(t.EntityId));
+            return _dataContext.SalesFlatOrder.Find(id);
         }
 
         internal static ImmutableList<SalesFlatOrder> SalesFlatOrders(Func<SalesFlatOrder, bool> predicate)
