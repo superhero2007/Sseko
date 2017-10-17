@@ -1,20 +1,23 @@
-﻿import 'react-bootstrap-daterangepicker/css/daterangepicker.css';
-import * as React from 'react';
+﻿import * as React from 'react';
 import * as ReactDOM from "react-dom";
-import * as DateRangePicker from "react-bootstrap-daterangepicker";
-import * as moment from 'moment';
 import { DashboardSelectOption } from '../../components/DashboardSelectOption';
 import C3Chart from 'react-c3js';
 import 'c3/c3.css';
+import 'react-monthrange-picker/src/css/monthly_picker.css';
+import * as ReactMonthRangePicker from 'react-monthrange-picker';
+import * as moment from 'moment';
+import { extendMoment } from 'moment-range';
+const Moment = extendMoment(moment);
+
 
 interface DashboardWidgetProps {
     dateFilter: { startDate: any, endDate: any };
+    onMonthChange: (value1: any, value2: any) => any;
 }
 
 interface DashboardWidgetState {
     startDate: any;
     endDate: any;
-    ranges: any;
     minimize: boolean;
     close: boolean;
 }
@@ -26,14 +29,6 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
         this.state = {
             startDate: this.props.dateFilter.startDate,
             endDate: this.props.dateFilter.endDate,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
             minimize: false,
             close: false
         };
@@ -42,7 +37,6 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
     state = {
         startDate: null,
         endDate: null,
-        ranges: null,
         minimize: false,
         close: false
     }
@@ -51,8 +45,8 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
         console.log("TransactionChange", value);
     }
 
-    handleEvent = (event, picker) => {
-        console.log("HandleEvent");
+    handleEvent = (value) => {
+        this.props.onMonthChange(value.start, value.end);
     }
 
     bodycollapse = (event) => {
@@ -64,12 +58,6 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
     }
 
     render() {
-        const start = this.state.startDate.format('YYYY-MM-DD');
-        const end = this.state.endDate.format('YYYY-MM-DD');
-        let label = start + ' - ' + end;
-        if (start === end) {
-            label = start;
-        }
         const data = {
             x: 'x',
             columns: [
@@ -136,25 +124,11 @@ export class DashboardWidget extends React.Component<DashboardWidgetProps, Dashb
                                 onChange={this.onTransactionChange} />
                         </div>
                         <div className="DashboardSelectOption DateRangeOption">
-                            <DateRangePicker
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
-                                ranges={this.state.ranges}
+                            <ReactMonthRangePicker
+                                selectedDateRange={Moment.range(this.props.dateFilter.startDate, this.props.dateFilter.endDate)}
                                 onApply={this.handleEvent}
-                                alwaysShowCalendars={true}
-                                locale={{format: 'MM/DD/YYYY'}}
-
-                            >
-                                <button className="selected-date-range-btn">
-                                    <div className="pull-left"><i className="fa fa-calendar" aria-hidden="true"></i></div>
-                                    <div className="pull-right">
-                                        <span>
-                                            {label}
-                                        </span>
-                                        <span className="caret"></span>
-                                    </div>
-                                </button>
-                            </DateRangePicker>
+                                direction={"bottom"}
+                            />
                         </div>
                     </div>
                     <div id="chartContainer" className="DashboardSubBody row">

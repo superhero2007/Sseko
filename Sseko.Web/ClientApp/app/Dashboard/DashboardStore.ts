@@ -4,14 +4,13 @@ import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from '../../store';
 import DashboardState from '../../store/DashboardState';
 import * as moment from 'moment';
+import { extendMoment } from 'moment-range';
+const Moment = extendMoment(moment);
 
 interface GetDashboardModel { type: 'GET_DASHBOARD_MODEL', payload: any }
-interface UpdateSort { type: 'UPDATE_PV_SORT', column: string, direction: string }
-interface UpdateSaleTypeFilter { type: 'UPDATE_SALE_FILTER', saleTypeFilter: string[] }
-interface UpdateHostessFilter { type: 'UPDATE_HOSTESS_FILTER', hostessFilter: string[] }
 interface UpdateDateFilter { type: 'UPDATE_DATE_FILTER', startDate: moment.Moment, endDate: moment.Moment }
 
-type KnownAction = GetDashboardModel | UpdateSort | UpdateSaleTypeFilter | UpdateHostessFilter | UpdateDateFilter;
+type KnownAction = GetDashboardModel | UpdateDateFilter;
 
 export const actionCreators = {
     getDashboardModel: (startDate: moment.Moment, endDate: moment.Moment): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -21,14 +20,6 @@ export const actionCreators = {
             });
     },
 
-    updateSaleFilter: (saleTypes: string[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UPDATE_SALE_FILTER', saleTypeFilter: saleTypes });
-    },
-
-    updateHostessFilter: (hostessFilter: string[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UPDATE_HOSTESS_FILTER', hostessFilter });
-    },
-
     updateDateFilter: (startDate: moment.Moment, endDate: moment.Moment): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({ type: 'UPDATE_DATE_FILTER', startDate, endDate })
 
@@ -36,36 +27,21 @@ export const actionCreators = {
             .then(response => {
                 dispatch({ type: 'GET_DASHBOARD_MODEL', payload: response.data });
             });
-    },
-
-    updateSort: (column: string, direction: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        dispatch({ type: 'UPDATE_PV_SORT', column, direction });
     }
 }
 
 const today = new Date();
 const unloadedState: DashboardState = {
     dashboardModel: {},
-    rows: [],
     errors: '',
-    saleTypeFilter: [],
-    hostessFilter: [],
-    startDate: moment().add(-1, 'year'),
-    endDate: moment(),
-    sortColumn: 'date',
-    sortDirection: 'DESC',
+    startDate: Moment().add(-1, 'year'),
+    endDate: Moment(),
     loading: true
 }
 
 export const reducer: Reducer<DashboardState> = (state: DashboardState, incomingAction: Action) => {
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'UPDATE_PV_SORT':
-            return { ...state, sortColumn: action.column, sortDirection: action.direction };
-        case 'UPDATE_SALE_FILTER':
-            return { ...state, saleTypeFilter: action.saleTypeFilter };
-        case 'UPDATE_HOSTESS_FILTER':
-            return { ...state, hostessFilter: action.hostessFilter };
         case 'UPDATE_DATE_FILTER':
             return { ...state, startDate: action.startDate, endDate: action.endDate };
         case 'GET_DASHBOARD_MODEL':

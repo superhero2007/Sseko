@@ -61,26 +61,20 @@
             min-width: 220px;
         }
 
-        .DashboardBody .DashboardSubBody .DashboardLegendButton {
-            width: 10%;
-            min-width: 90px;
-        }
-
-            .DashboardBody .DashboardSubBody .DashboardLegendButton .legendButton {
-                width: 100%;
-                height: 35px;
-                color: #e1ab82;
-                background: white;
-                border-style: solid;
-                border-radius: 5px;
-            }
-
-        .DashboardBody .DashboardSubBody .DashboardSelectOption .selected-date-range-btn {
+        .DashboardBody .DashboardSubBody .DashboardSelectOption #date-range {
             width: 100%;
             height: 35px;
             color: #e1ab82;
             background: white;
             border-style: solid;
+            border-radius: 5px;
+            outline: 0;
+        }
+
+        .DashboardBody .DashboardSubBody .DashboardSelectOption .selected-date-range-btn {
+            width: 100%;
+            height: 35px;
+            color: #e1ab82;
             border-radius: 5px;
             outline: 0;
         }

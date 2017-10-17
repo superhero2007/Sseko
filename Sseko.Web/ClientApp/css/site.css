@@ -143,15 +143,15 @@ body.fixed-nav #wrapper .navbar-static-side, body.fixed-nav #wrapper #page-wrapp
         margin-right: 35px;
     }
 
-        .option .optionBody .date button {
-            height: 40px;
-            width: 210px;
-            color: #e1ab82;
-            background: black;
-            border: 0;
-            border-radius: 3px;
-            padding: 10px;
-        }
+    .option .optionBody .date #date-range {
+        height: 40px;
+        width: 210px;
+        color: #e1ab82;
+        background: black;
+        border: 0;
+        border-radius: 3px;
+        padding: 10px;
+    }
 
 .dataTable button {
     color: #e1ab82;

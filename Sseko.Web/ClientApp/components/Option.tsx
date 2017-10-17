@@ -3,9 +3,11 @@ import { Label } from "./Label";
 import { SelectList } from './SelectList';
 import { DateSelect } from './DateSelect';
 import { ButtonGroup } from './ButtonGroup';
-import * as DateRangePicker from "react-bootstrap-daterangepicker";
-import 'react-bootstrap-daterangepicker/css/daterangepicker.css';
+import 'react-monthrange-picker/src/css/monthly_picker.css';
+import * as ReactMonthRangePicker from 'react-monthrange-picker';
 import * as moment from 'moment';
+import { extendMoment } from 'moment-range';
+const Moment = extendMoment(moment);
 
 interface OptionProps {
     title: string;
@@ -18,8 +20,6 @@ interface OptionProps {
 }
 
 interface OptionState {
-    startDate: any;
-    endDate: any;
     selected: any;
     ranges: any;
 }
@@ -29,8 +29,6 @@ export class Option extends React.Component<OptionProps, OptionState> {
     constructor(props) {
         super(props)
         this.state = {
-            startDate: this.props.startDate,
-            endDate: this.props.endDate,
             selected: {
                 value: "AllValue",
                 label: "All"
@@ -45,8 +43,6 @@ export class Option extends React.Component<OptionProps, OptionState> {
     }
 
     state = {
-        startDate: null,
-        endDate: null,
         selected: null,
         ranges: null
     }
@@ -56,12 +52,8 @@ export class Option extends React.Component<OptionProps, OptionState> {
         this.props.onChange(value.value);
     }
 
-    handleEvent= (event, picker) => {
-        this.setState({
-            startDate: picker.startDate,
-            endDate: picker.endDate
-        });
-        this.props.onMonthChange(picker.startDate, picker.endDate);
+    handleEvent = (value) => {
+        this.props.onMonthChange(value.start, value.end);
     }
 
     render() {
@@ -86,12 +78,6 @@ export class Option extends React.Component<OptionProps, OptionState> {
                 clearable={false}
                 onChange={this.onSelectChange}
             />
-        const start = this.state.startDate.format('YYYY-MM-DD');
-        const end = this.state.endDate.format('YYYY-MM-DD');
-        let label = start + ' - ' + end;
-        if (start === end) {
-            label = start;
-        }
         return (
             <div className="option">
                 <div className="optionHeader">
@@ -102,22 +88,11 @@ export class Option extends React.Component<OptionProps, OptionState> {
                         { left }
                     </div>
                     <div className="date pull-left">
-                        <DateRangePicker
-                            startDate={this.state.startDate}
-                            endDate={this.state.endDate}
-                            ranges={this.state.ranges}
+                        <ReactMonthRangePicker
+                            selectedDateRange={Moment.range(this.props.startDate, this.props.endDate)}
                             onApply={this.handleEvent}
-                        >
-                            <button className="selected-date-range-btn">
-                                <div className="pull-left"><i className="fa fa-calendar" aria-hidden="true"></i></div>
-                                <div className="pull-right">
-                                    <span>
-                                        {label}
-                                    </span>
-                                    <span className="caret"></span>
-                                </div>
-                            </button>
-                        </DateRangePicker>
+                            direction={"bottom"}
+                        />
                     </div>
                 </div>
             </div>
